@@ -50,14 +50,14 @@
     <div id="pack-area"></div>
 
     <script>
-        const totalCards = 50; 
+        const totalCards = 5; 
         let musicStarted = false;
 
         function ripPack() {
             // 1. START BACKGROUND MUSIC (Only on the first click)
             const bgMusic = document.getElementById("bgMusic");
             if (!musicStarted) {
-                bgMusic.volume = 0.4; // Set background music volume lower
+                bgMusic.volume = 0.3; // Set background music volume lower
                 bgMusic.play();
                 musicStarted = true;
             }
@@ -80,7 +80,7 @@
                 cardDiv.innerHTML = `
                     <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped')">
                         <div class="back"></div>
-                        <div class="front" style="background-image: url('Rare EWF Cards/${fileName}')"></div>
+                        <div class="front" style="background-image: url('rare ewf cards/${fileName}')"></div>
                     </div>`;
                 area.appendChild(cardDiv);
             }
