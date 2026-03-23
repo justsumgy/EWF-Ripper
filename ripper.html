@@ -38,7 +38,8 @@
     <div id="stats-bar">
         <div id="cash-display">CONTRACT FUNDS: $0</div>
         <div id="rank-display">RANK: ROOKIE PROMOTER</div>
-        <button style="background: #222; font-size: 10px; padding: 5px; margin-top: 10px; border: 1px solid #555;" onclick="clearEverything()">RESET ALL DATA</button>
+        <button style="background: #222; font-size: 10px; padding: 5px; margin-top: 10px;" onclick="clearEverything()">WIPE DATA</button>
+        <button style="background: green; font-size: 10px; padding: 5px; margin-top: 10px;" onclick="addCash()">+ ADD $1000 (DEV MODE)</button>
     </div>
     <br>
     <button id="rip-btn" onclick="ripPack()">RIP 2026 PACK ($100)</button>
@@ -53,13 +54,18 @@
         const totalCards = 23; 
         const folderPath = "rare ewf cards"; 
         
-        // --- EMERGENCY CASH SAFETY NET ---
         let userCash = parseInt(localStorage.getItem('EWF_Cash'));
-        if (isNaN(userCash) || userCash <= 0) { userCash = 500; localStorage.setItem('EWF_Cash', 500); }
+        // GOD MODE: If money is missing or 0, give $1000
+        if (isNaN(userCash) || userCash <= 0) {
+            userCash = 1000;
+            localStorage.setItem('EWF_Cash', 1000);
+        }
 
         let musicStarted = false;
 
-        function initGame() { updateUI(); displayCollection(); setInterval(() => { userCash += 20; saveGame(); updateUI(); }, 30000); }
+        function initGame() { updateUI(); displayCollection(); setInterval(() => { userCash += 50; saveGame(); updateUI(); }, 30000); }
+
+        function addCash() { userCash += 1000; saveGame(); updateUI(); }
 
         function spark(element) {
             const rect = element.getBoundingClientRect();
@@ -67,12 +73,12 @@
             const centerY = rect.top + (rect.height / 2);
             for (let i = 0; i < 20; i++) {
                 const dot = document.createElement('div');
-                dot.style.cssText = `position:fixed; width:8px; height:8px; background:gold; border-radius:50%; z-index:999; left:${centerX}px; top:${centerY}px; box-shadow:0 0 10px gold;`;
+                dot.style.cssText = `position:fixed; width:8px; height:8px; background:gold; border-radius:50%; z-index:9999; left:${centerX}px; top:${centerY}px; box-shadow:0 0 10px gold; pointer-events:none;`;
                 document.body.appendChild(dot);
-                const angle = Math.random() * Math.PI * 2, dist = Math.random() * 10 + 5;
+                const angle = Math.random() * Math.PI * 2, dist = Math.random() * 8 + 4;
                 let curX = 0, curY = 0, opacity = 1;
                 const anim = setInterval(() => {
-                    curX += Math.cos(angle) * dist; curY += Math.sin(angle) * dist + 1.5; opacity -= 0.04;
+                    curX += Math.cos(angle) * dist; curY += Math.sin(angle) * dist + 1; opacity -= 0.05;
                     dot.style.transform = `translate(${curX}px, ${curY}px)`; dot.style.opacity = opacity;
                     if (opacity <= 0) { clearInterval(anim); dot.remove(); }
                 }, 20);
@@ -81,13 +87,13 @@
 
         function triggerConfetti() {
             const colors = ['#e60000', '#00FF00', '#FFD700', '#fff'];
-            for(let i=0; i<60; i++) {
+            for(let i=0; i<50; i++) {
                 const c = document.createElement('div');
-                c.style.cssText = `position:fixed; width:10px; height:10px; z-index:2000; left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`;
+                c.style.cssText = `position:fixed; width:10px; height:10px; z-index:2000; left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]}; pointer-events:none;`;
                 document.body.appendChild(c);
                 let cy = 0, opacity = 1;
                 const drift = setInterval(() => {
-                    cy += Math.random() * 5 + 2; opacity -= 0.01;
+                    cy += Math.random() * 4 + 2; opacity -= 0.01;
                     c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = opacity;
                     if (opacity <= 0) { clearInterval(drift); c.remove(); }
                 }, 20);
@@ -110,8 +116,8 @@
         function ripPack() {
             if (userCash < 100) return;
             userCash -= 100; saveGame(); updateUI();
-            if (!musicStarted) { document.getElementById("bgMusic").volume = 0.2; document.getElementById("bgMusic").play(); musicStarted = true; }
-            document.getElementById("cheerSound").currentTime = 0; document.getElementById("cheerSound").play();
+            if (!musicStarted) { document.getElementById("bgMusic").volume = 0.2; document.getElementById("bgMusic").play().catch(e=>{}); musicStarted = true; }
+            document.getElementById("cheerSound").currentTime = 0; document.getElementById("cheerSound").play().catch(e=>{});
             const area = document.getElementById('pack-area'); area.innerHTML = ''; 
             for (let i = 0; i < 5; i++) {
                 const randomNum = Math.floor(Math.random() * totalCards) + 1;
@@ -132,4 +138,35 @@
         }
 
         function startMatch(cardImg, cardIndex) {
-            const overlay = document.getElementById('battle-overlay
+            const overlay = document.getElementById('battle-overlay'), bCard = document.getElementById('battle-card'), bText = document.getElementById('battle-text');
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${cardImg}')`;
+            bCard.className = 'rumble'; bText.innerHTML = "FIGHTING...";
+            setTimeout(() => {
+                bCard.classList.remove('rumble');
+                if (Math.random() > 0.5) {
+                    bText.innerHTML = "WINNER!"; bText.style.color = "#00FF00"; triggerConfetti(); col[cardIndex].wins++;
+                    if(col[cardIndex].wins >= 100) col[cardIndex].hof = true;
+                } else { bText.innerHTML = "DEFEAT"; bText.style.color = "red"; }
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); }, 2000);
+            }, 1500);
+        }
+
+        function displayCollection() {
+            const grid = document.getElementById('collection-grid'), hofGrid = document.getElementById('hof-grid'), col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            document.getElementById('collection-title').innerHTML = `MY EWF COLLECTION (${col.length} / ${totalCards})`;
+            grid.innerHTML = ''; hofGrid.innerHTML = '';
+            col.forEach((card, index) => {
+                const div = document.createElement('div');
+                div.className = `saved-card ${card.hof ? 'hof-card' : ''}`;
+                div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
+                div.innerHTML = `<div class="grade-tag" style="font-size:9px; top:5px; left:5px;">PSA ${card.grade || 10}</div>`;
+                if (card.hof) { div.innerHTML += `<div class="win-count" style="background:gold; color:black;">100</div>`; hofGrid.appendChild(div); }
+                else { div.onclick = () => startMatch(card.img, index); if(card.wins > 0) div.innerHTML += `<div class="win-count">${card.wins}</div>`; grid.appendChild(div); }
+            });
+        }
+        function clearEverything() { if(confirm("WIPE EVERYTHING?")) { localStorage.clear(); location.reload(); } }
+    </script>
+</body>
+</html>
