@@ -6,122 +6,89 @@
         body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; border: 5px solid #D4AF37; min-height: 100vh; margin: 0; overflow-x: hidden; }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
-        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; position: relative; box-shadow: 0 0 20px black; }
-        #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; display: block; }
-        
-        /* Rank Progress */
-        #progress-container { width: 100%; height: 8px; background: #333; border-radius: 4px; margin-top: 10px; border: 1px solid #555; overflow: hidden; }
-        #progress-fill { height: 100%; width: 0%; background: linear-gradient(to right, #D4AF37, #fff); transition: 0.5s; }
+        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; }
+        #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
 
         #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 350px; }
         
-        /* 3D TILT CARD STYLES */
-        .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; }
-        .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
-        .card.flipped .card-inner { transform: rotateY(180deg); }
-        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; border: 3px solid #D4AF37; box-shadow: 0 10px 20px rgba(0,0,0,0.5); overflow: hidden; }
+        /* THE TILT CONTAINER */
+        .card-container { width: 140px; height: 200px; perspective: 600px; display: inline-block; margin: 15px; }
+        
+        .saved-card { 
+            width: 100%; height: 100%; border-radius: 8px; border: 2px solid #D4AF37;
+            background-size: cover; background-position: center; 
+            position: relative; transition: transform 0.1s ease-out; 
+            transform-style: preserve-3d; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* THE HOLO SHINE LAYER */
+        .shimmer {
+            position: absolute; inset: 0; border-radius: 8px;
+            background: linear-gradient(105deg, 
+                transparent 20%, 
+                rgba(255, 219, 112, 0.4) 45%, 
+                rgba(255, 255, 255, 0.6) 50%, 
+                rgba(255, 219, 112, 0.4) 55%, 
+                transparent 80%
+            );
+            background-size: 250% 250%; background-position: 100% 100%;
+            mix-blend-mode: color-dodge; z-index: 2; pointer-events: none; display: none;
+        }
+        .is-holo .shimmer { display: block; }
+
+        .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; z-index: 10; font-weight: bold; }
+
+        /* PACK CARDS */
+        .pack-card { width: 200px; height: 280px; perspective: 1000px; cursor: pointer; display: inline-block; margin: 10px; }
+        .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
+        .pack-card.flipped .card-inner { transform: rotateY(180deg); }
+        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px; border: 3px solid #D4AF37; }
         .back { background: url('wrapper.jpg') center/cover; }
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
 
-        /* HOLO SHIMMER EFFECT */
-        .holo::before {
-            content: ""; position: absolute; inset: 0;
-            background: linear-gradient(125deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.4) 45%, rgba(255,255,255,.4) 55%, rgba(255,255,255,0) 100%);
-            background-size: 200% 200%; transition: background-position 0.1s; pointer-events: none; z-index: 2;
-        }
-
-        /* Match History UI */
-        #history-box { background: rgba(0,0,0,0.85); border: 2px solid #555; max-width: 500px; margin: 40px auto; padding: 15px; border-radius: 10px; }
-        .history-entry { border-bottom: 1px solid #333; padding: 8px; font-size: 14px; text-align: left; }
-        .history-win { color: #00FF00; }
-        .history-loss { color: #FF4444; }
-
-        button { padding: 12px 25px; font-size: 16px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #D4AF37; transition: transform 0.1s ease-out; position: relative; display: inline-block; margin: 10px; cursor: pointer; }
-        .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; z-index: 10; font-weight: bold; }
+        #history-box { background: rgba(0,0,0,0.8); border: 1px solid #555; max-width: 400px; margin: 20px auto; padding: 10px; border-radius: 8px; font-size: 13px; }
+        .entry { border-bottom: 1px solid #333; padding: 5px; }
         
-        #battle-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        #battle-card { width: 280px; height: 400px; border: 5px solid gold; background-size: cover; z-index: 1001; }
-        @keyframes rumble { 0%{transform:translate(2px,2px)} 50%{transform:translate(-2px,-2px)} }
-        .rumble { animation: rumble 0.1s infinite; }
+        button { padding: 12px 25px; font-size: 16px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; }
     </style>
 </head>
 <body onload="initGame()">
-    <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
-    <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
-    <div id="battle-overlay"><div id="battle-card"></div><div id="battle-text" style="font-size:3em; margin-top:20px;">FIGHT!</div></div>
-
-    <h1>ELITE WRESTLING FEDERATION</h1>
-    <h2>SERIES 1: 2026 EDITION</h2>
     
+    <h1>ELITE WRESTLING FEDERATION</h1>
     <div id="stats-bar">
         <div id="cash-display">CONTRACT FUNDS: $0</div>
-        <div id="rank-display" style="color:gold;">RANK: ROOKIE PROMOTER</div>
-        <div id="progress-container"><div id="progress-fill"></div></div>
+        <div id="rank-display" style="color:gold; margin-top:5px;">RANK: ROOKIE PROMOTER</div>
     </div>
     <br>
     <button id="rip-btn" onclick="ripPack()">RIP 2026 PACK ($100)</button>
     
     <div id="pack-area"></div>
+
     <h2 id="collection-title" style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF COLLECTION</h2>
     <div id="collection-grid"></div>
 
     <div id="history-box">
-        <h3 style="margin-top:0; color:#D4AF37;">LATEST MATCH RESULTS</h3>
+        <h3 style="margin:0 0 10px 0; color:#D4AF37;">MATCH HISTORY</h3>
         <div id="history-list"></div>
     </div>
 
-    <h1 style="color: #ff4500; text-shadow: 0 0 20px #ff4500; margin-top: 50px;">🏆 HALL OF FAME 🏆</h1>
-    <div id="hof-grid"></div>
-    <button style="font-size: 10px; margin-top: 50px; background:#222; opacity:0.5;" onclick="localStorage.clear(); location.reload();">Hard Reset</button>
-
     <script>
-        const totalCards = 23; 
-        const folderPath = "rare ewf cards"; 
+        const totalCards = 23;
+        const folderPath = "rare ewf cards";
         let userCash = parseInt(localStorage.getItem('EWF_Cash')) || 300;
         let matchHistory = JSON.parse(localStorage.getItem('EWF_History')) || [];
 
-        function initGame() { 
-            updateUI(); 
-            displayCollection(); 
+        function initGame() {
+            updateUI();
+            displayCollection();
             displayHistory();
-            setInterval(() => { userCash += 20; saveGame(); updateUI(); }, 30000); 
-        }
-
-        // --- 3D TILT EFFECT ---
-        function handleTilt(e, card) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-            
-            const holo = card.querySelector('.front');
-            if(holo && holo.classList.contains('holo')) {
-                holo.style.backgroundPosition = `${(x / rect.width) * 100}% ${(y / rect.height) * 100}%`;
-            }
-        }
-
-        function resetTilt(card) {
-            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            setInterval(() => { userCash += 20; saveGame(); updateUI(); }, 30000);
         }
 
         function updateUI() {
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
             document.getElementById('rip-btn').disabled = (userCash < 100);
-            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            let r = "ROOKIE PROMOTER";
-            let next = 6; let base = 0;
-            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; }
-            else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; }
-            else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
-            document.getElementById('rank-display').innerHTML = `RANK: ${r}`;
-            document.getElementById('progress-fill').style.width = `${((col.length - base) / (next - base)) * 100}%`;
         }
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
@@ -129,67 +96,6 @@
         function ripPack() {
             if (userCash < 100) return;
             userCash -= 100; saveGame(); updateUI();
-            const area = document.getElementById('pack-area'); area.innerHTML = ''; 
+            const area = document.getElementById('pack-area'); area.innerHTML = '';
             for (let i = 0; i < 5; i++) {
-                const randomNum = Math.floor(Math.random() * totalCards) + 1;
-                const isHolo = Math.random() > 0.85;
-                const cardDiv = document.createElement('div');
-                cardDiv.className = 'card';
-                cardDiv.innerHTML = `
-                    <div class="card-inner">
-                        <div class="back"></div>
-                        <div class="front ${isHolo ? 'holo' : ''}" style="background-image: url('${folderPath}/card (${randomNum}).jpg')"></div>
-                    </div>`;
-                cardDiv.onclick = (e) => { 
-                    cardDiv.classList.add('flipped'); 
-                    saveCard(`card (${randomNum}).jpg`, isHolo); 
-                };
-                area.appendChild(cardDiv);
-            }
-        }
-
-        function saveCard(img, isHolo) {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            if (!col.find(c => c.img === img)) {
-                col.push({ img: img, wins: 0, holo: isHolo });
-                localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                displayCollection(); updateUI();
-            } else { userCash += 50; saveGame(); updateUI(); }
-        }
-
-        function startMatch(cardImg, index) {
-            const overlay = document.getElementById('battle-overlay');
-            const bCard = document.getElementById('battle-card');
-            overlay.style.display = 'flex';
-            bCard.style.backgroundImage = `url('${folderPath}/${cardImg}')`;
-            bCard.className = 'rumble';
-            
-            setTimeout(() => {
-                bCard.classList.remove('rumble');
-                const win = Math.random() > 0.5;
-                const result = win ? "WIN" : "LOSS";
-                
-                let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-                if(win) col[index].wins++;
-                
-                // Update History
-                matchHistory.unshift({ wrestler: cardImg.replace('.jpg',''), result: result, date: new Date().toLocaleTimeString() });
-                if(matchHistory.length > 5) matchHistory.pop();
-                
-                localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                localStorage.setItem('EWF_History', JSON.stringify(matchHistory));
-
-                document.getElementById('battle-text').innerHTML = result;
-                document.getElementById('battle-text').style.color = win ? "#00FF00" : "#FF0000";
-
-                setTimeout(() => { 
-                    overlay.style.display = 'none'; 
-                    document.getElementById('battle-text').innerHTML = "FIGHT!";
-                    displayCollection(); displayHistory(); 
-                }, 2000);
-            }, 1500);
-        }
-
-        function displayHistory() {
-            const list = document.getElementById('history-list');
-            list.innerHTML = matchHistory.map(h =>
+                const num = Math.floor(Math
