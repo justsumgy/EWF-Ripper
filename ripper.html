@@ -25,6 +25,7 @@
         #music-toggle { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.8); border: 2px solid #D4AF37; font-size: 16px; font-weight: bold; color: white; cursor: pointer; padding: 10px 15px; border-radius: 8px; z-index: 9999; transition: 0.2s; }
         #music-toggle:hover { background: #D4AF37; color: black; }
 
+        /* PACK RIP ANIMATIONS */
         #pack-area { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; min-height: 250px; align-items: center; }
         #sealed-pack { width: 200px; height: 300px; background: linear-gradient(135deg, #d4af37, #ffd700, #8a6d3b); border: 5px solid white; border-radius: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px gold; transition: 0.2s; position: relative; overflow: hidden; }
         #sealed-pack::after { content: ''; position: absolute; width: 50%; height: 200%; background: rgba(255,255,255,0.3); transform: rotate(45deg); top: -50%; left: -100%; animation: foil-shine 2s infinite; }
@@ -34,17 +35,10 @@
         @keyframes slideIn { from { transform: translateY(-50px) scale(0.8); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
         .slide-in { animation: slideIn 0.4s ease-out forwards; }
 
-        @keyframes superShake { 
-            0% { transform: translate(2px, 1px) rotate(0deg); filter: brightness(1); box-shadow: 0 0 0px white; } 
-            20% { transform: translate(-3px, 0px) rotate(2deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); filter: brightness(2); box-shadow: 0 0 40px white; }
-            80% { transform: translate(-1px, -1px) rotate(2deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); filter: brightness(1); box-shadow: 0 0 0px white; }
-        }
+        @keyframes superShake { 0% { transform: translate(2px, 1px) rotate(0deg); filter: brightness(1); box-shadow: 0 0 0px white; } 20% { transform: translate(-3px, 0px) rotate(2deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); filter: brightness(2); box-shadow: 0 0 40px white; } 80% { transform: translate(-1px, -1px) rotate(2deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); filter: brightness(1); box-shadow: 0 0 0px white; } }
         .super-shake { animation: superShake 1.2s cubic-bezier(.36,.07,.19,.97) both !important; }
-        @keyframes screenShake { 0% { transform: translate(5px,5px); } 50% { transform: translate(-5px,-5px); } 100% { transform: translate(0,0); } }
-        .screen-shake { animation: screenShake 0.1s linear infinite; }
+        @keyframes screenShake { 0% { transform: translate(10px,10px) rotate(1deg); } 25% { transform: translate(-10px,-5px) rotate(-1deg); } 50% { transform: translate(5px,-10px) rotate(1deg); } 75% { transform: translate(-5px,10px) rotate(-1deg); } 100% { transform: translate(0,0); } }
+        .screen-shake { animation: screenShake 0.15s linear; }
 
         .pack-card { width: 150px; height: 210px; perspective: 1000px; cursor: pointer; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
@@ -92,13 +86,11 @@
         button.main-btn { padding: 12px 15px; font-size: 13px; color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 3px; transition: 0.2s; }
         .rip-std { background: linear-gradient(#e60000, #800000); } .rip-super { background: linear-gradient(#D4AF37, #8a6d3b); color: black; } .rip-gear { background: linear-gradient(#555, #222); border-color: silver; }
         .btn-arena { background: linear-gradient(#0044ff, #001188); border-color: cyan; } .btn-bounty { background: linear-gradient(#ff8c00, #8b4500); border-color: gold; } .btn-faction { background: linear-gradient(#000080, #0000ff); border-color: cyan; } .btn-shredder { background: linear-gradient(#ff0000, #550000); border-color: red; }
-        .btn-about { background: linear-gradient(#0088cc, #004466); border-color: #00ffff; }
+        .btn-about { background: linear-gradient(#0088cc, #004466); border-color: #00ffff; } .btn-vault { background: linear-gradient(#2ecc71, #27ae60); border-color: #fff; } .btn-gauntlet { background: linear-gradient(#c0392b, #8e44ad); border-color: gold; text-shadow: 0 0 5px black; }
         button.main-btn:hover { transform: scale(1.05); } button.main-btn:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
         
-        /* UPDATED MODAL WITH SCROLLING */
         .modal { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 450px; max-height: 80vh; overflow-y: auto; background: rgba(0,0,0,0.95); border: 3px solid gold; border-radius: 10px; padding: 20px; z-index: 5000; display: none; box-shadow: 0 0 50px black; text-align: left; }
-        .modal::-webkit-scrollbar { width: 8px; }
-        .modal::-webkit-scrollbar-thumb { background: gold; border-radius: 4px; }
+        .modal::-webkit-scrollbar { width: 8px; } .modal::-webkit-scrollbar-thumb { background: gold; border-radius: 4px; }
         .modal h2 { color: gold; margin-top: 0; text-align: center; }
         .modal-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #444; align-items: center; }
         .modal-btn { background: #00FF00; color: black; border: 1px solid white; padding: 5px 10px; cursor: pointer; font-weight: bold; border-radius: 4px; }
@@ -111,7 +103,6 @@
         .loss-text { color: #FF0000; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
 
         #hof-section { margin-top: 50px; padding: 40px 20px; background: rgba(212, 175, 55, 0.1); border-top: 5px solid gold; border-bottom: 5px solid gold; }
-        
         .about-text { color: #ccc; font-family: 'Arial', sans-serif; font-size: 14px; line-height: 1.6; }
         .about-text h3 { color: #00FF00; margin-bottom: 5px; margin-top: 20px; font-family: 'Arial Black', sans-serif; }
     </style>
@@ -124,67 +115,28 @@
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
     <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
-    <div id="battle-overlay" onclick="if(!factionSimulating) this.style.display='none';"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
+    <div id="battle-overlay" onclick="if(!factionSimulating && !gauntlet.active) this.style.display='none';"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
 
-    <div id="arena-modal" class="modal">
-        <h2>🏟️ VENUE INFRASTRUCTURE</h2>
-        <div id="arena-list"></div>
-        <button class="close-btn" onclick="document.getElementById('arena-modal').style.display='none'">CLOSE</button>
-    </div>
-
-    <div id="bounty-modal" class="modal">
-        <h2>📋 PROMOTER BOUNTY BOARD</h2>
-        <div id="bounty-list"></div>
-        <button class="close-btn" onclick="document.getElementById('bounty-modal').style.display='none'">CLOSE</button>
-    </div>
-
-    <div id="gear-modal" class="modal">
-        <h2>🎒 EQUIP GEAR</h2>
-        <p style="color:cyan; font-size:12px; text-align:center;">Select an item to use on this wrestler.</p>
-        <div id="gear-list"></div>
-        <button class="close-btn" onclick="document.getElementById('gear-modal').style.display='none'">CANCEL</button>
-    </div>
-
-    <div id="shredder-modal" class="modal">
-        <h2>☢️ THE BLACK MARKET SHREDDER</h2>
-        <p style="color:cyan; font-size:12px; text-align:center;">Burn 5 Common Dupes for a permanent +0.5% Global Holo Pull Rate!</p>
-        <div id="shredder-stats" style="margin: 20px 0; font-size: 18px; font-weight: bold; color: white; text-align:center;"></div>
-        <button class="modal-btn" style="background:red; color:white; width:100%; margin-top:10px; font-size: 16px;" onclick="shredCards()">SHRED 5 COMMONS</button>
-        <button class="close-btn" onclick="document.getElementById('shredder-modal').style.display='none'">CLOSE</button>
+    <div id="arena-modal" class="modal"><h2>🏟️ VENUE INFRASTRUCTURE</h2><div id="arena-list"></div><button class="close-btn" onclick="document.getElementById('arena-modal').style.display='none'">CLOSE</button></div>
+    <div id="bounty-modal" class="modal"><h2>📋 PROMOTER BOUNTY BOARD</h2><div id="bounty-list"></div><button class="close-btn" onclick="document.getElementById('bounty-modal').style.display='none'">CLOSE</button></div>
+    <div id="gear-modal" class="modal"><h2>🎒 EQUIP GEAR</h2><p style="color:cyan; font-size:12px; text-align:center;">Select an item to use on this wrestler.</p><div id="gear-list"></div><button class="close-btn" onclick="document.getElementById('gear-modal').style.display='none'">CANCEL</button></div>
+    <div id="shredder-modal" class="modal"><h2>☢️ THE BLACK MARKET SHREDDER</h2><p style="color:cyan; font-size:12px; text-align:center;">Burn 5 Common Dupes for a permanent +0.5% Global Holo Pull Rate!</p><div id="shredder-stats" style="margin: 20px 0; font-size: 18px; font-weight: bold; color: white; text-align:center;"></div><button class="modal-btn" style="background:red; color:white; width:100%; margin-top:10px; font-size: 16px;" onclick="shredCards()">SHRED 5 COMMONS</button><button class="close-btn" onclick="document.getElementById('shredder-modal').style.display='none'">CLOSE</button></div>
+    <div id="vault-modal" class="modal"><h2>💼 MONEY IN THE BANK VAULT</h2><p style="color:cyan; font-size:12px; text-align:center;">Briefcases randomly drop when you win matches. Wait 10 mins or pay a Bribe!</p><div id="vault-list"></div><button class="close-btn" onclick="document.getElementById('vault-modal').style.display='none'">CLOSE</button></div>
+    
+    <div id="gauntlet-modal" class="modal" style="width: 550px;">
+        <div id="gauntlet-content"></div>
+        <button class="close-btn" id="gauntlet-close-btn" onclick="document.getElementById('gauntlet-modal').style.display='none'">SURRENDER (LOSE RUN)</button>
     </div>
 
     <div id="about-modal" class="modal">
         <h2>❓ PROMOTER'S MANUAL</h2>
         <div class="about-text">
             <p>Welcome to <b>EWF RIPPED</b>. Build your roster, manage stamina, and dominate the ring to become a Prestige Tycoon.</p>
-            
-            <h3>📦 Ripping Packs</h3>
-            <p>Click the foil wrapper to rip it open. Reveal cards one by one. If the screen shakes, you just pulled a <b>Holo</b> or a <b>GEM MINT 10</b>!</p>
-            
-            <h3>⚔️ Combat & Stamina</h3>
-            <p><b>Double-click</b> any wrestler to send them into a fight. Fights cost 1 Stamina (the green bar). Stamina recharges naturally over time.</p>
-            <p>⚠️ <b>INJURIES:</b> If you force a wrestler to fight with 0 Stamina, there is a 50% chance they get injured (🤕). You must pay $500 to heal them before they can fight or be sold.</p>
-            
-            <h3>🔥 Streaks & Value</h3>
-            <p>Win 3 times in a row for a <b>Hot Streak (🔥)</b> (+50% Card Value and +10% win chance). Lose 3 times for a <b>Cold Streak (❄️)</b> (-50% Card Value).</p>
-            
-            <h3>🛠️ Card Upgrades</h3>
-            <ul>
-                <li><b>Title Match ($1000):</b> High risk. Win to get the 🏆 Champion badge (Card value x5).</li>
-                <li><b>Forge:</b> Combine 3 duplicate cards to craft a perfect GEM MINT 10.</li>
-                <li><b>Train ($1000):</b> Send a card to Camp for 5 minutes. They permanently gain a 60% base win chance!</li>
-            </ul>
-
-            <h3>💼 Tycoon Mechanics</h3>
-            <ul>
-                <li><b>Arena:</b> Buy better venues to increase your background visuals and passive income tick.</li>
-                <li><b>3v3 Faction War:</b> Select 3 wrestlers to fight an AI team. Win 2 out of 3 matches for a massive payout.</li>
-                <li><b>Shredder:</b> Turn 5 useless Common duplicate cards into a permanent global increase to your Holo pull rate.</li>
-                <li><b>Hall of Fame:</b> Any card that hits 200 Wins retires to the HOF, granting a permanent $25/tick bonus.</li>
-            </ul>
-
-            <h3>👑 Rebirth & Prestige</h3>
-            <p>Reach "Legendary Collector" rank and secure 5 Hall of Famers to unlock <b>Rebirth</b>. This wipes your entire save file, but gives you a permanent <b>Cash Multiplier</b> on all future runs and an exclusive glowing border.</p>
+            <h3>📦 Ripping Packs</h3><p>Click the foil wrapper to rip it open. Reveal cards one by one. If the screen shakes, you just pulled a <b>Holo</b> or a <b>GEM MINT 10</b>!</p>
+            <h3>⚔️ Combat & Stamina</h3><p><b>Double-click</b> any wrestler to fight. Fights cost 1 Stamina. Stamina recharges naturally. ⚠️ <b>INJURIES:</b> Fighting at 0 Stamina has a 50% chance of injury! Pay $500 to heal.</p>
+            <h3>💼 The Vault</h3><p>Winning a match has a 10% chance to drop a locked Briefcase. Open them for massive loot!</p>
+            <h3>☠️ Ironman Gauntlet</h3><p>Pay $2,500 to draft 3 random max-level cards. Survive 5 waves of AI combat for a massive payout. 3 losses and you are eliminated.</p>
+            <h3>👑 Rebirth & Prestige</h3><p>Reach "Legendary Collector" rank and secure 5 Hall of Famers to unlock <b>Rebirth</b>. Wipe your save for a permanent <b>Cash Multiplier</b> and glowing border.</p>
         </div>
         <button class="close-btn" onclick="document.getElementById('about-modal').style.display='none'">GOT IT!</button>
     </div>
@@ -204,9 +156,11 @@
         <button class="main-btn rip-std" id="rip-std-btn" onclick="ripPack(100, 0.15)">STANDARD PACK ($100)</button>
         <button class="main-btn rip-super" id="rip-super-btn" onclick="ripPack(500, 0.65)">SUPER HOLO ($500)</button>
         <button class="main-btn rip-gear" id="rip-gear-btn" onclick="ripGearPack()">GEAR PACK ($250)</button>
+        <button class="main-btn btn-vault" onclick="openVault()">💼 VAULT</button>
         <button class="main-btn btn-arena" onclick="openArena()">🏟️ ARENA</button>
-        <button class="main-btn btn-faction" id="faction-btn" onclick="toggleFactionWar()">3v3 WAR ($500)</button>
         <button class="main-btn btn-shredder" onclick="openShredder()">☢️ SHREDDER</button>
+        <button class="main-btn btn-gauntlet" onclick="startGauntlet()">☠️ GAUNTLET ($2500)</button>
+        <button class="main-btn btn-faction" id="faction-btn" onclick="toggleFactionWar()">3v3 WAR ($500)</button>
         <button class="main-btn btn-bounty" onclick="openBounties()">📋 BOUNTIES</button>
         <button class="main-btn btn-about" onclick="document.getElementById('about-modal').style.display='block'">❓ HOW TO PLAY</button>
     </div>
@@ -245,10 +199,13 @@
         
         let shredBonus = parseFloat(localStorage.getItem('EWF_ShredBonus')) || 0;
         let pendingPack = [];
+        let vault = JSON.parse(localStorage.getItem('EWF_Vault')) || [];
 
         let factionMode = false;
         let factionTeam = [];
         let factionSimulating = false;
+
+        let gauntlet = { active: false, team: [], wins: 0, losses: 0 };
 
         const arenas = [
             { name: "Local Gym", income: 25, cost: 0, bg: "url('background.jpg') center/cover no-repeat fixed" },
@@ -270,63 +227,130 @@
             if(prestigeLevel > 0) document.body.classList.add('prestige-active');
             migrateData(); updateBackground(); updateUI(); displayCollection(); displayRecord();
             setInterval(() => { tick(); }, 30000); 
-            setInterval(() => { refreshTrainingTimers(); }, 1000); 
+            setInterval(() => { refreshTimers(); }, 1000); 
         }
 
-        function updateBackground() {
-            document.body.style.background = arenas[currentArena].bg;
-            document.body.style.backgroundSize = "cover";
-            document.body.style.backgroundAttachment = "fixed";
-        }
+        function updateBackground() { document.body.style.background = arenas[currentArena].bg; document.body.style.backgroundSize = "cover"; document.body.style.backgroundAttachment = "fixed"; }
 
         function doRebirth() {
             if(confirm("⚠️ ARE YOU SURE? ⚠️\n\nThis will wipe your ENTIRE roster, cash, arena, gear, and stats!\n\nIn exchange, you will permanently gain +1x Global Cash Multiplier and unlock the exclusive Prestige Border.")) {
                 prestigeLevel++; localStorage.setItem('EWF_Prestige', prestigeLevel);
                 localStorage.removeItem('EWF_Collection'); localStorage.removeItem('EWF_Cash'); localStorage.removeItem('EWF_Arena');
                 localStorage.removeItem('EWF_Gear'); localStorage.removeItem('EWF_Wins'); localStorage.removeItem('EWF_Losses');
-                localStorage.removeItem('EWF_Bounties');
+                localStorage.removeItem('EWF_Bounties'); localStorage.removeItem('EWF_Vault');
                 alert(`🔥 REBIRTH COMPLETE! Welcome to PRESTIGE ${prestigeLevel}! 🔥`); location.reload();
             }
         }
 
         function migrateData() {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            let mod = false;
-            col.forEach(c => {
-                if(c.stamina === undefined) { c.stamina = 5; c.injured = false; c.streak = 0; mod = true; }
-                if(c.baseWin === undefined) { c.baseWin = 0.5; c.trainingUntil = 0; c.buff = null; mod = true; }
-            });
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let mod = false;
+            col.forEach(c => { if(c.stamina === undefined) { c.stamina = 5; c.injured = false; c.streak = 0; mod = true; } if(c.baseWin === undefined) { c.baseWin = 0.5; c.trainingUntil = 0; c.buff = null; mod = true; } });
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col));
         }
 
         function tick() {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            const hofCount = col.filter(c => c.wins >= 200).length;
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; const hofCount = col.filter(c => c.wins >= 200).length;
             userCash += ((arenas[currentArena].income + (hofCount * 25)) * multi); 
             let mod = false; col.forEach(c => { if(!c.injured && c.stamina < 5) { c.stamina++; mod = true; } });
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col));
             saveGame(); updateUI(); if(mod) displayCollection();
         }
 
-        function refreshTrainingTimers() {
+        function refreshTimers() {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let needsRender = false; const now = Date.now();
-            col.forEach((c, idx) => {
-                if(c.trainingUntil > 0 && now >= c.trainingUntil) {
-                    c.trainingUntil = 0; c.baseWin = 0.6; needsRender = true;
-                    alert("🏋️ TRAINING COMPLETE! A wrestler's base win rate increased to 60%!");
-                }
-            });
+            col.forEach((c, idx) => { if(c.trainingUntil > 0 && now >= c.trainingUntil) { c.trainingUntil = 0; c.baseWin = 0.6; needsRender = true; alert("🏋️ TRAINING COMPLETE! A wrestler's base win rate increased to 60%!"); } });
             if(needsRender) { localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); }
             document.querySelectorAll('.train-timer-text').forEach(el => {
                 const targetTime = parseInt(el.getAttribute('data-time'));
-                if(targetTime > now) {
-                    const secs = Math.floor((targetTime - now) / 1000);
-                    const m = Math.floor(secs / 60); const s = secs % 60;
-                    el.innerHTML = `${m}:${s < 10 ? '0' : ''}${s}`;
-                }
+                if(targetTime > now) { const secs = Math.floor((targetTime - now) / 1000); const m = Math.floor(secs / 60); const s = secs % 60; el.innerHTML = `${m}:${s < 10 ? '0' : ''}${s}`; }
             });
+            // Auto refresh vault UI if open
+            if(document.getElementById('vault-modal').style.display === 'block') openVault();
         }
 
+        // --- NEW VAULT & BRIEFCASE LOGIC ---
+        function openVault() {
+            let html = ""; let now = Date.now();
+            vault.forEach((b, i) => {
+                let ready = now >= b.unlockAt;
+                let status = ready ? `<button class="modal-btn" onclick="openBriefcase(${i}, false)">OPEN (FREE)</button>` : `<button class="modal-btn" style="background:orange;" onclick="openBriefcase(${i}, true)">BRIBE $1000</button>`;
+                let time = ready ? "READY TO OPEN!" : Math.ceil((b.unlockAt - now)/60000) + "m left";
+                html += `<div class="modal-item"><div>💼 MITB Briefcase<br><small style="color:cyan;">${time}</small></div><div>${status}</div></div>`;
+            });
+            if(vault.length === 0) html = "<p style='color:cyan; text-align:center;'>Play matches to earn Briefcases!</p>";
+            document.getElementById('vault-list').innerHTML = html; document.getElementById('vault-modal').style.display = 'block';
+        }
+
+        function openBriefcase(i, isBribe) {
+            if(isBribe) { if(userCash < 1000) return alert("Not enough cash to bribe!"); userCash -= 1000; }
+            vault.splice(i, 1); localStorage.setItem('EWF_Vault', JSON.stringify(vault));
+            let roll = Math.random();
+            if(roll < 0.5) { let w = 2000*multi; userCash += w; alert(`💰 Briefcase contained $${w}!`); }
+            else if(roll < 0.8) { inventory.drink+=2; inventory.chair+=2; localStorage.setItem('EWF_Gear', JSON.stringify(inventory)); alert("🎒 Briefcase contained 2 Drinks & 2 Chairs!"); }
+            else { alert("🌟 Briefcase contained a SUPER HOLO PACK!"); ripPack(0, 0.65); document.getElementById('vault-modal').style.display='none'; } 
+            saveGame(); updateUI(); if(document.getElementById('vault-modal').style.display === 'block') openVault();
+        }
+
+        // --- NEW GAUNTLET LOGIC ---
+        function startGauntlet() {
+            if(userCash < 2500) return alert("Need $2500 to enter!");
+            if(!confirm("Enter Ironman Gauntlet for $2500?")) return;
+            userCash -= 2500; saveGame(); updateUI();
+            gauntlet = { active: true, team: [], wins: 0, losses: 0 };
+            document.getElementById('gauntlet-close-btn').style.display = 'block';
+            renderGauntletDraft();
+        }
+
+        function renderGauntletDraft() {
+            if(gauntlet.team.length >= 3) { renderGauntletBattle(); return; }
+            let html = `<h2 style="color:gold;">DRAFT PHASE: PICK CARD ${gauntlet.team.length+1}/3</h2><p style="color:cyan; font-size:12px; text-align:center;">Select your Elite Roster</p><div style="display:flex; justify-content:center; gap:10px; margin-top:20px;">`;
+            for(let i=0; i<3; i++) {
+                let num = Math.floor(Math.random() * totalCards) + 1;
+                html += `<div class="pack-card" onclick="draftCard(${num})"><div class="card-inner flipped"><div class="front" style="background-image:url('${folderPath}/card (${num}).jpg'); box-shadow:0 0 15px gold; border-color:gold;"></div></div></div>`;
+            }
+            html += `</div>`;
+            document.getElementById('gauntlet-content').innerHTML = html;
+            document.getElementById('gauntlet-modal').style.display = 'block';
+        }
+
+        function draftCard(num) { gauntlet.team.push(num); renderGauntletDraft(); }
+
+        function renderGauntletBattle() {
+            let html = `<h2 style="color:red; text-shadow: 0 0 10px red;">⚔️ IRONMAN GAUNTLET ⚔️</h2>`;
+            html += `<p style="color:white; font-size:24px; text-align:center; font-weight:bold;">WINS: <span style="color:#0f0">${gauntlet.wins}/5</span> | LOSSES: <span style="color:red">${gauntlet.losses}/3</span></p>`;
+            html += `<div style="display:flex; justify-content:center; gap:15px; margin:25px 0;">`;
+            gauntlet.team.forEach(num => { html += `<div style="width:100px; height:140px; background:url('${folderPath}/card (${num}).jpg') center/cover; border:3px solid gold; border-radius:8px; box-shadow: 0 0 15px gold;"></div>`; });
+            html += `</div><button class="modal-btn" style="width:100%; font-size:18px; padding:15px; background:linear-gradient(#c0392b, #8e44ad); color:white; text-shadow:0 0 5px black; border:2px solid gold;" onclick="fightGauntlet()">FIGHT NEXT WAVE</button>`;
+            document.getElementById('gauntlet-content').innerHTML = html;
+        }
+
+        function fightGauntlet() {
+            const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
+            overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble';
+            let moves = ["LOCKUP!", "TRADING BLOWS!", "GAUNTLET CHAOS!", "1...", "2..."];
+            let step = 0; bText.innerHTML = moves[0]; bText.style.color = "white";
+            let fightInt = setInterval(() => {
+                step++;
+                if(step < moves.length) { 
+                    bText.innerHTML = moves[step]; document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),100); 
+                } else {
+                    clearInterval(fightInt); bCard.classList.remove('rumble');
+                    if(Math.random() > 0.4) { 
+                        bText.innerHTML = "WAVE CLEARED!"; bText.style.color = "#00FF00"; gauntlet.wins++; triggerConfetti();
+                        if(gauntlet.wins >= 5) { 
+                            let payout = 10000 * multi;
+                            setTimeout(() => { alert(`🏆 YOU CONQUERED THE GAUNTLET! You won $${payout}!`); userCash += payout; saveGame(); updateUI(); document.getElementById('gauntlet-modal').style.display='none'; overlay.style.display='none'; gauntlet.active=false; }, 2000); return; 
+                        }
+                    } else { 
+                        bText.innerHTML = "WAVE FAILED!"; bText.style.color = "red"; gauntlet.losses++;
+                        if(gauntlet.losses >= 3) { setTimeout(() => { alert("☠️ ELIMINATED FROM THE GAUNTLET."); document.getElementById('gauntlet-modal').style.display='none'; overlay.style.display='none'; gauntlet.active=false; }, 2000); return; }
+                    }
+                    setTimeout(() => { overlay.style.display = 'none'; renderGauntletBattle(); }, 2000);
+                }
+            }, 500);
+        }
+
+        // --- EXISTING SYSTEMS ---
         function openArena() {
             let html = "";
             arenas.forEach((a, i) => {
@@ -339,48 +363,29 @@
             document.getElementById('arena-list').innerHTML = html; document.getElementById('arena-modal').style.display = 'block';
         }
 
-        function buyArena(i) {
-            if(userCash >= arenas[i].cost) {
-                userCash -= arenas[i].cost; currentArena = i;
-                localStorage.setItem('EWF_Arena', currentArena);
-                saveGame(); updateBackground(); updateUI(); openArena();
-            }
-        }
+        function buyArena(i) { if(userCash >= arenas[i].cost) { userCash -= arenas[i].cost; currentArena = i; localStorage.setItem('EWF_Arena', currentArena); saveGame(); updateBackground(); updateUI(); openArena(); } }
 
         function openShredder() {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            let commonDupes = 0;
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let commonDupes = 0;
             col.forEach(c => { if(!c.holo && c.grade < 9 && c.dupes > 0) commonDupes += c.dupes; });
             document.getElementById('shredder-stats').innerHTML = `Common Dupes Available: <span style="color:red;">${commonDupes}</span><br>Current Holo Bonus: <span style="color:#00FF00;">+${(shredBonus*100).toFixed(1)}%</span>`;
             document.getElementById('shredder-modal').style.display = 'block';
         }
 
         function shredCards() {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            let commonDupes = 0;
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let commonDupes = 0;
             col.forEach(c => { if(!c.holo && c.grade < 9 && c.dupes > 0) commonDupes += c.dupes; });
             if(commonDupes < 5) { alert("You need at least 5 Common (Non-Holo, Grade 7/8) Dupes to shred!"); return; }
-            
-            let burned = 0;
-            for(let i=0; i<col.length; i++) {
-                if(!col[i].holo && col[i].grade < 9 && col[i].dupes > 0) {
-                    while(col[i].dupes > 0 && burned < 5) { col[i].dupes--; burned++; }
-                }
-                if(burned >= 5) break;
-            }
-            
-            shredBonus += 0.005; 
-            localStorage.setItem('EWF_ShredBonus', shredBonus); localStorage.setItem('EWF_Collection', JSON.stringify(col));
-            document.body.classList.add('screen-shake'); setTimeout(() => document.body.classList.remove('screen-shake'), 300);
-            openShredder(); displayCollection();
+            let burned = 0; for(let i=0; i<col.length; i++) { if(!col[i].holo && col[i].grade < 9 && col[i].dupes > 0) { while(col[i].dupes > 0 && burned < 5) { col[i].dupes--; burned++; } } if(burned >= 5) break; }
+            shredBonus += 0.005; localStorage.setItem('EWF_ShredBonus', shredBonus); localStorage.setItem('EWF_Collection', JSON.stringify(col));
+            document.body.classList.add('screen-shake'); setTimeout(() => document.body.classList.remove('screen-shake'), 300); openShredder(); displayCollection();
         }
 
         function openBounties() {
             let html = "";
             for(const [k, b] of Object.entries(bounties)) {
                 let status = `<span style="color:cyan;">${b.current} / ${b.target}</span>`;
-                if(b.claimed) status = `<span style="color:#555;">CLAIMED</span>`;
-                else if(b.current >= b.target) status = `<button class="modal-btn" onclick="claimBounty('${k}')">CLAIM $${b.reward}</button>`;
+                if(b.claimed) status = `<span style="color:#555;">CLAIMED</span>`; else if(b.current >= b.target) status = `<button class="modal-btn" onclick="claimBounty('${k}')">CLAIM $${b.reward}</button>`;
                 html += `<div class="modal-item"><div>${b.desc}</div><div>${status}</div></div>`;
             }
             document.getElementById('bounty-list').innerHTML = html; document.getElementById('bounty-modal').style.display = 'block';
@@ -391,28 +396,21 @@
 
         function toggleFactionWar() {
             if(userCash < 500) return; factionMode = !factionMode; factionTeam = [];
-            document.getElementById('faction-msg').style.display = factionMode ? 'block' : 'none';
-            document.getElementById('faction-btn').innerHTML = factionMode ? "CANCEL WAR" : "3v3 WAR ($500)";
-            displayCollection(); updateUI();
+            document.getElementById('faction-msg').style.display = factionMode ? 'block' : 'none'; document.getElementById('faction-btn').innerHTML = factionMode ? "CANCEL WAR" : "3v3 WAR ($500)"; displayCollection(); updateUI();
         }
 
         function confirmFactionWar() {
             if(confirm("Start Faction War with these 3 wrestlers for $500?")) {
-                userCash -= 500; saveGame(); factionMode = false; 
-                document.getElementById('faction-msg').style.display = 'none'; document.getElementById('faction-btn').innerHTML = "3v3 WAR ($500)";
+                userCash -= 500; saveGame(); factionMode = false; document.getElementById('faction-msg').style.display = 'none'; document.getElementById('faction-btn').innerHTML = "3v3 WAR ($500)";
                 factionSimulating = true;
                 const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
-                overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble';
-                bText.innerHTML = "FACTION WAR SIMULATING..."; bText.style.color = "gold";
+                overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; bText.innerHTML = "FACTION WAR SIMULATING..."; bText.style.color = "gold";
 
                 setTimeout(() => {
-                    bCard.classList.remove('rumble');
-                    let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let teamWins = 0;
+                    bCard.classList.remove('rumble'); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let teamWins = 0;
                     factionTeam.forEach(idx => { col[idx].stamina--; let winChance = col[idx].baseWin; if(col[idx].streak >= 3) winChance += 0.1; if(Math.random() < winChance) teamWins++; });
-                    
                     if(teamWins >= 2) { const payout = 5000 * multi; bText.innerHTML = `FACTION WINS ${teamWins}-` + (3-teamWins) + `! ($${payout} PAYOUT)`; bText.style.color = "#00FF00"; userCash += payout; saveGame(); triggerConfetti(); } 
                     else { bText.innerHTML = `FACTION DEFEATED ${teamWins}-` + (3-teamWins); bText.style.color = "red"; }
-
                     localStorage.setItem('EWF_Collection', JSON.stringify(col)); setTimeout(() => { overlay.style.display = 'none'; factionSimulating = false; displayCollection(); updateUI(); }, 3000);
                 }, 2000);
             } else { toggleFactionWar(); }
@@ -420,8 +418,7 @@
 
         function ripGearPack() {
             if(userCash < 250) return; userCash -= 250; saveGame(); updateUI();
-            const area = document.getElementById('pack-area'); area.innerHTML = ''; 
-            const div = document.createElement('div'); div.className = 'pack-card';
+            const area = document.getElementById('pack-area'); area.innerHTML = ''; const div = document.createElement('div'); div.className = 'pack-card';
             div.innerHTML = `<div class="card-inner"><div class="back"></div><div class="front" style="background:#222; border-color:silver; display:flex; align-items:center; justify-content:center; flex-direction:column;"><div id="gear-reveal" style="font-size:50px;">❓</div><div id="gear-text" style="color:white; font-weight:bold; margin-top:10px;"></div></div></div>`;
             div.onclick = function() {
                 if(!this.classList.contains('flipped')) { 
@@ -429,8 +426,7 @@
                     setTimeout(() => {
                         const roll = Math.random(); let item = "", icon = "";
                         if(roll > 0.5) { inventory.drink++; item = "ENERGY DRINK"; icon = "🥤"; } else { inventory.chair++; item = "STEEL CHAIR"; icon = "🪑"; }
-                        localStorage.setItem('EWF_Gear', JSON.stringify(inventory));
-                        document.getElementById('gear-reveal').innerHTML = icon; document.getElementById('gear-text').innerHTML = item;
+                        localStorage.setItem('EWF_Gear', JSON.stringify(inventory)); document.getElementById('gear-reveal').innerHTML = icon; document.getElementById('gear-text').innerHTML = item;
                     }, 300);
                 }
             };
@@ -454,10 +450,8 @@
         function trainCard(idx) {
             if(userCash < 1000) { alert("Need $1000 to send to Performance Center."); return; }
             if(confirm("Send to Camp for $1000? They will be locked for 5 Minutes but gain a permanent +10% Win Rate.")) {
-                userCash -= 1000; saveGame(); updateUI();
-                let col = JSON.parse(localStorage.getItem('EWF_Collection'));
-                col[idx].trainingUntil = Date.now() + (5 * 60 * 1000); 
-                localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection();
+                userCash -= 1000; saveGame(); updateUI(); let col = JSON.parse(localStorage.getItem('EWF_Collection'));
+                col[idx].trainingUntil = Date.now() + (5 * 60 * 1000); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection();
             }
         }
 
@@ -470,70 +464,44 @@
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
             document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${(arenas[currentArena].income + (col.filter(c => c.wins >= 200).length * 25)) * multi} / 30s`;
             
-            document.getElementById('rip-std-btn').disabled = (userCash < 100) || factionMode;
-            document.getElementById('rip-super-btn').disabled = (userCash < 500) || factionMode;
-            document.getElementById('rip-gear-btn').disabled = (userCash < 250) || factionMode;
-            document.getElementById('faction-btn').disabled = (userCash < 500) || col.length < 3;
+            document.getElementById('rip-std-btn').disabled = (userCash < 100) || factionMode || gauntlet.active;
+            document.getElementById('rip-super-btn').disabled = (userCash < 500) || factionMode || gauntlet.active;
+            document.getElementById('rip-gear-btn').disabled = (userCash < 250) || factionMode || gauntlet.active;
+            document.getElementById('faction-btn').disabled = (userCash < 500) || col.length < 3 || gauntlet.active;
             
             let r = "ROOKIE PROMOTER"; let next = 6; let base = 0; let isLegendary = false;
-            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; isLegendary = true; } 
-            else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; } 
-            else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
-            
+            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; isLegendary = true; } else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; } else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
             let rankText = `RANK: ${r}`; if(prestigeLevel > 0) rankText += ` <span style="color:cyan; font-weight:900;">[PRESTIGE ${prestigeLevel}]</span>`;
-            document.getElementById('rank-display').innerHTML = rankText;
-            document.getElementById('progress-fill').style.width = Math.min(((col.length - base) / (next - base)) * 100, 100) + "%";
-
-            const hofCount = col.filter(c => c.wins >= 200).length;
-            document.getElementById('rebirth-btn').style.display = (isLegendary && hofCount >= 5) ? 'block' : 'none';
+            document.getElementById('rank-display').innerHTML = rankText; document.getElementById('progress-fill').style.width = Math.min(((col.length - base) / (next - base)) * 100, 100) + "%";
+            const hofCount = col.filter(c => c.wins >= 200).length; document.getElementById('rebirth-btn').style.display = (isLegendary && hofCount >= 5) ? 'block' : 'none';
         }
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
 
         function ripPack(cost, baseHoloChance) {
-            if (userCash < cost) return;
-            userCash -= cost; saveGame(); updateUI();
-            
-            let holoChance = baseHoloChance + shredBonus;
-            pendingPack = [];
+            if (userCash < cost) return; userCash -= cost; saveGame(); updateUI();
+            let holoChance = baseHoloChance + shredBonus; pendingPack = [];
             for (let i = 0; i < 5; i++) {
-                const num = Math.floor(Math.random() * totalCards) + 1;
-                const isHolo = Math.random() < holoChance;
-                let grade = 7; const roll = Math.random();
+                const num = Math.floor(Math.random() * totalCards) + 1; const isHolo = Math.random() < holoChance; let grade = 7; const roll = Math.random();
                 if(roll > 0.95) grade = 10; else if(roll > 0.80) grade = 9; else if(roll > 0.40) grade = 8;
                 pendingPack.push({ img: `card (${num}).jpg`, holo: isHolo, grade: grade });
             }
-            
-            const area = document.getElementById('pack-area');
-            area.innerHTML = `
-                <div id="sealed-pack" onclick="openSealedPack()">
-                    <h2 style="color:black; font-size: 30px; transform: rotate(-10deg);">RIP PACK!</h2>
-                </div>
-            `;
+            const area = document.getElementById('pack-area'); area.innerHTML = `<div id="sealed-pack" onclick="openSealedPack()"><h2 style="color:black; font-size: 30px; transform: rotate(-10deg);">RIP PACK!</h2></div>`;
         }
 
         function openSealedPack() {
             const cheer = document.getElementById("cheerSound"); cheer.volume = 0.5; cheer.currentTime = 0; cheer.play().catch(e=>{});
             const area = document.getElementById('pack-area'); area.innerHTML = '';
-            
             pendingPack.forEach((cardData, i) => {
                 setTimeout(() => {
                     const cardDiv = document.createElement('div'); cardDiv.className = 'pack-card slide-in';
                     cardDiv.innerHTML = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${cardData.img}'); ${cardData.holo ? 'border-color:cyan; box-shadow: 0 0 10px cyan;' : ''}"></div></div>`;
-                    
                     cardDiv.onclick = function() { 
                         if(!this.classList.contains('flipped')) { 
                             if(cardData.holo || cardData.grade === 10) {
                                 this.classList.add('super-shake'); document.body.classList.add('screen-shake');
-                                setTimeout(() => {
-                                    this.classList.remove('super-shake'); document.body.classList.remove('screen-shake');
-                                    this.classList.add('flipped'); triggerConfetti();
-                                    if(cardData.holo) updateBounty('holos', 1);
-                                    saveCard(cardData.img, cardData.holo, cardData.grade); 
-                                }, 1200); 
-                            } else {
-                                this.classList.add('flipped'); saveCard(cardData.img, cardData.holo, cardData.grade); 
-                            }
+                                setTimeout(() => { this.classList.remove('super-shake'); document.body.classList.remove('screen-shake'); this.classList.add('flipped'); triggerConfetti(); if(cardData.holo) updateBounty('holos', 1); saveCard(cardData.img, cardData.holo, cardData.grade); }, 1200); 
+                            } else { this.classList.add('flipped'); saveCard(cardData.img, cardData.holo, cardData.grade); }
                         } 
                     };
                     area.appendChild(cardDiv);
@@ -542,122 +510,86 @@
         }
 
         function saveCard(img, holo, grade) {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            let existing = col.find(c => c.img === img);
-            if (!existing) { col.push({ img, wins: 0, holo, grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, buff: null }); } 
-            else { existing.dupes = (existing.dupes || 0) + 1; }
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let existing = col.find(c => c.img === img);
+            if (!existing) { col.push({ img, wins: 0, holo, grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, buff: null }); } else { existing.dupes = (existing.dupes || 0) + 1; }
             localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI();
         }
 
-        function displayRecord() {
-            document.getElementById('win-count').innerHTML = `${totalWins} W`; document.getElementById('loss-count').innerHTML = `${totalLosses} L`;
-            const totalMatches = totalWins + totalLosses; document.getElementById('win-rate').innerHTML = `WIN RATE: ${totalMatches === 0 ? 0 : Math.round((totalWins / totalMatches) * 100)}%`;
-        }
+        function displayRecord() { document.getElementById('win-count').innerHTML = `${totalWins} W`; document.getElementById('loss-count').innerHTML = `${totalLosses} L`; const totalMatches = totalWins + totalLosses; document.getElementById('win-rate').innerHTML = `WIN RATE: ${totalMatches === 0 ? 0 : Math.round((totalWins / totalMatches) * 100)}%`; }
 
+        // --- NEW PLAY-BY-PLAY ENGINE ---
         function runBattle(idx, isPPV = false) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let card = col[idx];
-            if(card.injured || card.trainingUntil > Date.now() || factionMode) return;
+            if(card.injured || card.trainingUntil > Date.now() || factionMode || gauntlet.active) return;
             if(card.stamina <= 0) { if(Math.random() < 0.5) { card.injured = true; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); alert("🚑 INJURY! Pay $500 to heal."); return; } } 
             else { card.stamina--; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); }
 
             const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
-            overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${card.img}')`;
-            bCard.className = 'rumble'; bText.innerHTML = isPPV ? "TITLE MATCH..." : "FIGHTING..."; bText.style.color = "white";
+            overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${card.img}')`; bCard.className = 'rumble'; 
+            
+            let moves = isPPV ? ["TITLE MATCH!", "CHAMPIONSHIP ON THE LINE!", "DEVASTATING FINISHER!", "1...", "2..."] : ["LOCKUP!", "IRISH WHIP!", "MASSIVE SUPLEX!", "1...", "2..."];
+            let step = 0; bText.innerHTML = moves[0]; bText.style.color = "white";
 
-            setTimeout(() => {
-                bCard.classList.remove('rumble'); col = JSON.parse(localStorage.getItem('EWF_Collection')); card = col[idx]; 
-                let chance = card.baseWin; if(card.buff === 'chair') { chance += 0.25; card.buff = null; } 
-                const win = Math.random() < chance;
-                
-                if (win) { 
-                    bText.innerHTML = "WINNER!"; bText.style.color = "#00FF00"; triggerConfetti(); 
-                    card.wins++; totalWins++; card.streak = (card.streak > 0) ? card.streak + 1 : 1;
-                    if(isPPV) card.champion = true; updateBounty('wins', 1);
-                } else { 
-                    bText.innerHTML = "DEFEAT"; bText.style.color = "red"; totalLosses++; card.streak = (card.streak < 0) ? card.streak - 1 : -1;
+            let fightInt = setInterval(() => {
+                step++;
+                if(step < moves.length) {
+                    bText.innerHTML = moves[step]; document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),100);
+                } else {
+                    clearInterval(fightInt); bCard.classList.remove('rumble'); col = JSON.parse(localStorage.getItem('EWF_Collection')); card = col[idx]; 
+                    let chance = card.baseWin; if(card.buff === 'chair') { chance += 0.25; card.buff = null; } 
+                    const win = Math.random() < chance;
+                    
+                    if (win) { 
+                        bText.innerHTML = "WINNER!"; bText.style.color = "#00FF00"; triggerConfetti(); 
+                        card.wins++; totalWins++; card.streak = (card.streak > 0) ? card.streak + 1 : 1;
+                        if(isPPV) card.champion = true; updateBounty('wins', 1);
+                        
+                        // VAULT DROP LOGIC
+                        if(Math.random() < 0.1) {
+                            vault.push({ id: Date.now(), unlockAt: Date.now() + 10*60*1000 });
+                            localStorage.setItem('EWF_Vault', JSON.stringify(vault));
+                            setTimeout(() => alert("💼 A MONEY IN THE BANK BRIEFCASE DROPPED! Check your vault!"), 500);
+                        }
+                    } else { 
+                        bText.innerHTML = "DEFEAT"; bText.style.color = "red"; totalLosses++; card.streak = (card.streak < 0) ? card.streak - 1 : -1;
+                    }
+
+                    localStorage.setItem('EWF_Wins', totalWins); localStorage.setItem('EWF_Losses', totalLosses); localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                    setTimeout(() => { overlay.style.display = 'none'; displayCollection(); displayRecord(); updateUI(); }, 2000);
                 }
-
-                localStorage.setItem('EWF_Wins', totalWins); localStorage.setItem('EWF_Losses', totalLosses); localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); displayRecord(); updateUI(); }, 2000);
-            }, 1500); 
+            }, 500); 
         }
 
-        function getCardValue(card) {
-            let baseVal = 20; if (card.grade === 10) baseVal = 500; else if (card.grade === 9) baseVal = 100; else if (card.grade === 8) baseVal = 40;
-            let total = card.holo ? baseVal * 4 : baseVal; if (card.champion) total *= 5; if (card.streak >= 3) total *= 1.5; if (card.streak <= -3) total *= 0.5;
-            return Math.floor(total * multi);
-        }
-
+        function getCardValue(card) { let baseVal = 20; if (card.grade === 10) baseVal = 500; else if (card.grade === 9) baseVal = 100; else if (card.grade === 8) baseVal = 40; let total = card.holo ? baseVal * 4 : baseVal; if (card.champion) total *= 5; if (card.streak >= 3) total *= 1.5; if (card.streak <= -3) total *= 0.5; return Math.floor(total * multi); }
         function sellCard(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); const val = getCardValue(col[idx]); if(confirm(`Sell for $${val}?`)) { if(col[idx].dupes > 0) col[idx].dupes--; else col.splice(idx, 1); userCash += val; localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); updateUI(); displayCollection(); } }
         function healCard(idx) { if(userCash < 500) return; userCash -= 500; saveGame(); let col = JSON.parse(localStorage.getItem('EWF_Collection')); col[idx].injured = false; col[idx].stamina = 5; localStorage.setItem('EWF_Collection', JSON.stringify(col)); updateUI(); displayCollection(); }
         function forgeCard(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); if(confirm("Trade 3 copies to forge a GEM MINT 10?")) { col[idx].dupes -= 2; col[idx].grade = 10; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI(); } }
         function ppvMatch(idx) { if(userCash < 1000) return; if(confirm("Book a $1000 Title Match?")) { userCash -= 1000; saveGame(); updateUI(); runBattle(idx, true); } }
 
         function setupInspector(card) {
-            const update = (e) => {
-                const rect = card.getBoundingClientRect(); const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left; const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
-                const rX = ((rect.height / 2) - y) / 10; const rY = (x - (rect.width / 2)) / 10;
-                if(!factionMode) { card.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) scale(1.05)`; card.style.boxShadow = `${-rY}px ${rX}px 25px rgba(0,0,0,0.6)`; }
-                card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`); 
-            };
-            card.addEventListener('mousemove', update);
-            card.addEventListener('mouseleave', () => { card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; });
+            const update = (e) => { const rect = card.getBoundingClientRect(); const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left; const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top; const rX = ((rect.height / 2) - y) / 10; const rY = (x - (rect.width / 2)) / 10; if(!factionMode) { card.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) scale(1.05)`; card.style.boxShadow = `${-rY}px ${rX}px 25px rgba(0,0,0,0.6)`; } card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`); };
+            card.addEventListener('mousemove', update); card.addEventListener('mouseleave', () => { card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; });
         }
 
-        function handleCardClick(idx) {
-            if(!factionMode) return; let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            if(col[idx].injured || col[idx].wins >= 200) { alert("Cannot select injured or retired wrestlers!"); return; }
-            const teamIdx = factionTeam.indexOf(idx); if(teamIdx > -1) { factionTeam.splice(teamIdx, 1); } else if(factionTeam.length < 3) { factionTeam.push(idx); } 
-            displayCollection(); if(factionTeam.length === 3) setTimeout(() => confirmFactionWar(), 300);
-        }
+        function handleCardClick(idx) { if(!factionMode) return; let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; if(col[idx].injured || col[idx].wins >= 200) { alert("Cannot select injured or retired wrestlers!"); return; } const teamIdx = factionTeam.indexOf(idx); if(teamIdx > -1) { factionTeam.splice(teamIdx, 1); } else if(factionTeam.length < 3) { factionTeam.push(idx); } displayCollection(); if(factionTeam.length === 3) setTimeout(() => confirmFactionWar(), 300); }
 
         function displayCollection() {
-            const grid = document.getElementById('collection-grid'); const hofGrid = document.getElementById('hof-grid');
-            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            const grid = document.getElementById('collection-grid'); const hofGrid = document.getElementById('hof-grid'); const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             grid.innerHTML = ''; hofGrid.innerHTML = ''; const now = Date.now();
-            
             col.forEach((card, index) => {
-                const container = document.createElement('div'); container.className = 'card-container';
-                const cardDiv = document.createElement('div'); 
-                
-                let classes = `saved-card ${card.holo ? 'is-holo' : ''}`;
-                if(factionMode && factionTeam.includes(index)) { classes += ' faction-selected'; cardDiv.style.borderColor = '#00FF00'; cardDiv.style.boxShadow = '0 0 20px #00FF00'; cardDiv.style.transform = 'scale(1.05)'; }
-                cardDiv.className = classes;
-
-                const isHof = card.wins >= 200;
-                let streakHtml = ''; if(card.streak >= 3) streakHtml = '<div class="streak-badge">🔥</div>'; if(card.streak <= -3) streakHtml = '<div class="streak-badge">❄️</div>';
-                let buffHtml = ''; if(card.buff === 'chair') buffHtml = '<div class="buff-icon">🪑</div>';
-                
-                const staminaPrc = (card.stamina / 5) * 100;
-                let stamColor = "#00FF00"; if(card.stamina <= 2) stamColor = "orange"; if(card.stamina === 0) stamColor = "red";
-                let isTraining = card.trainingUntil > now;
+                const container = document.createElement('div'); container.className = 'card-container'; const cardDiv = document.createElement('div'); 
+                let classes = `saved-card ${card.holo ? 'is-holo' : ''}`; if(factionMode && factionTeam.includes(index)) { classes += ' faction-selected'; cardDiv.style.borderColor = '#00FF00'; cardDiv.style.boxShadow = '0 0 20px #00FF00'; cardDiv.style.transform = 'scale(1.05)'; } cardDiv.className = classes;
+                const isHof = card.wins >= 200; let streakHtml = ''; if(card.streak >= 3) streakHtml = '<div class="streak-badge">🔥</div>'; if(card.streak <= -3) streakHtml = '<div class="streak-badge">❄️</div>'; let buffHtml = ''; if(card.buff === 'chair') buffHtml = '<div class="buff-icon">🪑</div>'; const staminaPrc = (card.stamina / 5) * 100; let stamColor = "#00FF00"; if(card.stamina <= 2) stamColor = "orange"; if(card.stamina === 0) stamColor = "red"; let isTraining = card.trainingUntil > now;
 
                 cardDiv.innerHTML = `
                     <div class="grade-label ${card.grade === 10 ? 'gem-mint' : ''}"><div class="grade-title">${card.champion ? '🏆 EWF AUTHENTIC 🏆' : 'EWF AUTHENTIC'}</div><div class="grade-score">${card.grade === 10 ? 'GEM MINT 10' : `MINT ${card.grade}`}</div></div>
                     <div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; z-index: 10;"></div>
-                    <div class="shine-layer"></div><div class="sparkle-layer"></div><div class="holo-foil"></div>
-                    <div class="win-count">${card.wins} W</div>
-                    ${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}
-                    ${streakHtml} ${buffHtml}
-                    ${!isHof ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}
-                    ${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}
-                    ${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}
-                `;
+                    <div class="shine-layer"></div><div class="sparkle-layer"></div><div class="holo-foil"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}`;
                 
-                setupInspector(cardDiv); 
-                if(factionMode) { cardDiv.onclick = () => handleCardClick(index); } else if(!isHof && !card.injured && !isTraining) { cardDiv.ondblclick = () => runBattle(index, false); }
-                container.appendChild(cardDiv);
-
+                setupInspector(cardDiv); if(factionMode) { cardDiv.onclick = () => handleCardClick(index); } else if(!isHof && !card.injured && !isTraining) { cardDiv.ondblclick = () => runBattle(index, false); } container.appendChild(cardDiv);
                 if(!isHof && !isTraining && !factionMode) {
                     const controls = document.createElement('div'); controls.className = 'gm-controls';
-                    if(card.injured) {
-                        controls.innerHTML = `<button class="gm-btn btn-heal" onclick="healCard(${index})">HEAL ($500)</button>`;
-                    } else {
-                        controls.innerHTML = `<div style="display:flex; gap:2px;"><button class="gm-btn btn-sell" style="flex:1;" onclick="sellCard(${index})">SELL ($${getCardValue(card)})</button><button class="gm-btn btn-gear" style="flex:1;" onclick="openGearMenu(${index})">🎒 GEAR</button></div>`;
-                        if(card.baseWin < 0.6) controls.innerHTML += `<button class="gm-btn btn-train" onclick="trainCard(${index})">TRAIN 5m ($1000)</button>`;
-                        if(!card.champion && userCash >= 1000) controls.innerHTML += `<button class="gm-btn btn-ppv" onclick="ppvMatch(${index})">PPV TITLE ($1000)</button>`;
-                        if(card.dupes >= 2 && card.grade < 10) controls.innerHTML += `<button class="gm-btn btn-forge" onclick="forgeCard(${index})">FORGE 10</button>`;
-                    }
+                    if(card.injured) { controls.innerHTML = `<button class="gm-btn btn-heal" onclick="healCard(${index})">HEAL ($500)</button>`; } else { controls.innerHTML = `<div style="display:flex; gap:2px;"><button class="gm-btn btn-sell" style="flex:1;" onclick="sellCard(${index})">SELL ($${getCardValue(card)})</button><button class="gm-btn btn-gear" style="flex:1;" onclick="openGearMenu(${index})">🎒 GEAR</button></div>`; if(card.baseWin < 0.6) controls.innerHTML += `<button class="gm-btn btn-train" onclick="trainCard(${index})">TRAIN 5m ($1000)</button>`; if(!card.champion && userCash >= 1000) controls.innerHTML += `<button class="gm-btn btn-ppv" onclick="ppvMatch(${index})">PPV TITLE ($1000)</button>`; if(card.dupes >= 2 && card.grade < 10) controls.innerHTML += `<button class="gm-btn btn-forge" onclick="forgeCard(${index})">FORGE 10</button>`; }
                     container.appendChild(controls); grid.appendChild(container);
                 } else if(isHof) { hofGrid.appendChild(container); } else { grid.appendChild(container); } 
             });
