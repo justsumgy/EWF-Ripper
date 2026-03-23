@@ -5,9 +5,14 @@
     <style>
         body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; border: 5px solid #D4AF37; min-height: 100vh; margin: 0; overflow-x: hidden; }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
-        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; }
+        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; position: relative; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; display: block; }
         #rank-display { color: #D4AF37; font-size: 18px; display: block; margin-top: 5px; letter-spacing: 2px; }
+        
+        /* Rank Progress Bar */
+        #progress-container { width: 100%; height: 8px; background: #333; border-radius: 4px; margin-top: 10px; overflow: hidden; border: 1px solid #555; }
+        #progress-fill { height: 100%; width: 0%; background: linear-gradient(to right, #D4AF37, #fff); transition: 0.5s; }
+
         #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 350px; }
         .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; position: relative; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
@@ -15,9 +20,14 @@
         .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; border: 3px solid #D4AF37; box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
         .back { background: url('wrapper.jpg') center/cover; background-color: #111; }
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
+        
+        /* Holo Effect */
+        .holo-shimmer::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(125deg, transparent 0%, rgba(255,255,255,0.3) 45%, rgba(255,255,255,0.3) 55%, transparent 100%); background-size: 200% 200%; animation: holo 3s infinite; pointer-events: none; border-radius: 10px; }
+        @keyframes holo { 0% { background-position: 200% 200%; } 100% { background-position: -200% -200%; } }
+
         .grade-tag { position: absolute; top: 10px; left: 10px; background: white; color: black; padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #333; z-index: 5; }
         button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
-        button:disabled { background: #444 !important; opacity: 0.5; cursor: not-allowed; }
+        button:disabled { background: #444 !important; opacity: 0.5; }
         .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #D4AF37; transition: 0.3s; position: relative; display: inline-block; margin: 10px; cursor: pointer; }
         .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; font-weight: bold; z-index: 10; }
         #battle-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; }
@@ -25,6 +35,8 @@
         #battle-text { font-size: 4em; color: gold; text-shadow: 0 0 20px red; margin-top: 20px; font-style: italic; z-index: 1001; }
         @keyframes rumble { 0% { transform: translate(2px,2px); } 50% { transform: translate(-2px,-2px); } 100% { transform: translate(0,0); } }
         .rumble { animation: rumble 0.1s linear infinite; }
+        .mute-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer; opacity: 0.5; }
+        .mute-btn:hover { opacity: 1; }
     </style>
 </head>
 <body onload="initGame()">
@@ -36,10 +48,11 @@
     <h2>SERIES 1: 2026 EDITION</h2>
     
     <div id="stats-bar">
+        <button class="mute-btn" onclick="toggleMute()">🔊</button>
         <div id="cash-display">CONTRACT FUNDS: $0</div>
         <div id="rank-display">RANK: ROOKIE PROMOTER</div>
-        <button style="background: #222; font-size: 10px; padding: 5px; margin-top: 10px;" onclick="clearEverything()">WIPE DATA</button>
-        <button style="background: green; font-size: 10px; padding: 5px; margin-top: 10px;" onclick="addCash()">+ ADD $1000 (DEV MODE)</button>
+        <div id="progress-container"><div id="progress-fill"></div></div>
+        <button style="background: #222; font-size: 10px; padding: 5px; margin-top: 10px; border: 1px solid #555;" onclick="clearEverything()">WIPE DATA</button>
     </div>
     <br>
     <button id="rip-btn" onclick="ripPack()">RIP 2026 PACK ($100)</button>
@@ -53,19 +66,18 @@
     <script>
         const totalCards = 23; 
         const folderPath = "rare ewf cards"; 
-        
-        let userCash = parseInt(localStorage.getItem('EWF_Cash'));
-        // GOD MODE: If money is missing or 0, give $1000
-        if (isNaN(userCash) || userCash <= 0) {
-            userCash = 1000;
-            localStorage.setItem('EWF_Cash', 1000);
-        }
-
+        let userCash = parseInt(localStorage.getItem('EWF_Cash')) || 300;
+        let isMuted = false;
         let musicStarted = false;
 
-        function initGame() { updateUI(); displayCollection(); setInterval(() => { userCash += 50; saveGame(); updateUI(); }, 30000); }
+        function initGame() { updateUI(); displayCollection(); setInterval(() => { userCash += 20; saveGame(); updateUI(); }, 30000); }
 
-        function addCash() { userCash += 1000; saveGame(); updateUI(); }
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById("bgMusic").muted = isMuted;
+            document.getElementById("cheerSound").muted = isMuted;
+            event.target.innerHTML = isMuted ? "🔇" : "🔊";
+        }
 
         function spark(element) {
             const rect = element.getBoundingClientRect();
@@ -105,10 +117,16 @@
             document.getElementById('rip-btn').disabled = (userCash < 100);
             const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             let r = "ROOKIE PROMOTER";
-            if (col.length >= 19) r = "LEGENDARY COLLECTOR";
-            else if (col.length >= 13) r = "ELITE EXECUTIVE";
-            else if (col.length >= 6) r = "PRO MANAGER";
+            let nextTarget = 6;
+            let currentBase = 0;
+            
+            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; nextTarget = 23; currentBase = 19; }
+            else if (col.length >= 13) { r = "ELITE EXECUTIVE"; nextTarget = 19; currentBase = 13; }
+            else if (col.length >= 6) { r = "PRO MANAGER"; nextTarget = 13; currentBase = 6; }
+            
             document.getElementById('rank-display').innerHTML = `RANK: ${r}`;
+            const percent = ((col.length - currentBase) / (nextTarget - currentBase)) * 100;
+            document.getElementById('progress-fill').style.width = percent + "%";
         }
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
@@ -122,17 +140,18 @@
             for (let i = 0; i < 5; i++) {
                 const randomNum = Math.floor(Math.random() * totalCards) + 1;
                 const fileName = `card (${randomNum}).jpg`, grade = Math.floor(Math.random() * 4) + 7;
+                const isHolo = Math.random() > 0.9;
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'card';
-                cardDiv.innerHTML = `<div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}', ${grade}); spark(this)"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${fileName}')"><div class="grade-tag">PSA ${grade}</div></div></div>`;
+                cardDiv.innerHTML = `<div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}', ${grade}, ${isHolo}); spark(this)"><div class="back"></div><div class="front ${isHolo ? 'holo-shimmer' : ''}" style="background-image: url('${folderPath}/${fileName}')"><div class="grade-tag">PSA ${grade}</div></div></div>`;
                 area.appendChild(cardDiv);
             }
         }
 
-        function saveCard(img, grade) {
+        function saveCard(img, grade, holo) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             if (!col.find(c => c.img === img)) {
-                col.push({ img: img, wins: 0, hof: false, grade: grade });
+                col.push({ img: img, wins: 0, hof: false, grade: grade, holo: holo });
                 localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI();
             } else { userCash += 50; saveGame(); updateUI(); }
         }
@@ -159,7 +178,7 @@
             grid.innerHTML = ''; hofGrid.innerHTML = '';
             col.forEach((card, index) => {
                 const div = document.createElement('div');
-                div.className = `saved-card ${card.hof ? 'hof-card' : ''}`;
+                div.className = `saved-card ${card.hof ? 'hof-card' : ''} ${card.holo ? 'holo-shimmer' : ''}`;
                 div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
                 div.innerHTML = `<div class="grade-tag" style="font-size:9px; top:5px; left:5px;">PSA ${card.grade || 10}</div>`;
                 if (card.hof) { div.innerHTML += `<div class="win-count" style="background:gold; color:black;">100</div>`; hofGrid.appendChild(div); }
