@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My EWF Collection 2026</title>
+    <title>EWF RIPPED (TCG)</title>
     <style>
         body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; margin: 0; overflow-x: hidden; user-select: none; }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
+        /* NEW EARLY ACCESS TAG */
+        #early-access { position: fixed; top: 20px; left: 20px; background: #c00; color: white; padding: 8px 12px; font-weight: bold; border-radius: 5px; font-size: 14px; z-index: 9999; border: 2px solid white; box-shadow: 0 0 15px rgba(255,0,0,0.8); transform: rotate(-5deg); letter-spacing: 1px; pointer-events: none; }
+
         #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; position: relative; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
         #income-display { color: #aaa; font-size: 14px; letter-spacing: 1px; margin-top: 5px; }
@@ -61,7 +64,6 @@
         .btn-arena { background: linear-gradient(#0044ff, #001188); border-color: cyan; } .btn-bounty { background: linear-gradient(#ff8c00, #8b4500); border-color: gold; }
         button.main-btn:hover { transform: scale(1.05); } button.main-btn:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
         
-        /* MODALS */
         .modal { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 450px; background: rgba(0,0,0,0.95); border: 3px solid gold; border-radius: 10px; padding: 20px; z-index: 5000; display: none; box-shadow: 0 0 50px black; }
         .modal h2 { color: gold; margin-top: 0; }
         .modal-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #444; align-items: center; text-align: left; }
@@ -69,11 +71,18 @@
         .modal-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
         .close-btn { margin-top:20px; padding:10px; background:red; color:white; font-weight:bold; border:none; border-radius:5px; cursor:pointer; width: 100%; }
 
+        /* WIN-LOSS RECORD CSS */
+        #record-box { background: rgba(0,0,0,0.85); border: 2px solid #D4AF37; max-width: 350px; margin: 40px auto; padding: 20px; border-radius: 12px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
+        #record-display { font-size: 36px; font-weight: 900; letter-spacing: 2px; margin: 10px 0; }
+        .win-text { color: #00FF00; text-shadow: 0 0 10px rgba(0,255,0,0.5); }
+        .loss-text { color: #FF0000; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
+
         #hof-section { margin-top: 50px; padding: 40px 20px; background: rgba(212, 175, 55, 0.1); border-top: 5px solid gold; border-bottom: 5px solid gold; }
     </style>
 </head>
 <body onload="initGame()">
     
+    <div id="early-access">EARLY ACCESS GAME</div>
     <button id="music-toggle" onclick="toggleMusic()">🔇 Play Music</button>
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
     <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
@@ -99,7 +108,7 @@
         <button class="close-btn" onclick="document.getElementById('gear-modal').style.display='none'">CANCEL</button>
     </div>
 
-    <h1>ELITE WRESTLING FEDERATION</h1>
+    <h1>EWF RIPPED (TCG)</h1>
     <div id="stats-bar">
         <div id="cash-display">CONTRACT FUNDS: $0</div>
         <div id="income-display">PASSIVE INCOME: $25 / tick</div>
@@ -121,6 +130,14 @@
     <h2 style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF ROSTER</h2>
     <div id="collection-grid"></div>
     
+    <div id="record-box">
+        <h3 style="margin:0; color:#D4AF37; font-size: 18px;">PROMOTER RECORD</h3>
+        <div id="record-display">
+            <span class="win-text" id="win-count">0 W</span> <span style="color:#555;">-</span> <span class="loss-text" id="loss-count">0 L</span>
+        </div>
+        <div id="win-rate" style="font-size: 14px; color: #ccc; letter-spacing: 1px;">WIN RATE: 0%</div>
+    </div>
+
     <div id="hof-section">
         <h1 style="color: gold; text-shadow: 0 0 20px gold; font-size: 2.5em; margin-bottom: 5px;">🏛️ EWF HALL OF FAME 🏛️</h1>
         <p style="color: #ccc; font-size: 12px; margin-top: 0;">LEGENDS WITH 200+ WINS</p>
@@ -133,7 +150,9 @@
         let userCash = parseInt(localStorage.getItem('EWF_Cash')); if (isNaN(userCash) || userCash <= 0) userCash = 3000;
         let isMusicPlaying = false;
         
-        // TYCOON: ARENA DATA
+        let totalWins = parseInt(localStorage.getItem('EWF_Wins')) || 0;
+        let totalLosses = parseInt(localStorage.getItem('EWF_Losses')) || 0;
+        
         const arenas = [
             { name: "Local Gym", income: 25, cost: 0 },
             { name: "Bingo Hall", income: 100, cost: 5000 },
@@ -142,20 +161,18 @@
         ];
         let currentArena = parseInt(localStorage.getItem('EWF_Arena')) || 0;
 
-        // INVENTORY DATA
         let inventory = JSON.parse(localStorage.getItem('EWF_Gear')) || { drink: 0, chair: 0 };
-        let activeGearTarget = null; // Used when modal is open
+        let activeGearTarget = null; 
 
-        // BOUNTY DATA
         let bounties = JSON.parse(localStorage.getItem('EWF_Bounties')) || {
             wins: { target: 10, current: 0, reward: 2000, desc: "Win 10 Matches", claimed: false },
             holos: { target: 3, current: 0, reward: 3000, desc: "Pull 3 Holo Cards", claimed: false }
         };
 
         function initGame() {
-            migrateData(); updateUI(); displayCollection();
-            setInterval(() => { tick(); }, 30000); // 30s Tick
-            setInterval(() => { refreshTrainingTimers(); }, 1000); // 1s UI Tick for Timers
+            migrateData(); updateUI(); displayCollection(); displayRecord();
+            setInterval(() => { tick(); }, 30000); 
+            setInterval(() => { refreshTrainingTimers(); }, 1000); 
         }
 
         function migrateData() {
@@ -171,8 +188,6 @@
         function tick() {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             const hofCount = col.filter(c => c.wins >= 200).length;
-            
-            // Apply Arena Income + HOF Bonus
             userCash += (arenas[currentArena].income + (hofCount * 25)); 
             
             let mod = false;
@@ -192,14 +207,13 @@
             col.forEach((c, idx) => {
                 if(c.trainingUntil > 0 && now >= c.trainingUntil) {
                     c.trainingUntil = 0;
-                    c.baseWin = 0.6; // Upgrade permanent win rate to 60%!
+                    c.baseWin = 0.6; 
                     needsRender = true;
                     alert("🏋️ TRAINING COMPLETE! A wrestler's base win rate increased to 60%!");
                 }
             });
             if(needsRender) { localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); }
             
-            // Update UI text for active trainers
             document.querySelectorAll('.train-timer-text').forEach(el => {
                 const targetTime = parseInt(el.getAttribute('data-time'));
                 if(targetTime > now) {
@@ -210,7 +224,6 @@
             });
         }
 
-        // --- NEW SYSTEMS ---
         function openArena() {
             let html = "";
             arenas.forEach((a, i) => {
@@ -323,7 +336,6 @@
             }
         }
 
-        // --- EXISTING CORE ---
         function hardReset() { if(confirm("Wipe all cards, stats, and start fresh?")) { localStorage.clear(); location.reload(); } }
         function toggleMusic() { const m = document.getElementById("bgMusic"); const btn = document.getElementById("music-toggle"); if (isMusicPlaying) { m.pause(); btn.innerHTML = "🔇 Play Music"; isMusicPlaying = false; } else { m.volume = 0.2; m.play().catch(e => {}); btn.innerHTML = "🔊 Mute Music"; isMusicPlaying = true; } }
         function triggerConfetti() { const colors = ['#e60000', '#00FF00', '#FFD700', '#fff']; for(let i=0; i<60; i++) { const c = document.createElement('div'); c.className = 'confetti'; c.style.cssText = `left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`; document.body.appendChild(c); let cy = 0, op = 1; const drift = setInterval(() => { cy += Math.random() * 5 + 2; op -= 0.01; c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = op; if (op <= 0) { clearInterval(drift); c.remove(); } }, 20); } }
@@ -376,17 +388,25 @@
             localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI();
         }
 
+        // RESTORED DISPLAY RECORD LOGIC
+        function displayRecord() {
+            document.getElementById('win-count').innerHTML = `${totalWins} W`;
+            document.getElementById('loss-count').innerHTML = `${totalLosses} L`;
+            const totalMatches = totalWins + totalLosses;
+            const winRate = totalMatches === 0 ? 0 : Math.round((totalWins / totalMatches) * 100);
+            document.getElementById('win-rate').innerHTML = `WIN RATE: ${winRate}%`;
+        }
+
         function runBattle(idx, isPPV = false) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let card = col[idx];
             if(card.injured || card.trainingUntil > Date.now()) return;
             
-            // STAMINA BUG FIX: Drop and instantly re-render before overlay hits
             if(card.stamina <= 0) {
                 if(Math.random() < 0.5) { card.injured = true; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); alert("🚑 INJURY! Pay $500 to heal."); return; }
             } else {
                 card.stamina--; 
                 localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                displayCollection(); // VISUAL UPDATE INSTANTLY
+                displayCollection(); 
             }
 
             const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
@@ -395,25 +415,33 @@
 
             setTimeout(() => {
                 bCard.classList.remove('rumble'); 
-                col = JSON.parse(localStorage.getItem('EWF_Collection')); card = col[idx]; // Refresh state
+                col = JSON.parse(localStorage.getItem('EWF_Collection')); card = col[idx]; 
                 
                 let chance = card.baseWin;
-                if(card.buff === 'chair') { chance += 0.25; card.buff = null; } // Use Chair
+                if(card.buff === 'chair') { chance += 0.25; card.buff = null; } 
                 
                 const win = Math.random() < chance;
                 
                 if (win) { 
                     bText.innerHTML = "WINNER!"; bText.style.color = "#00FF00"; triggerConfetti(); 
-                    card.wins++; card.streak = (card.streak > 0) ? card.streak + 1 : 1;
+                    card.wins++; totalWins++;
+                    card.streak = (card.streak > 0) ? card.streak + 1 : 1;
                     if(isPPV) card.champion = true;
                     updateBounty('wins', 1);
                 } else { 
-                    bText.innerHTML = "DEFEAT"; bText.style.color = "red"; 
+                    bText.innerHTML = "DEFEAT"; bText.style.color = "red"; totalLosses++;
                     card.streak = (card.streak < 0) ? card.streak - 1 : -1;
                 }
 
+                localStorage.setItem('EWF_Wins', totalWins);
+                localStorage.setItem('EWF_Losses', totalLosses);
                 localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); }, 2000);
+                
+                setTimeout(() => { 
+                    overlay.style.display = 'none'; 
+                    displayCollection(); 
+                    displayRecord(); 
+                }, 2000);
             }, 1500); 
         }
 
@@ -504,7 +532,7 @@
                     }
                     container.appendChild(controls); grid.appendChild(container);
                 } else if(isHof) { hofGrid.appendChild(container); }
-                else { grid.appendChild(container); } // Training state
+                else { grid.appendChild(container); } 
             });
             document.getElementById('hof-section').style.display = hofGrid.innerHTML === '' ? 'none' : 'block';
         }
