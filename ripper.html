@@ -26,7 +26,6 @@
         .card-container { width: 160px; height: 230px; perspective: 1000px; display: inline-block; margin: 15px; vertical-align: top; }
         .saved-card { width: 100%; height: 100%; border-radius: 12px; border: 3px solid #D4AF37; background-size: cover; background-position: center; position: relative; transition: transform 0.1s ease-out; cursor: pointer; transform-style: preserve-3d; }
         
-        /* Effects */
         .is-holo { border-color: cyan !important; box-shadow: 0 0 15px cyan; }
         .shine { position: absolute; inset: 0; border-radius: 12px; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%); background-size: 200% 200%; pointer-events: none; z-index: 2; opacity: 0; }
         .saved-card:hover .shine { opacity: 1; }
@@ -34,4 +33,135 @@
         .win-count { position: absolute; top: -12px; right: -12px; background: red; color: white; border-radius: 50%; width: 30px; height: 30px; font-size: 14px; line-height: 30px; border: 2px solid white; z-index: 10; font-weight: bold; }
         
         button { padding: 12px 25px; font-size: 16px; color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; transition: 0.2s; }
-        .rip-std { background: linear-gradient(#e6
+        .rip-std { background: linear-gradient(#e60000, #800000); }
+        .rip-super { background: linear-gradient(#D4AF37, #8a6d3b); border-color: gold; color: black; }
+        button:hover { transform: scale(1.05); }
+        button:disabled { opacity: 0.5; transform: none; }
+    </style>
+</head>
+<body onload="initGame()">
+    
+    <h1>ELITE WRESTLING FEDERATION</h1>
+    <div id="stats-bar">
+        <div id="cash-display">CONTRACT FUNDS: $0</div>
+        <div id="rank-display" style="color:gold; margin-top:5px;">RANK: ROOKIE PROMOTER</div>
+        <div id="progress-container"><div id="progress-fill"></div></div>
+        <button style="background:#222; font-size:10px; padding:5px; margin-top:10px;" onclick="localStorage.clear(); location.reload();">FULL DATA RESET</button>
+    </div>
+    <br>
+    <button class="rip-std" id="rip-std-btn" onclick="ripPack(100, 0.15)">RIP STANDARD PACK ($100)</button>
+    <button class="rip-super" id="rip-super-btn" onclick="ripPack(500, 0.65)">RIP SUPER HOLO PACK ($500)</button>
+    
+    <div id="pack-area"></div>
+
+    <h2 id="collection-title" style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF COLLECTION</h2>
+    <div id="collection-grid"></div>
+
+    <script>
+        const totalCards = 23;
+        const folderPath = "rare ewf cards";
+        let userCash = parseInt(localStorage.getItem('EWF_Cash'));
+        if (isNaN(userCash) || userCash <= 0) userCash = 500;
+
+        function initGame() {
+            updateUI();
+            displayCollection();
+            setInterval(() => { userCash += 25; saveGame(); updateUI(); }, 30000);
+        }
+
+        function updateUI() {
+            document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
+            document.getElementById('rip-std-btn').disabled = (userCash < 100);
+            document.getElementById('rip-super-btn').disabled = (userCash < 500);
+
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let r = "ROOKIE PROMOTER";
+            let next = 6; let base = 0;
+            
+            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; }
+            else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; }
+            else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
+            
+            document.getElementById('rank-display').innerHTML = `RANK: ${r}`;
+            const progress = Math.min(((col.length - base) / (next - base)) * 100, 100);
+            document.getElementById('progress-fill').style.width = progress + "%";
+        }
+
+        function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
+
+        function ripPack(cost, holoChance) {
+            if (userCash < cost) return;
+            userCash -= cost; saveGame(); updateUI();
+            const area = document.getElementById('pack-area'); area.innerHTML = ''; 
+            
+            for (let i = 0; i < 5; i++) {
+                const num = Math.floor(Math.random() * totalCards) + 1;
+                const isHolo = Math.random() < holoChance;
+                const imgFile = `card (${num}).jpg`;
+                
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'pack-card';
+                cardDiv.innerHTML = `
+                    <div class="card-inner">
+                        <div class="back"></div>
+                        <div class="front" style="background-image: url('${folderPath}/${imgFile}'); ${isHolo ? 'border-color:cyan; box-shadow: 0 0 10px cyan;' : ''}"></div>
+                    </div>
+                `;
+                
+                cardDiv.onclick = function() {
+                    if(!this.classList.contains('flipped')) {
+                        this.classList.add('flipped');
+                        saveCard(imgFile, isHolo);
+                    }
+                };
+                area.appendChild(cardDiv);
+            }
+        }
+
+        function saveCard(img, holo) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            if (!col.find(c => c.img === img)) {
+                col.push({ img, wins: 0, holo });
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                displayCollection(); updateUI();
+            } else { 
+                userCash += 50; saveGame(); updateUI(); 
+            }
+        }
+
+        function applyTilt(e, card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotateX = ((rect.height / 2) - y) / 8;
+            const rotateY = (x - (rect.width / 2)) / 8;
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+        }
+
+        function displayCollection() {
+            const grid = document.getElementById('collection-grid');
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            grid.innerHTML = '';
+            col.forEach((card, index) => {
+                const container = document.createElement('div');
+                container.className = 'card-container';
+                const cardDiv = document.createElement('div');
+                cardDiv.className = `saved-card ${card.holo ? 'is-holo' : ''}`;
+                cardDiv.style.backgroundImage = `url('${folderPath}/${card.img}')`;
+                cardDiv.innerHTML = `<div class="shine"></div>${card.wins > 0 ? `<div class="win-count">${card.wins}</div>` : ''}`;
+                
+                cardDiv.onmousemove = (e) => applyTilt(e, cardDiv);
+                cardDiv.onmouseleave = () => cardDiv.style.transform = "rotateX(0) rotateY(0) scale(1)";
+                
+                cardDiv.onclick = () => {
+                    if(Math.random() > 0.5) { card.wins++; }
+                    localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                    displayCollection();
+                };
+                container.appendChild(cardDiv);
+                grid.appendChild(container);
+            });
+        }
+    </script>
+</body>
+</html>
