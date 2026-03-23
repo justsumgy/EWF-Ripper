@@ -3,41 +3,26 @@
 <head>
     <title>My EWF Collection 2026</title>
     <style>
-        body { 
-            background: url('background.jpg') center/cover no-repeat fixed; 
-            color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px;
-            border: 5px solid #D4AF37; min-height: 100vh; margin: 0; overflow-x: hidden;
-        }
-        h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
-        
+        body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; border: 5px solid #D4AF37; min-height: 100vh; margin: 0; overflow-x: hidden; }
+        h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; }
         #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; display: block; }
-        #rank-display { color: #D4AF37; font-size: 18px; display: block; margin-top: 5px; letter-spacing: 2px; }
-
+        #rank-display { color: #D4AF37; font-size: 18px; display: block; margin-top: 5px; }
         #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 350px; }
-        
-        /* CARDS */
         .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; position: relative; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
         .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; border: 3px solid #D4AF37; box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
         .back { background: url('wrapper.jpg') center/cover; background-color: #111; }
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
-
-        .grade-tag { position: absolute; top: 10px; left: 10px; background: white; color: black; padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #333; z-index: 5; }
-
-        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; transition: 0.2s; }
+        .grade-tag { position: absolute; top: 10px; left: 10px; background: white; color: black; padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; }
+        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
         button:disabled { background: #444; opacity: 0.5; }
-
-        /* ROSTER */
         .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #D4AF37; transition: 0.3s; position: relative; display: inline-block; margin: 10px; cursor: pointer; }
-        .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; font-weight: bold; z-index: 10; }
-        
-        /* BATTLE VFX */
+        .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; font-weight: bold; }
         #battle-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        #battle-card { width: 280px; height: 400px; border-radius: 15px; border: 5px solid gold; background-size: cover; background-position: center; transition: 0.5s; z-index: 1001; }
-        #battle-text { font-size: 4em; color: gold; text-shadow: 0 0 20px red; margin-top: 20px; font-style: italic; z-index: 1001; }
-        .vfx-dot, .confetti { position: fixed; pointer-events: none; z-index: 9999; }
+        #battle-card { width: 280px; height: 400px; border: 5px solid gold; background-size: cover; background-position: center; }
+        #battle-text { font-size: 4em; color: gold; margin-top: 20px; font-style: italic; }
         @keyframes rumble { 0% { transform: translate(2px,2px); } 50% { transform: translate(-2px,-2px); } 100% { transform: translate(0,0); } }
         .rumble { animation: rumble 0.1s linear infinite; }
     </style>
@@ -58,6 +43,7 @@
     <div id="stats-bar">
         <div id="cash-display">CONTRACT FUNDS: $0</div>
         <div id="rank-display">RANK: ROOKIE PROMOTER</div>
+        <button style="background: green; font-size: 10px; padding: 5px; margin-top: 10px;" onclick="addCash(500)">+ ADD STARTING CASH ($500)</button>
         <button style="background: #222; font-size: 10px; padding: 5px; margin-top: 10px; border: 1px solid #555;" onclick="clearEverything()">RESET ALL DATA</button>
     </div>
     <br>
@@ -75,20 +61,20 @@
         const totalCards = 23; 
         const folderPath = "rare ewf cards"; 
         
-        // --- STARTING CASH FIX ---
-        let userCash = localStorage.getItem('EWF_Cash');
-        if (userCash === null) {
-            userCash = 500; // New players get $500
-        } else {
-            userCash = parseInt(userCash);
-        }
-
+        let userCash = parseInt(localStorage.getItem('EWF_Cash')) || 0;
         let musicStarted = false;
 
         function initGame() {
             updateUI();
             displayCollection();
             setInterval(() => { userCash += 20; saveGame(); updateUI(); }, 30000); 
+        }
+
+        // --- NEW EMERGENCY CASH FUNCTION ---
+        function addCash(amount) {
+            userCash += amount;
+            saveGame();
+            updateUI();
         }
 
         function spark(element) {
