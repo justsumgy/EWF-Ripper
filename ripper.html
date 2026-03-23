@@ -25,7 +25,6 @@
         #music-toggle { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.8); border: 2px solid #D4AF37; font-size: 16px; font-weight: bold; color: white; cursor: pointer; padding: 10px 15px; border-radius: 8px; z-index: 9999; transition: 0.2s; }
         #music-toggle:hover { background: #D4AF37; color: black; }
 
-        /* PACK RIP ANIMATIONS */
         #pack-area { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; min-height: 250px; align-items: center; }
         #sealed-pack { width: 200px; height: 300px; background: linear-gradient(135deg, #d4af37, #ffd700, #8a6d3b); border: 5px solid white; border-radius: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px gold; transition: 0.2s; position: relative; overflow: hidden; }
         #sealed-pack::after { content: ''; position: absolute; width: 50%; height: 200%; background: rgba(255,255,255,0.3); transform: rotate(45deg); top: -50%; left: -100%; animation: foil-shine 2s infinite; }
@@ -93,14 +92,18 @@
         button.main-btn { padding: 12px 15px; font-size: 13px; color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 3px; transition: 0.2s; }
         .rip-std { background: linear-gradient(#e60000, #800000); } .rip-super { background: linear-gradient(#D4AF37, #8a6d3b); color: black; } .rip-gear { background: linear-gradient(#555, #222); border-color: silver; }
         .btn-arena { background: linear-gradient(#0044ff, #001188); border-color: cyan; } .btn-bounty { background: linear-gradient(#ff8c00, #8b4500); border-color: gold; } .btn-faction { background: linear-gradient(#000080, #0000ff); border-color: cyan; } .btn-shredder { background: linear-gradient(#ff0000, #550000); border-color: red; }
+        .btn-about { background: linear-gradient(#0088cc, #004466); border-color: #00ffff; }
         button.main-btn:hover { transform: scale(1.05); } button.main-btn:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
         
-        .modal { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 450px; background: rgba(0,0,0,0.95); border: 3px solid gold; border-radius: 10px; padding: 20px; z-index: 5000; display: none; box-shadow: 0 0 50px black; }
-        .modal h2 { color: gold; margin-top: 0; }
-        .modal-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #444; align-items: center; text-align: left; }
+        /* UPDATED MODAL WITH SCROLLING */
+        .modal { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 450px; max-height: 80vh; overflow-y: auto; background: rgba(0,0,0,0.95); border: 3px solid gold; border-radius: 10px; padding: 20px; z-index: 5000; display: none; box-shadow: 0 0 50px black; text-align: left; }
+        .modal::-webkit-scrollbar { width: 8px; }
+        .modal::-webkit-scrollbar-thumb { background: gold; border-radius: 4px; }
+        .modal h2 { color: gold; margin-top: 0; text-align: center; }
+        .modal-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #444; align-items: center; }
         .modal-btn { background: #00FF00; color: black; border: 1px solid white; padding: 5px 10px; cursor: pointer; font-weight: bold; border-radius: 4px; }
         .modal-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
-        .close-btn { margin-top:20px; padding:10px; background:red; color:white; font-weight:bold; border:none; border-radius:5px; cursor:pointer; width: 100%; }
+        .close-btn { margin-top:20px; padding:10px; background:red; color:white; font-weight:bold; border:none; border-radius:5px; cursor:pointer; width: 100%; text-align: center; }
 
         #record-box { background: rgba(0,0,0,0.85); border: 2px solid #D4AF37; max-width: 350px; margin: 40px auto; padding: 20px; border-radius: 12px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
         #record-display { font-size: 36px; font-weight: 900; letter-spacing: 2px; margin: 10px 0; }
@@ -108,6 +111,9 @@
         .loss-text { color: #FF0000; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
 
         #hof-section { margin-top: 50px; padding: 40px 20px; background: rgba(212, 175, 55, 0.1); border-top: 5px solid gold; border-bottom: 5px solid gold; }
+        
+        .about-text { color: #ccc; font-family: 'Arial', sans-serif; font-size: 14px; line-height: 1.6; }
+        .about-text h3 { color: #00FF00; margin-bottom: 5px; margin-top: 20px; font-family: 'Arial Black', sans-serif; }
     </style>
 </head>
 <body onload="initGame()">
@@ -134,17 +140,53 @@
 
     <div id="gear-modal" class="modal">
         <h2>🎒 EQUIP GEAR</h2>
-        <p style="color:cyan; font-size:12px;">Select an item to use on this wrestler.</p>
+        <p style="color:cyan; font-size:12px; text-align:center;">Select an item to use on this wrestler.</p>
         <div id="gear-list"></div>
         <button class="close-btn" onclick="document.getElementById('gear-modal').style.display='none'">CANCEL</button>
     </div>
 
     <div id="shredder-modal" class="modal">
         <h2>☢️ THE BLACK MARKET SHREDDER</h2>
-        <p style="color:cyan; font-size:12px;">Burn 5 Common Dupes for a permanent +0.5% Global Holo Pull Rate!</p>
-        <div id="shredder-stats" style="margin: 20px 0; font-size: 18px; font-weight: bold; color: white;"></div>
+        <p style="color:cyan; font-size:12px; text-align:center;">Burn 5 Common Dupes for a permanent +0.5% Global Holo Pull Rate!</p>
+        <div id="shredder-stats" style="margin: 20px 0; font-size: 18px; font-weight: bold; color: white; text-align:center;"></div>
         <button class="modal-btn" style="background:red; color:white; width:100%; margin-top:10px; font-size: 16px;" onclick="shredCards()">SHRED 5 COMMONS</button>
         <button class="close-btn" onclick="document.getElementById('shredder-modal').style.display='none'">CLOSE</button>
+    </div>
+
+    <div id="about-modal" class="modal">
+        <h2>❓ PROMOTER'S MANUAL</h2>
+        <div class="about-text">
+            <p>Welcome to <b>EWF RIPPED</b>. Build your roster, manage stamina, and dominate the ring to become a Prestige Tycoon.</p>
+            
+            <h3>📦 Ripping Packs</h3>
+            <p>Click the foil wrapper to rip it open. Reveal cards one by one. If the screen shakes, you just pulled a <b>Holo</b> or a <b>GEM MINT 10</b>!</p>
+            
+            <h3>⚔️ Combat & Stamina</h3>
+            <p><b>Double-click</b> any wrestler to send them into a fight. Fights cost 1 Stamina (the green bar). Stamina recharges naturally over time.</p>
+            <p>⚠️ <b>INJURIES:</b> If you force a wrestler to fight with 0 Stamina, there is a 50% chance they get injured (🤕). You must pay $500 to heal them before they can fight or be sold.</p>
+            
+            <h3>🔥 Streaks & Value</h3>
+            <p>Win 3 times in a row for a <b>Hot Streak (🔥)</b> (+50% Card Value and +10% win chance). Lose 3 times for a <b>Cold Streak (❄️)</b> (-50% Card Value).</p>
+            
+            <h3>🛠️ Card Upgrades</h3>
+            <ul>
+                <li><b>Title Match ($1000):</b> High risk. Win to get the 🏆 Champion badge (Card value x5).</li>
+                <li><b>Forge:</b> Combine 3 duplicate cards to craft a perfect GEM MINT 10.</li>
+                <li><b>Train ($1000):</b> Send a card to Camp for 5 minutes. They permanently gain a 60% base win chance!</li>
+            </ul>
+
+            <h3>💼 Tycoon Mechanics</h3>
+            <ul>
+                <li><b>Arena:</b> Buy better venues to increase your background visuals and passive income tick.</li>
+                <li><b>3v3 Faction War:</b> Select 3 wrestlers to fight an AI team. Win 2 out of 3 matches for a massive payout.</li>
+                <li><b>Shredder:</b> Turn 5 useless Common duplicate cards into a permanent global increase to your Holo pull rate.</li>
+                <li><b>Hall of Fame:</b> Any card that hits 200 Wins retires to the HOF, granting a permanent $25/tick bonus.</li>
+            </ul>
+
+            <h3>👑 Rebirth & Prestige</h3>
+            <p>Reach "Legendary Collector" rank and secure 5 Hall of Famers to unlock <b>Rebirth</b>. This wipes your entire save file, but gives you a permanent <b>Cash Multiplier</b> on all future runs and an exclusive glowing border.</p>
+        </div>
+        <button class="close-btn" onclick="document.getElementById('about-modal').style.display='none'">GOT IT!</button>
     </div>
 
     <h1>EWF RIPPED (TCG)</h1>
@@ -164,8 +206,9 @@
         <button class="main-btn rip-gear" id="rip-gear-btn" onclick="ripGearPack()">GEAR PACK ($250)</button>
         <button class="main-btn btn-arena" onclick="openArena()">🏟️ ARENA</button>
         <button class="main-btn btn-faction" id="faction-btn" onclick="toggleFactionWar()">3v3 WAR ($500)</button>
-        <button class="main-btn btn-bounty" onclick="openBounties()">📋 BOUNTIES</button>
         <button class="main-btn btn-shredder" onclick="openShredder()">☢️ SHREDDER</button>
+        <button class="main-btn btn-bounty" onclick="openBounties()">📋 BOUNTIES</button>
+        <button class="main-btn btn-about" onclick="document.getElementById('about-modal').style.display='block'">❓ HOW TO PLAY</button>
     </div>
     
     <h2 id="faction-msg" style="color: #00FF00; display: none; text-shadow: 0 0 10px #00FF00;">SELECT 3 WRESTLERS FOR COMBAT!</h2>
@@ -207,7 +250,6 @@
         let factionTeam = [];
         let factionSimulating = false;
 
-        // DYNAMIC ARENA BACKGROUNDS
         const arenas = [
             { name: "Local Gym", income: 25, cost: 0, bg: "url('background.jpg') center/cover no-repeat fixed" },
             { name: "Bingo Hall", income: 100, cost: 5000, bg: "radial-gradient(circle at center, #2b1d10, #000)" },
@@ -305,7 +347,6 @@
             }
         }
 
-        // --- THE BLACK MARKET SHREDDER ---
         function openShredder() {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             let commonDupes = 0;
@@ -449,7 +490,6 @@
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
 
-        // --- NEW SLOW-REVEAL PACK LOGIC ---
         function ripPack(cost, baseHoloChance) {
             if (userCash < cost) return;
             userCash -= cost; saveGame(); updateUI();
@@ -490,7 +530,7 @@
                                     this.classList.add('flipped'); triggerConfetti();
                                     if(cardData.holo) updateBounty('holos', 1);
                                     saveCard(cardData.img, cardData.holo, cardData.grade); 
-                                }, 1200); // 1.2s anticipation!
+                                }, 1200); 
                             } else {
                                 this.classList.add('flipped'); saveCard(cardData.img, cardData.holo, cardData.grade); 
                             }
