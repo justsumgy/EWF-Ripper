@@ -3,15 +3,17 @@
 <head>
     <title>My EWF Collection 2026</title>
     <style>
-        body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; margin: 0; overflow-x: hidden; }
+        body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; margin: 0; overflow-x: hidden; user-select: none; }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
         #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
         
+        /* Rank Progress Bar */
         #progress-container { width: 100%; height: 12px; background: #222; border-radius: 6px; margin-top: 10px; border: 1px solid #555; overflow: hidden; }
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #D4AF37, #fff, #D4AF37); background-size: 200% 100%; transition: 0.5s; }
 
+        /* PACK AREA */
         #pack-area { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; min-height: 250px; }
         .pack-card { width: 150px; height: 210px; perspective: 1000px; cursor: pointer; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
@@ -20,33 +22,48 @@
         .back { background: url('wrapper.jpg') center/cover; background-color: #222; }
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
 
+        /* COLLECTION */
         .card-container { width: 160px; height: 230px; perspective: 1000px; display: inline-block; margin: 15px; vertical-align: top; }
-        .saved-card { width: 100%; height: 100%; border-radius: 12px; border: 3px solid #D4AF37; background-size: cover; background-position: center; position: relative; transition: transform 0.1s ease-out; cursor: pointer; transform-style: preserve-3d; }
+        .saved-card { width: 100%; height: 100%; border-radius: 12px; border: 3px solid #D4AF37; background-size: cover; background-position: center; position: relative; transition: transform 0.1s ease-out, box-shadow 0.1s ease-out; cursor: pointer; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        
+        /* THE ULTIMATE HOLO VISUALS */
+        .shine-layer {
+            position: absolute; inset: 0; border-radius: 12px;
+            background: radial-gradient(circle at var(--lx) var(--ly), rgba(255,255,255,0.7) 0%, transparent 50%);
+            z-index: 5; pointer-events: none; opacity: 0; mix-blend-mode: screen; transition: opacity 0.3s;
+        }
+        .holo-foil {
+            position: absolute; inset: 0; border-radius: 12px;
+            background-image: linear-gradient(110deg, transparent 15%, #ff00ff4d 30%, #00ffff4d 50%, #ffff004d 70%, transparent 85%);
+            background-size: 200% 200%; background-position: var(--hx) var(--hy);
+            mix-blend-mode: color-dodge; z-index: 4; pointer-events: none; opacity: 0; transition: opacity 0.3s;
+        }
+        /* SPARKLE LAYER */
+        .sparkle-layer {
+            position: absolute; inset: 0; border-radius: 12px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); /* Simple noise pattern */
+            background-repeat: repeat; background-position: var(--sx) var(--sy);
+            mix-blend-mode: color-dodge; z-index: 3; pointer-events: none; opacity: 0; transition: opacity 0.3s;
+        }
         .is-holo { border-color: cyan !important; box-shadow: 0 0 15px cyan; }
-        .shine { position: absolute; inset: 0; border-radius: 12px; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%); background-size: 200% 200%; pointer-events: none; z-index: 2; opacity: 0; }
-        .saved-card:hover .shine { opacity: 1; }
+        
+        /* HOVER EFFECTS */
+        .saved-card:hover .shine-layer, 
+        .saved-card:hover .sparkle-layer { opacity: 1; }
+        .is-holo.saved-card .holo-foil { opacity: 1; }
+
         .win-count { position: absolute; top: -12px; right: -12px; background: red; color: white; border-radius: 50%; width: 30px; height: 30px; font-size: 14px; line-height: 30px; border: 2px solid white; z-index: 10; font-weight: bold; }
-
-        /* BATTLE STUFF */
-        #battle-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        #battle-card { width: 280px; height: 400px; border: 5px solid gold; background-size: cover; background-position: center; z-index: 1001; }
-        #battle-text { font-size: 4em; color: gold; text-shadow: 0 0 20px red; margin-top: 20px; font-style: italic; z-index: 1001; }
-        .confetti { position: fixed; width: 10px; height: 10px; z-index: 2000; pointer-events: none; }
-        @keyframes rumble { 0% { transform: translate(2px,2px); } 50% { transform: translate(-2px,-2px); } 100% { transform: translate(0,0); } }
-        .rumble { animation: rumble 0.1s linear infinite; }
-
+        
         button { padding: 12px 25px; font-size: 16px; color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; transition: 0.2s; }
         .rip-std { background: linear-gradient(#e60000, #800000); }
         .rip-super { background: linear-gradient(#D4AF37, #8a6d3b); border-color: gold; color: black; }
-        button:disabled { opacity: 0.5; }
+        button:hover { transform: scale(1.05); }
+        button:disabled { opacity: 0.5; transform: none; }
+        #history-box { background: rgba(0,0,0,0.8); border: 1px solid #555; max-width: 400px; margin: 20px auto; padding: 10px; border-radius: 8px; font-size: 13px; }
     </style>
 </head>
 <body onload="initGame()">
     
-    <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
-    <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
-    <div id="battle-overlay"><div id="battle-card"></div><div id="battle-text">FIGHT!</div></div>
-
     <h1>ELITE WRESTLING FEDERATION</h1>
     <div id="stats-bar">
         <div id="cash-display">CONTRACT FUNDS: $0</div>
@@ -61,41 +78,44 @@
     <div id="pack-area"></div>
     <h2 id="collection-title" style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF COLLECTION</h2>
     <div id="collection-grid"></div>
+    <div id="history-box">
+        <h3 style="margin:0; color:#D4AF37;">LATEST MATCH RESULTS</h3>
+        <div id="history-list"></div>
+    </div>
 
     <script>
         const totalCards = 23;
         const folderPath = "rare ewf cards";
         let userCash = parseInt(localStorage.getItem('EWF_Cash'));
         if (isNaN(userCash) || userCash <= 0) userCash = 500;
-        let musicStarted = false;
+        let matchHistory = JSON.parse(localStorage.getItem('EWF_History')) || [];
 
         function initGame() {
             updateUI();
             displayCollection();
+            displayHistory();
             setInterval(() => { userCash += 25; saveGame(); updateUI(); }, 30000);
         }
 
-        function triggerConfetti() {
-            const colors = ['#e60000', '#00FF00', '#FFD700', '#fff'];
-            for(let i=0; i<60; i++) {
-                const c = document.createElement('div');
-                c.className = 'confetti';
-                c.style.cssText = `left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`;
-                document.body.appendChild(c);
-                let cy = 0, opacity = 1;
-                const drift = setInterval(() => {
-                    cy += Math.random() * 5 + 2; opacity -= 0.01;
-                    c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = opacity;
-                    if (opacity <= 0) { clearInterval(drift); c.remove(); }
-                }, 20);
-            }
+        function updateUI() {
+            document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
+            document.getElementById('rip-std-btn').disabled = (userCash < 100);
+            document.getElementById('rip-super-btn').disabled = (userCash < 500);
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let r = "ROOKIE PROMOTER"; let next = 6; let base = 0;
+            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; }
+            else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; }
+            else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
+            document.getElementById('rank-display').innerHTML = `RANK: ${r}`;
+            const progress = Math.min(((col.length - base) / (next - base)) * 100, 100);
+            document.getElementById('progress-fill').style.width = progress + "%";
         }
+
+        function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
 
         function ripPack(cost, holoChance) {
             if (userCash < cost) return;
             userCash -= cost; saveGame(); updateUI();
-            if (!musicStarted) { document.getElementById("bgMusic").volume = 0.2; document.getElementById("bgMusic").play().catch(e=>{}); musicStarted = true; }
-            document.getElementById("cheerSound").currentTime = 0; document.getElementById("cheerSound").play().catch(e=>{});
             const area = document.getElementById('pack-area'); area.innerHTML = ''; 
             for (let i = 0; i < 5; i++) {
                 const num = Math.floor(Math.random() * totalCards) + 1;
@@ -120,35 +140,60 @@
             } else { userCash += 50; saveGame(); updateUI(); }
         }
 
-        function startMatch(cardImg, cardIndex) {
-            const overlay = document.getElementById('battle-overlay'), bCard = document.getElementById('battle-card'), bText = document.getElementById('battle-text');
+        // --- THE DYNAMIC HOLO ENGINE ---
+        function setupInspector(card) {
+            let isDragging = false;
+            const update = (e) => {
+                if (!isDragging) return;
+                const rect = card.getBoundingClientRect();
+                const clientX = (e.clientX || (e.touches && e.touches[0].clientX));
+                const clientY = (e.clientY || (e.touches && e.touches[0].clientY));
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+                
+                const rotateX = ((rect.height / 2) - y) / 6;
+                const rotateY = (x - (rect.width / 2)) / 6;
+
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
+                card.style.boxShadow = `${-rotateY}px ${rotateX}px 30px rgba(0,0,0,0.6)`;
+                
+                // LIGHT REFLECTION
+                card.style.setProperty('--lx', `${x}px`);
+                card.style.setProperty('--ly', `${y}px`);
+                
+                // HOLO SHIMMER (Opposite to mouse)
+                card.style.setProperty('--hx', `${100 - (x/rect.width*100)}%`);
+                card.style.setProperty('--hy', `${100 - (y/rect.height*100)}%`);
+                
+                // SPARKLE TEXTURE
+                card.style.setProperty('--sx', `${-rotateY}px`);
+                card.style.setProperty('--sy', `${-rotateX}px`);
+            };
+            card.onmousedown = (e) => { isDragging = true; update(e); };
+            window.onmousemove = (e) => update(e);
+            window.onmouseup = () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; };
+            card.ontouchstart = (e) => { isDragging = true; update(e); };
+            window.ontouchmove = (e) => update(e);
+            window.ontouchend = () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; };
+        }
+
+        function runBattle(img, idx) {
+            const win = Math.random() > 0.5;
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${cardImg}')`;
-            bCard.className = 'rumble'; bText.innerHTML = "FIGHTING...";
-            setTimeout(() => {
-                bCard.classList.remove('rumble');
-                if (Math.random() > 0.5) {
-                    bText.innerHTML = "WINNER!"; bText.style.color = "#00FF00"; triggerConfetti(); col[cardIndex].wins++;
-                } else { bText.innerHTML = "DEFEAT"; bText.style.color = "red"; }
-                localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); }, 2000);
-            }, 1500);
+            if(win) col[idx].wins++;
+            matchHistory.unshift({ name: img.replace('.jpg',''), res: win ? 'WIN' : 'LOSS' });
+            if(matchHistory.length > 5) matchHistory.pop();
+            localStorage.setItem('EWF_Collection', JSON.stringify(col));
+            localStorage.setItem('EWF_History', JSON.stringify(matchHistory));
+            displayCollection(); displayHistory();
+            alert(win ? "VICTORY!" : "DEFEAT...");
         }
 
-        function updateUI() {
-            document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
-            document.getElementById('rip-std-btn').disabled = (userCash < 100);
-            document.getElementById('rip-super-btn').disabled = (userCash < 500);
-            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            let r = "ROOKIE PROMOTER"; let next = 6; let base = 0;
-            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; }
-            else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; }
-            else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
-            document.getElementById('rank-display').innerHTML = `RANK: ${r}`;
-            document.getElementById('progress-fill').style.width = Math.min(((col.length - base) / (next - base)) * 100, 100) + "%";
+        function displayHistory() {
+            document.getElementById('history-list').innerHTML = matchHistory.map(h => 
+                `<div style="padding:4px; border-bottom:1px solid #333">${h.name}: <span style="color:${h.res==='WIN'?'#0f0':'#f00'}">${h.res}</span></div>`
+            ).join('');
         }
-
-        function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
 
         function displayCollection() {
             const grid = document.getElementById('collection-grid'), col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
@@ -159,8 +204,21 @@
                 const cardDiv = document.createElement('div');
                 cardDiv.className = `saved-card ${card.holo ? 'is-holo' : ''}`;
                 cardDiv.style.backgroundImage = `url('${folderPath}/${card.img}')`;
-                cardDiv.innerHTML = `<div class="shine"></div>${card.wins > 0 ? `<div class="win-count">${card.wins}</div>` : ''}`;
-                cardDiv.onclick = () => startMatch(card.img, index);
+                
+                // Layer the effects (shine on top of holo foil)
+                cardDiv.innerHTML = `
+                    <div class="shine-layer"></div>
+                    <div class="sparkle-layer"></div>
+                    <div class="holo-foil"></div>
+                    ${card.wins > 0 ? `<div class="win-count">${card.wins}</div>` : ''}
+                `;
+                
+                // Setup drag-to-inspect
+                setupInspector(cardDiv);
+                
+                // BATTLE ON DOUBLE-CLICK
+                cardDiv.ondblclick = () => runBattle(card.img, index);
+                
                 container.appendChild(cardDiv);
                 grid.appendChild(container);
             });
