@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWF Elite Pack Ripper</title>
+    <style>
+        body { 
+            background: url('background.jpg') center/cover no-repeat fixed; 
+            color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px;
+            border: 5px solid #D4AF37; min-height: 100vh; margin: 0;
+        }
+        h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
+        h2 { color: #fff; font-size: 1.2em; letter-spacing: 5px; margin-top: 0; opacity: 0.8; }
+        #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 350px; }
+        .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; }
+        .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; border: 3px solid #D4AF37; box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
+        .back { background: url('wrapper.jpg') center/cover; background-color: #1a1a1a; }
+        .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
+        button { padding: 18px 35px; font-size: 22px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; }
+        
+        #collection-title { margin-top: 60px; color: #FFD700; border-top: 2px solid #D4AF37; padding-top: 20px; }
+        #collection-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 20px; }
+        .saved-card { width: 120px; height: 180px; border: 2px solid #D4AF37; border-radius: 8px; background-size: cover; background-position: center; transition: 0.3s; cursor: pointer; }
+        .saved-card:hover { transform: scale(1.3); z-index: 10; }
+        #clear-btn { background: #333; color: #ccc; font-size: 12px; margin-top: 10px; border: 1px solid #555; cursor: pointer; padding: 5px 10px; }
+    </style>
+</head>
+<body onload="displayCollection()">
+    
+    <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
+    <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
+
+    <h1>ELITE WRESTLING FEDERATION</h1>
+    <h2>SERIES 1: LEGENDS EDITION</h2>
+    
+    <button onclick="ripPack()">RIP NEW PACK</button>
+    <div id="pack-area"></div>
+
+    <h1 id="collection-title">MY CHAMPIONSHIP ROSTER</h1>
+    <div id="collection-grid"></div>
+    <button id="clear-btn" onclick="clearCollection()">Reset Collection</button>
+
+    <script>
+        const totalCards = 23; 
+        const folderPath = "rare ewf cards"; // Matches your lowercase GitHub folder
+        let musicStarted = false;
+
+        function ripPack() {
+            const bgMusic = document.getElementById("bgMusic");
+            if (!musicStarted) {
+                bgMusic.volume = 0.3;
+                bgMusic.play().catch(e => console.log("Audio blocked"));
+                musicStarted = true;
+            }
+            document.getElementById("cheerSound").currentTime = 0;
+            document.getElementById("cheerSound").play();
+
+            const area = document.getElementById('pack-area');
+            area.innerHTML = ''; 
+            
+            for (let i = 0; i < 5; i++) {
+                const randomNum = Math.floor(Math.random() * totalCards) + 1;
+                const fileName = "card (" + randomNum + ").jpg"; 
+
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                cardDiv.innerHTML = `
+                    <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}')">
+                        <div class="back"></div>
+                        <div class="front" style="background-image: url('${folderPath}/${fileName}')"></div>
+                    </div>`;
+                area.appendChild(cardDiv);
+            }
+        }
+
+        function saveCard(cardImg) {
+            let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            if (!collection.includes(cardImg)) {
+                collection.push(cardImg);
+                localStorage.setItem('EWF_Collection', JSON.stringify(collection));
+                displayCollection();
+            }
+        }
+
+        function displayCollection() {
+            const grid = document.getElementById('collection-grid');
+            const collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            grid.innerHTML = '';
+            collection.forEach(img => {
+                const div = document.createElement('div');
+                div.className = 'saved-card';
+                div.style.backgroundImage = `url('${folderPath}/${img}')`;
+                div.onclick = () => { window.open(`${folderPath}/${img}`, '_blank'); };
+                grid.appendChild(div);
+            });
+        }
+
+        function clearCollection() {
+            if(confirm("Vacate all titles?")) {
+                localStorage.removeItem('EWF_Collection');
+                displayCollection();
+            }
+        }
+    </script>
+</body>
+</html>
