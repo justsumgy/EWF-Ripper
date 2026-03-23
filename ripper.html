@@ -24,9 +24,11 @@
         .back { background: url('wrapper.jpg') center/cover; background-color: #222; }
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
 
-        .card-container { width: 160px; height: 320px; perspective: 1000px; display: inline-block; margin: 15px; vertical-align: top; }
+        .card-container { width: 160px; height: 330px; perspective: 1000px; display: inline-block; margin: 15px; vertical-align: top; }
         .saved-card { width: 100%; height: 230px; border-radius: 12px; border: 3px solid silver; background-size: cover; background-position: center; position: relative; transition: transform 0.1s ease-out, box-shadow 0.1s ease-out; cursor: pointer; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.5); padding-top: 30px; background-color: white; }
-        
+        .faction-select-mode .saved-card:hover { border-color: #00FF00; box-shadow: 0 0 20px #00FF00; }
+        .faction-selected { border-color: #00FF00 !important; box-shadow: 0 0 25px #00FF00 !important; transform: scale(1.05); }
+
         .grade-label { position: absolute; top: 0; left: 0; width: 100%; background: #c00; border-bottom: 2px solid silver; color: white; font-family: 'Arial', sans-serif; text-align: center; border-top-left-radius: 9px; border-top-right-radius: 9px; z-index: 6; pointer-events: none; }
         .grade-title { font-size: 8px; font-weight: bold; letter-spacing: 1px; padding-top: 2px; }
         .grade-score { font-size: 14px; font-weight: 900; padding-bottom: 2px; }
@@ -39,14 +41,20 @@
         .saved-card:hover .shine-layer, .saved-card:hover .sparkle-layer { opacity: 1; }
         .is-holo.saved-card .holo-foil { opacity: 1; }
 
+        /* NEW BADGES & BARS */
         .win-count { position: absolute; top: 15px; left: -10px; background: red; color: white; border-radius: 5px; padding: 2px 8px; font-size: 12px; border: 2px solid white; z-index: 10; font-weight: bold; box-shadow: 0 0 5px black; }
         .dupe-count { position: absolute; top: 15px; right: -10px; background: #0088ff; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; z-index: 10; font-weight: bold; box-shadow: 0 0 5px black; }
-        
+        .streak-badge { position: absolute; bottom: 15px; right: -10px; font-size: 20px; z-index: 11; filter: drop-shadow(0 0 5px black); }
+        .stamina-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #333; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; overflow: hidden; z-index: 10; border-top: 1px solid black; }
+        .stamina-fill { height: 100%; width: 100%; background: #00FF00; transition: 0.3s; }
+        .injured-overlay { position: absolute; inset: 0; background: rgba(255,0,0,0.6); z-index: 12; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; pointer-events: none; }
+
         .gm-controls { display: flex; flex-direction: column; gap: 3px; margin-top: 8px; }
         .gm-btn { padding: 4px; font-size: 11px; color: white; border: 1px solid #aaa; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .btn-sell { background: #228B22; } .btn-sell:hover { background: #32CD32; }
         .btn-ppv { background: #800080; border-color: #ff00ff; } .btn-ppv:hover { background: #ff00ff; }
         .btn-forge { background: #ff4500; border-color: gold; } .btn-forge:hover { background: #ff8c00; }
+        .btn-heal { background: #fff; color: red; border-color: red; } .btn-heal:hover { background: red; color: white; }
 
         #battle-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
         #battle-card { width: 280px; height: 400px; border: 5px solid gold; border-radius: 15px; background-size: cover; background-position: center; z-index: 1001; box-shadow: 0 0 30px gold; pointer-events: none; }
@@ -55,18 +63,24 @@
         @keyframes rumble { 0% { transform: translate(3px,3px); } 50% { transform: translate(-3px,-3px); } 100% { transform: translate(0,0); } }
         .rumble { animation: rumble 0.1s linear infinite; }
 
-        button.rip-btn { padding: 12px 25px; font-size: 16px; color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; transition: 0.2s; }
+        button.main-btn { padding: 12px 20px; font-size: 14px; color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; transition: 0.2s; }
         .rip-std { background: linear-gradient(#e60000, #800000); }
         .rip-super { background: linear-gradient(#D4AF37, #8a6d3b); border-color: gold; color: black; }
-        button.rip-btn:hover { transform: scale(1.05); }
-        button.rip-btn:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
+        .btn-faction { background: linear-gradient(#000080, #0000ff); border-color: cyan; }
+        .btn-sponsors { background: linear-gradient(#444, #111); border-color: gold; color: gold; }
+        button.main-btn:hover { transform: scale(1.05); }
+        button.main-btn:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
         
         #record-box { background: rgba(0,0,0,0.85); border: 2px solid #D4AF37; max-width: 350px; margin: 40px auto; padding: 20px; border-radius: 12px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
         #record-display { font-size: 36px; font-weight: 900; letter-spacing: 2px; margin: 10px 0; }
-        .win-text { color: #00FF00; text-shadow: 0 0 10px rgba(0,255,0,0.5); }
-        .loss-text { color: #FF0000; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
         
         #hof-section { margin-top: 50px; padding: 40px 20px; background: rgba(212, 175, 55, 0.1); border-top: 5px solid gold; border-bottom: 5px solid gold; }
+
+        /* ACHIEVEMENTS MODAL */
+        #achievements-modal { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 400px; background: rgba(0,0,0,0.95); border: 3px solid gold; border-radius: 10px; padding: 20px; z-index: 5000; display: none; box-shadow: 0 0 50px black; }
+        .achieve-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #444; align-items: center; }
+        .achieve-claim { background: #00FF00; color: black; border: 1px solid white; padding: 5px 10px; cursor: pointer; font-weight: bold; border-radius: 4px; }
+        .achieve-claimed { color: #888; font-style: italic; }
     </style>
 </head>
 <body onload="initGame()">
@@ -75,7 +89,13 @@
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
     <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
-    <div id="battle-overlay" onclick="this.style.display='none';"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
+    <div id="battle-overlay" onclick="if(!factionSimulating) this.style.display='none';"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
+
+    <div id="achievements-modal">
+        <h2 style="color:gold; margin-top:0;">🏆 SPONSORSHIP DEALS</h2>
+        <div id="achievements-list"></div>
+        <button onclick="document.getElementById('achievements-modal').style.display='none'" style="margin-top:20px; padding:10px; background:red; color:white; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">CLOSE</button>
+    </div>
 
     <h1>ELITE WRESTLING FEDERATION</h1>
     <div id="stats-bar">
@@ -86,8 +106,15 @@
         <button style="background:#222; color:white; font-size:10px; padding:5px; margin-top:10px; cursor:pointer;" onclick="hardReset()">FULL DATA RESET ($3000)</button>
     </div>
     <br>
-    <button class="rip-btn rip-std" id="rip-std-btn" onclick="ripPack(100, 0.15)">RIP STANDARD PACK ($100)</button>
-    <button class="rip-btn rip-super" id="rip-super-btn" onclick="ripPack(500, 0.65)">RIP SUPER HOLO PACK ($500)</button>
+    
+    <div>
+        <button class="main-btn rip-std" id="rip-std-btn" onclick="ripPack(100, 0.15)">RIP STANDARD ($100)</button>
+        <button class="main-btn rip-super" id="rip-super-btn" onclick="ripPack(500, 0.65)">RIP SUPER HOLO ($500)</button>
+        <button class="main-btn btn-faction" id="faction-btn" onclick="toggleFactionWar()">3v3 FACTION WAR ($500)</button>
+        <button class="main-btn btn-sponsors" onclick="showAchievements()">🏆 SPONSORS</button>
+    </div>
+
+    <h2 id="faction-msg" style="color: #00FF00; display: none; text-shadow: 0 0 10px #00FF00;">SELECT 3 WRESTLERS FOR COMBAT!</h2>
     
     <div id="pack-area"></div>
     <h2 style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF ROSTER</h2>
@@ -96,7 +123,7 @@
     <div id="record-box">
         <h3 style="margin:0; color:#D4AF37; font-size: 18px;">PROMOTER RECORD</h3>
         <div id="record-display">
-            <span class="win-text" id="win-count">0 W</span> <span style="color:#555;">-</span> <span class="loss-text" id="loss-count">0 L</span>
+            <span style="color:#00FF00;" id="win-count">0 W</span> <span style="color:#555;">-</span> <span style="color:#FF0000;" id="loss-count">0 L</span>
         </div>
         <div id="win-rate" style="font-size: 14px; color: #ccc; letter-spacing: 1px;">WIN RATE: 0%</div>
     </div>
@@ -116,68 +143,96 @@
         let totalWins = parseInt(localStorage.getItem('EWF_Wins')) || 0;
         let totalLosses = parseInt(localStorage.getItem('EWF_Losses')) || 0;
         let isMusicPlaying = false;
+        
+        let factionMode = false;
+        let factionTeam = [];
+        let factionSimulating = false;
+
+        // Achievements State
+        const achDefs = {
+            first_blood: { desc: "Win your first match", reward: 500 },
+            high_roller: { desc: "Pull a GEM MINT 10", reward: 2000 },
+            hot_streak: { desc: "Get a wrestler on Fire (3 Wins)", reward: 1000 },
+            dynasty: { desc: "Retire a card to the HOF", reward: 5000 },
+            faction_champ: { desc: "Win a 3v3 Faction War", reward: 3000 }
+        };
+        let userAch = JSON.parse(localStorage.getItem('EWF_Ach')) || {};
 
         function initGame() {
-            checkDailyLogin(); updateUI(); displayCollection(); displayRecord();
+            checkDailyLogin(); migrateData(); updateUI(); displayCollection(); displayRecord();
             setInterval(() => { 
                 const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
                 const hofCount = col.filter(c => c.wins >= 200).length;
-                const totalIncome = 25 + (hofCount * 25);
-                userCash += totalIncome; 
+                userCash += (25 + (hofCount * 25)); 
+                
+                // Regenerate Stamina
+                let modified = false;
+                col.forEach(c => {
+                    if(!c.injured && c.stamina < 5) { c.stamina++; modified = true; }
+                });
+                if(modified) localStorage.setItem('EWF_Collection', JSON.stringify(col));
+
                 saveGame(); updateUI(); 
-            }, 30000);
+                if(modified) displayCollection();
+            }, 30000); // 30s Tick
+        }
+
+        // Add defaults to old cards
+        function migrateData() {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let mod = false;
+            col.forEach(c => {
+                if(c.stamina === undefined) { c.stamina = 5; c.injured = false; c.streak = 0; mod = true; }
+            });
+            if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col));
+        }
+
+        function checkAchUnlock(key) {
+            if(!userAch[key]) { userAch[key] = "unlocked"; localStorage.setItem('EWF_Ach', JSON.stringify(userAch)); }
+        }
+
+        function claimAch(key) {
+            if(userAch[key] === "unlocked") {
+                userCash += achDefs[key].reward; userAch[key] = "claimed";
+                localStorage.setItem('EWF_Ach', JSON.stringify(userAch));
+                saveGame(); updateUI(); showAchievements();
+            }
+        }
+
+        function showAchievements() {
+            const list = document.getElementById('achievements-list');
+            list.innerHTML = Object.keys(achDefs).map(k => {
+                const status = userAch[k];
+                let btnHtml = `<span style="color:#555;">LOCKED</span>`;
+                if(status === "unlocked") btnHtml = `<button class="achieve-claim" onclick="claimAch('${k}')">CLAIM $${achDefs[k].reward}</button>`;
+                else if(status === "claimed") btnHtml = `<span class="achieve-claimed">CLAIMED</span>`;
+                return `<div class="achieve-item"><div>${achDefs[k].desc}</div><div>${btnHtml}</div></div>`;
+            }).join('');
+            document.getElementById('achievements-modal').style.display = 'block';
         }
 
         function checkDailyLogin() {
             const today = new Date().toDateString();
-            const lastLogin = localStorage.getItem('EWF_LastLogin');
-            if (lastLogin !== today) {
+            if (localStorage.getItem('EWF_LastLogin') !== today) {
                 userCash += 500; localStorage.setItem('EWF_LastLogin', today); saveGame();
                 alert("🔔 DAILY PROMOTER PAYOUT! You received $500 for logging in today! 🔔");
             }
         }
 
-        function hardReset() {
-            if(confirm("Wipe all cards, stats, and start fresh with $3000?")) {
-                localStorage.clear(); localStorage.setItem('EWF_Cash', 3000); location.reload();
-            }
-        }
-
-        function toggleMusic() {
-            const music = document.getElementById("bgMusic"); const btn = document.getElementById("music-toggle");
-            if (isMusicPlaying) { music.pause(); btn.innerHTML = "🔇 Play Music"; isMusicPlaying = false; } 
-            else { music.volume = 0.2; music.play().catch(e => {}); btn.innerHTML = "🔊 Mute Music"; isMusicPlaying = true; }
-        }
-
-        function triggerConfetti() {
-            const colors = ['#e60000', '#00FF00', '#FFD700', '#fff'];
-            for(let i=0; i<60; i++) {
-                const c = document.createElement('div'); c.className = 'confetti';
-                c.style.cssText = `left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`;
-                document.body.appendChild(c);
-                let cy = 0, opacity = 1;
-                const drift = setInterval(() => {
-                    cy += Math.random() * 5 + 2; opacity -= 0.01;
-                    c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = opacity;
-                    if (opacity <= 0) { clearInterval(drift); c.remove(); }
-                }, 20);
-            }
-        }
+        function hardReset() { if(confirm("Wipe all cards, stats, and start fresh with $3000?")) { localStorage.clear(); localStorage.setItem('EWF_Cash', 3000); location.reload(); } }
+        function toggleMusic() { const m = document.getElementById("bgMusic"); const btn = document.getElementById("music-toggle"); if (isMusicPlaying) { m.pause(); btn.innerHTML = "🔇 Play Music"; isMusicPlaying = false; } else { m.volume = 0.2; m.play().catch(e => {}); btn.innerHTML = "🔊 Mute Music"; isMusicPlaying = true; } }
+        function triggerConfetti() { const colors = ['#e60000', '#00FF00', '#FFD700', '#fff']; for(let i=0; i<60; i++) { const c = document.createElement('div'); c.className = 'confetti'; c.style.cssText = `left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`; document.body.appendChild(c); let cy = 0, op = 1; const drift = setInterval(() => { cy += Math.random() * 5 + 2; op -= 0.01; c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = op; if (op <= 0) { clearInterval(drift); c.remove(); } }, 20); } }
 
         function updateUI() {
             const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            const hofCount = col.filter(c => c.wins >= 200).length;
-            const totalIncome = 25 + (hofCount * 25);
-            
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
-            document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${totalIncome} / 30s`;
-            document.getElementById('rip-std-btn').disabled = (userCash < 100);
-            document.getElementById('rip-super-btn').disabled = (userCash < 500);
+            document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${25 + (col.filter(c => c.wins >= 200).length * 25)} / 30s`;
+            document.getElementById('rip-std-btn').disabled = (userCash < 100) || factionMode;
+            document.getElementById('rip-super-btn').disabled = (userCash < 500) || factionMode;
+            document.getElementById('faction-btn').disabled = (userCash < 500) || col.length < 3;
             
             let r = "ROOKIE PROMOTER"; let next = 6; let base = 0;
-            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; }
-            else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; }
-            else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
+            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; } else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; } else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
             document.getElementById('rank-display').innerHTML = `RANK: ${r}`;
             document.getElementById('progress-fill').style.width = Math.min(((col.length - base) / (next - base)) * 100, 100) + "%";
         }
@@ -186,29 +241,28 @@
 
         function getCardValue(card) {
             let baseVal = 20;
-            if (card.grade === 10) baseVal = 500;
-            else if (card.grade === 9) baseVal = 100;
-            else if (card.grade === 8) baseVal = 40;
-            
+            if (card.grade === 10) baseVal = 500; else if (card.grade === 9) baseVal = 100; else if (card.grade === 8) baseVal = 40;
             let total = card.holo ? baseVal * 4 : baseVal; 
             if (card.champion) total *= 5; 
-            return total;
+            if (card.streak >= 3) total *= 1.5; // HOT STREAK BONUS
+            if (card.streak <= -3) total *= 0.5; // COLD STREAK PENALTY
+            return Math.floor(total);
         }
 
         function ripPack(cost, holoChance) {
-            if (userCash < cost) return;
+            if (userCash < cost || factionMode) return;
             userCash -= cost; saveGame(); updateUI();
             const cheer = document.getElementById("cheerSound"); cheer.volume = 0.5; cheer.currentTime = 0; cheer.play().catch(e=>{});
             const area = document.getElementById('pack-area'); area.innerHTML = ''; 
             for (let i = 0; i < 5; i++) {
                 const num = Math.floor(Math.random() * totalCards) + 1;
                 const isHolo = Math.random() < holoChance;
-                const imgFile = `card (${num}).jpg`;
-                let grade = 7; const gradeRoll = Math.random();
-                if(gradeRoll > 0.95) grade = 10; else if(gradeRoll > 0.80) grade = 9; else if(gradeRoll > 0.40) grade = 8;
+                let grade = 7; const roll = Math.random();
+                if(roll > 0.95) { grade = 10; checkAchUnlock('high_roller'); } else if(roll > 0.80) grade = 9; else if(roll > 0.40) grade = 8;
+                
                 const cardDiv = document.createElement('div'); cardDiv.className = 'pack-card';
-                cardDiv.innerHTML = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${imgFile}'); ${isHolo ? 'border-color:cyan; box-shadow: 0 0 10px cyan;' : ''}"></div></div>`;
-                cardDiv.onclick = function() { if(!this.classList.contains('flipped')) { this.classList.add('flipped'); saveCard(imgFile, isHolo, grade); } };
+                cardDiv.innerHTML = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/card (${num}).jpg'); ${isHolo ? 'border-color:cyan; box-shadow: 0 0 10px cyan;' : ''}"></div></div>`;
+                cardDiv.onclick = function() { if(!this.classList.contains('flipped')) { this.classList.add('flipped'); saveCard(`card (${num}).jpg`, isHolo, grade); } };
                 area.appendChild(cardDiv);
             }
         }
@@ -216,171 +270,227 @@
         function saveCard(img, holo, grade) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             let existing = col.find(c => c.img === img);
-            if (!existing) {
-                col.push({ img, wins: 0, holo, grade, dupes: 0, champion: false });
-            } else { 
-                existing.dupes = (existing.dupes || 0) + 1; 
-            }
+            if (!existing) { col.push({ img, wins: 0, holo, grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0 }); } 
+            else { existing.dupes = (existing.dupes || 0) + 1; }
             localStorage.setItem('EWF_Collection', JSON.stringify(col));
             displayCollection(); updateUI();
         }
 
-        function sellCard(index) {
+        function healCard(idx) {
+            if(userCash < 500) { alert("Need $500 for Medical Bills!"); return; }
+            userCash -= 500; saveGame();
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            const card = col[index];
-            const val = getCardValue(card);
-            
-            if(confirm(`Sell 1 copy of this card for $${val}?`)) {
-                if(card.dupes > 0) { card.dupes--; } 
-                else { col.splice(index, 1); }
-                userCash += val; localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                saveGame(); updateUI(); displayCollection();
-            }
-        }
-
-        function forgeCard(index) {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            if(confirm("Trade 3 copies of this wrestler to forge an EWF Authentic GEM MINT 10?")) {
-                col[index].dupes -= 2; 
-                col[index].grade = 10;
-                localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                displayCollection(); updateUI();
-                alert("🔥 SUCCESS! Card upgraded to GEM MINT 10! 🔥");
-            }
-        }
-
-        function ppvMatch(index) {
-            if(userCash < 1000) { alert("You need $1000 Contract Funds to book a Title Match!"); return; }
-            if(confirm("Book a $1000 Title Match? If you win, this card becomes a Champion (5x Sell Value)!")) {
-                userCash -= 1000; saveGame(); updateUI();
-                runBattle(index, true);
-            }
+            col[idx].injured = false; col[idx].stamina = 5;
+            localStorage.setItem('EWF_Collection', JSON.stringify(col));
+            updateUI(); displayCollection();
         }
 
         function runBattle(idx, isPPV = false) {
+            if(factionMode) return;
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            if (!col[idx]) return;
-            const card = col[idx];
+            let card = col[idx];
+            if(card.injured) { alert("This wrestler is INJURED! Pay Medical Bills first."); return; }
             
-            const overlay = document.getElementById('battle-overlay');
-            const bCard = document.getElementById('battle-card');
-            const bText = document.getElementById('battle-text');
+            // Stamina Logic
+            if(card.stamina <= 0) {
+                if(Math.random() < 0.5) { // 50% Injury Risk
+                    card.injured = true;
+                    localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                    displayCollection();
+                    alert("🚑 DISASTER! Your wrestler was pushed too hard and got INJURED!");
+                    return;
+                }
+            } else {
+                card.stamina--;
+            }
+
+            const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
             overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${card.img}')`;
-            bCard.className = 'rumble'; 
-            bText.innerHTML = isPPV ? "TITLE MATCH FIGHT..." : "FIGHTING..."; 
-            bText.style.color = "white";
+            bCard.className = 'rumble'; bText.innerHTML = isPPV ? "TITLE MATCH FIGHT..." : "FIGHTING..."; bText.style.color = "white";
 
             setTimeout(() => {
-                bCard.classList.remove('rumble'); 
-                const win = Math.random() > 0.5;
+                bCard.classList.remove('rumble'); const win = Math.random() > 0.5;
+                col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; // refresh
                 
-                // Refresh data to prevent overwrite issues
-                col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-
                 if (win) { 
-                    bText.innerHTML = isPPV ? "NEW CHAMPION!" : "WINNER!"; 
-                    bText.style.color = "#00FF00"; triggerConfetti(); 
+                    bText.innerHTML = isPPV ? "NEW CHAMPION!" : "WINNER!"; bText.style.color = "#00FF00"; triggerConfetti(); 
                     col[idx].wins++; totalWins++; 
+                    col[idx].streak = (col[idx].streak > 0) ? col[idx].streak + 1 : 1;
                     if(isPPV) col[idx].champion = true;
+                    checkAchUnlock('first_blood');
+                    if(col[idx].streak >= 3) checkAchUnlock('hot_streak');
+                    if(col[idx].wins >= 200) checkAchUnlock('dynasty');
                 } else { 
-                    bText.innerHTML = "DEFEAT"; bText.style.color = "red"; 
-                    totalLosses++; 
+                    bText.innerHTML = "DEFEAT"; bText.style.color = "red"; totalLosses++; 
+                    col[idx].streak = (col[idx].streak < 0) ? col[idx].streak - 1 : -1;
                 }
 
-                localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                localStorage.setItem('EWF_Wins', totalWins);
-                localStorage.setItem('EWF_Losses', totalLosses);
-                
-                matchHistory.unshift({ name: card.img.replace('.jpg',''), res: win ? 'WIN' : 'LOSS' });
-                if(matchHistory.length > 5) matchHistory.pop();
-                localStorage.setItem('EWF_History', JSON.stringify(matchHistory));
-                
-                setTimeout(() => { 
-                    overlay.style.display = 'none'; 
-                    displayCollection(); 
-                    displayRecord(); 
-                    updateUI(); 
-                }, 2000);
+                localStorage.setItem('EWF_Collection', JSON.stringify(col)); localStorage.setItem('EWF_Wins', totalWins); localStorage.setItem('EWF_Losses', totalLosses);
+                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); displayRecord(); updateUI(); }, 2000);
             }, 1500); 
         }
 
-        function displayRecord() {
-            document.getElementById('win-count').innerHTML = `${totalWins} W`;
-            document.getElementById('loss-count').innerHTML = `${totalLosses} L`;
-            const totalMatches = totalWins + totalLosses;
-            const winRate = totalMatches === 0 ? 0 : Math.round((totalWins / totalMatches) * 100);
-            document.getElementById('win-rate').innerHTML = `WIN RATE: ${winRate}%`;
+        // --- FACTION WAR SYSTEM ---
+        function toggleFactionWar() {
+            if(userCash < 500) return;
+            factionMode = !factionMode;
+            factionTeam = [];
+            document.body.classList.toggle('faction-select-mode', factionMode);
+            document.getElementById('faction-msg').style.display = factionMode ? 'block' : 'none';
+            document.getElementById('faction-btn').innerHTML = factionMode ? "CANCEL WAR" : "3v3 FACTION WAR ($500)";
+            displayCollection(); updateUI();
         }
 
-        // --- BUG FIXED: INSPECTOR BOUND ONLY TO THE CARD ---
+        function handleCardClick(idx) {
+            if(!factionMode) return;
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            if(col[idx].injured || col[idx].wins >= 200) { alert("Cannot select injured or retired wrestlers!"); return; }
+            
+            const teamIdx = factionTeam.indexOf(idx);
+            if(teamIdx > -1) { factionTeam.splice(teamIdx, 1); } // Deselect
+            else if(factionTeam.length < 3) { factionTeam.push(idx); } // Select
+            
+            displayCollection();
+            
+            if(factionTeam.length === 3) {
+                setTimeout(() => confirmFactionWar(), 300);
+            }
+        }
+
+        function confirmFactionWar() {
+            if(confirm("Start Faction War with these 3 wrestlers for $500?")) {
+                userCash -= 500; saveGame();
+                factionMode = false; document.body.classList.remove('faction-select-mode');
+                document.getElementById('faction-msg').style.display = 'none';
+                document.getElementById('faction-btn').innerHTML = "3v3 FACTION WAR ($500)";
+                
+                factionSimulating = true;
+                const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
+                overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble';
+                bText.innerHTML = "FACTION WAR SIMULATING..."; bText.style.color = "gold";
+
+                setTimeout(() => {
+                    bCard.classList.remove('rumble');
+                    let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+                    let teamWins = 0;
+                    
+                    factionTeam.forEach(idx => {
+                        col[idx].stamina--; // Costs stamina
+                        let winChance = 0.5;
+                        if(col[idx].streak >= 3) winChance += 0.1; // Hot streak buff
+                        if(Math.random() < winChance) teamWins++;
+                    });
+                    
+                    if(teamWins >= 2) {
+                        bText.innerHTML = `FACTION WINS ${teamWins}-` + (3-teamWins) + `! ($5000 PAYOUT)`; bText.style.color = "#00FF00";
+                        userCash += 5000; saveGame(); triggerConfetti(); checkAchUnlock('faction_champ');
+                    } else {
+                        bText.innerHTML = `FACTION DEFEATED ${teamWins}-` + (3-teamWins); bText.style.color = "red";
+                    }
+
+                    localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                    setTimeout(() => { overlay.style.display = 'none'; factionSimulating = false; displayCollection(); updateUI(); }, 3000);
+                }, 2000);
+            } else {
+                toggleFactionWar(); // cancel
+            }
+        }
+
+        // --- GM SELL & FORGE ---
+        function sellCard(idx) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; const val = getCardValue(col[idx]);
+            if(confirm(`Sell 1 copy for $${val}?`)) {
+                if(col[idx].dupes > 0) col[idx].dupes--; else col.splice(idx, 1);
+                userCash += val; localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); updateUI(); displayCollection();
+            }
+        }
+
+        function forgeCard(idx) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            if(confirm("Trade 3 copies to forge a GEM MINT 10?")) {
+                col[idx].dupes -= 2; col[idx].grade = 10; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI(); alert("🔥 FORGED GEM MINT 10! 🔥");
+            }
+        }
+
+        function ppvMatch(idx) {
+            if(userCash < 1000) return;
+            if(confirm("Book a $1000 Title Match?")) { userCash -= 1000; saveGame(); updateUI(); runBattle(idx, true); }
+        }
+
+        function displayRecord() {
+            document.getElementById('win-count').innerHTML = `${totalWins} W`; document.getElementById('loss-count').innerHTML = `${totalLosses} L`;
+            document.getElementById('win-rate').innerHTML = `WIN RATE: ${totalWins+totalLosses===0 ? 0 : Math.round((totalWins/(totalWins+totalLosses))*100)}%`;
+        }
+
         function setupInspector(card) {
             let isDragging = false;
             const update = (e) => {
                 if (!isDragging) return;
-                const rect = card.getBoundingClientRect();
-                const clientX = (e.clientX || (e.touches && e.touches[0].clientX));
-                const clientY = (e.clientY || (e.touches && e.touches[0].clientY));
-                const x = clientX - rect.left; const y = clientY - rect.top;
-                const rotateX = ((rect.height / 2) - y) / 6; const rotateY = (x - (rect.width / 2)) / 6;
-                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
-                card.style.boxShadow = `${-rotateY}px ${rotateX}px 30px rgba(0,0,0,0.6)`;
-                card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`);
-                card.style.setProperty('--hx', `${100 - (x/rect.width*100)}%`); card.style.setProperty('--hy', `${100 - (y/rect.height*100)}%`);
-                card.style.setProperty('--sx', `${-rotateY}px`); card.style.setProperty('--sy', `${-rotateX}px`);
+                const rect = card.getBoundingClientRect(); const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left; const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+                const rX = ((rect.height / 2) - y) / 6; const rY = (x - (rect.width / 2)) / 6;
+                card.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) scale(1.1)`; card.style.boxShadow = `${-rY}px ${rX}px 30px rgba(0,0,0,0.6)`;
+                card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`); card.style.setProperty('--hx', `${100 - (x/rect.width*100)}%`); card.style.setProperty('--hy', `${100 - (y/rect.height*100)}%`); card.style.setProperty('--sx', `${-rY}px`); card.style.setProperty('--sy', `${-rX}px`);
             };
-            card.addEventListener('mousedown', (e) => { isDragging = true; update(e); });
-            card.addEventListener('mousemove', (e) => update(e));
-            card.addEventListener('mouseup', () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; });
-            card.addEventListener('mouseleave', () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; });
+            card.addEventListener('mousedown', (e) => { isDragging = true; update(e); }); card.addEventListener('mousemove', (e) => update(e));
+            card.addEventListener('mouseup', () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; }); card.addEventListener('mouseleave', () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; });
         }
 
         function displayCollection() {
-            const grid = document.getElementById('collection-grid');
-            const hofGrid = document.getElementById('hof-grid');
+            const grid = document.getElementById('collection-grid'); const hofGrid = document.getElementById('hof-grid');
             const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            
             grid.innerHTML = ''; hofGrid.innerHTML = '';
             
             col.forEach((card, index) => {
                 const container = document.createElement('div'); container.className = 'card-container';
-                const cardDiv = document.createElement('div'); cardDiv.className = `saved-card ${card.holo ? 'is-holo' : ''}`;
+                const cardDiv = document.createElement('div'); 
+                
+                let classes = `saved-card ${card.holo ? 'is-holo' : ''}`;
+                if(factionMode && factionTeam.includes(index)) classes += ' faction-selected';
+                cardDiv.className = classes;
                 
                 const isHof = card.wins >= 200;
-                let gradeTitle = card.champion ? '🏆 EWF AUTHENTIC 🏆' : 'EWF AUTHENTIC';
-                const gradeLabel = card.grade === 10 ? 'GEM MINT 10' : `MINT ${card.grade}`;
-                const gradeClass = card.grade === 10 ? 'gem-mint' : '';
-                const sellVal = getCardValue(card);
-                const totalCopies = (card.dupes || 0) + 1;
+                let streakHtml = '';
+                if(card.streak >= 3) streakHtml = '<div class="streak-badge">🔥</div>';
+                if(card.streak <= -3) streakHtml = '<div class="streak-badge">❄️</div>';
+                
+                const staminaPrc = (card.stamina / 5) * 100;
+                let stamColor = "#00FF00"; if(card.stamina <= 2) stamColor = "orange"; if(card.stamina === 0) stamColor = "red";
 
                 cardDiv.innerHTML = `
-                    <div class="grade-label ${gradeClass}"><div class="grade-title">${gradeTitle}</div><div class="grade-score">${gradeLabel}</div></div>
+                    <div class="grade-label ${card.grade === 10 ? 'gem-mint' : ''}"><div class="grade-title">${card.champion ? '🏆 EWF AUTHENTIC 🏆' : 'EWF AUTHENTIC'}</div><div class="grade-score">${card.grade === 10 ? 'GEM MINT 10' : `MINT ${card.grade}`}</div></div>
                     <div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px;"></div>
                     <div class="shine-layer"></div><div class="sparkle-layer"></div><div class="holo-foil"></div>
                     <div class="win-count">${card.wins} W</div>
-                    ${totalCopies > 1 ? `<div class="dupe-count">x${totalCopies}</div>` : ''}
+                    ${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}
+                    ${streakHtml}
+                    ${!isHof ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}
+                    ${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}
                 `;
                 
                 setupInspector(cardDiv); 
-                if(!isHof) {
+                
+                if(factionMode) {
+                    cardDiv.onclick = () => handleCardClick(index);
+                } else if(!isHof && !card.injured) {
                     cardDiv.ondblclick = () => runBattle(index, false); 
                 }
 
                 container.appendChild(cardDiv);
 
-                if(!isHof) {
+                if(!isHof && !factionMode) {
                     const controls = document.createElement('div'); controls.className = 'gm-controls';
-                    controls.innerHTML = `<button class="gm-btn btn-sell" onclick="sellCard(${index})">SELL ($${sellVal})</button>`;
-                    
-                    if(!card.champion && userCash >= 1000) {
-                        controls.innerHTML += `<button class="gm-btn btn-ppv" onclick="ppvMatch(${index})">PPV TITLE ($1000)</button>`;
+                    if(card.injured) {
+                        controls.innerHTML = `<button class="gm-btn btn-heal" onclick="healCard(${index})">HEAL ($500)</button>`;
+                    } else {
+                        controls.innerHTML = `<button class="gm-btn btn-sell" onclick="sellCard(${index})">SELL ($${getCardValue(card)})</button>`;
+                        if(!card.champion && userCash >= 1000) controls.innerHTML += `<button class="gm-btn btn-ppv" onclick="ppvMatch(${index})">PPV TITLE ($1000)</button>`;
+                        if(card.dupes >= 2 && card.grade < 10) controls.innerHTML += `<button class="gm-btn btn-forge" onclick="forgeCard(${index})">FORGE PSA 10 (3)</button>`;
                     }
-                    if(card.dupes >= 2 && card.grade < 10) {
-                        controls.innerHTML += `<button class="gm-btn btn-forge" onclick="forgeCard(${index})">FORGE PSA 10 (3)</button>`;
-                    }
-                    container.appendChild(controls);
-                    grid.appendChild(container);
-                } else {
+                    container.appendChild(controls); grid.appendChild(container);
+                } else if(isHof) {
                     hofGrid.appendChild(container);
+                } else {
+                    grid.appendChild(container); // Faction mode
                 }
             });
 
