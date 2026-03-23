@@ -10,13 +10,13 @@
         }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
-        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; }
+        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; display: block; }
         #rank-display { color: #D4AF37; font-size: 18px; display: block; margin-top: 5px; letter-spacing: 2px; }
 
         #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 350px; }
         
-        /* CARD BASICS */
+        /* CARDS */
         .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; position: relative; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
@@ -26,31 +26,20 @@
 
         .grade-tag { position: absolute; top: 10px; left: 10px; background: white; color: black; padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #333; z-index: 5; }
 
-        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
+        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; transition: 0.2s; }
         button:disabled { background: #444; opacity: 0.5; }
 
+        /* ROSTER */
         .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #D4AF37; transition: 0.3s; position: relative; display: inline-block; margin: 10px; cursor: pointer; }
         .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; font-weight: bold; z-index: 10; }
         
-        /* BATTLE OVERLAY */
-        #battle-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); z-index: 1000; display: none;
-            flex-direction: column; align-items: center; justify-content: center;
-        }
-        #battle-card { width: 280px; height: 400px; border-radius: 15px; border: 5px solid gold; background-size: cover; background-position: center; transition: 0.5s; z-index: 1001;}
+        /* BATTLE VFX */
+        #battle-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        #battle-card { width: 280px; height: 400px; border-radius: 15px; border: 5px solid gold; background-size: cover; background-position: center; transition: 0.5s; z-index: 1001; }
         #battle-text { font-size: 4em; color: gold; text-shadow: 0 0 20px red; margin-top: 20px; font-style: italic; z-index: 1001; }
-
-        /* VFX CLASSES */
-        .vfx-dot { position: fixed; width: 8px; height: 8px; background: #FFD700; border-radius: 50%; pointer-events: none; z-index: 9999; box-shadow: 0 0 10px #FFD700; }
-        
-        /* The Confetti styling */
-        .confetti { position: fixed; width: 10px; height: 10px; background: #FFD700; pointer-events: none; border-radius: 1px; z-index: 2000; }
-
-        @keyframes rumble { 0% { transform: translate(0,0); } 25% { transform: translate(5px,5px); } 50% { transform: translate(-5px,-5px); } 100% { transform: translate(0,0); } }
+        .vfx-dot, .confetti { position: fixed; pointer-events: none; z-index: 9999; }
+        @keyframes rumble { 0% { transform: translate(2px,2px); } 50% { transform: translate(-2px,-2px); } 100% { transform: translate(0,0); } }
         .rumble { animation: rumble 0.1s linear infinite; }
-        .win-glow { box-shadow: 0 0 50px lime !important; transform: scale(1.1); }
-        .lose-dark { filter: grayscale(1) brightness(0.5); transform: scale(0.9); }
     </style>
 </head>
 <body onload="initGame()">
@@ -85,75 +74,53 @@
     <script>
         const totalCards = 23; 
         const folderPath = "rare ewf cards"; 
-        let userCash = parseInt(localStorage.getItem('EWF_Cash'));
-        if (isNaN(userCash)) userCash = 300; 
+        
+        // --- STARTING CASH FIX ---
+        let userCash = localStorage.getItem('EWF_Cash');
+        if (userCash === null) {
+            userCash = 500; // New players get $500
+        } else {
+            userCash = parseInt(userCash);
+        }
+
         let musicStarted = false;
 
         function initGame() {
             updateUI();
             displayCollection();
-            setInterval(() => { userCash += 15; saveGame(); updateUI(); }, 30000); 
+            setInterval(() => { userCash += 20; saveGame(); updateUI(); }, 30000); 
         }
 
-        // --- PARTICLE BURST (PACK OPENING) ---
         function spark(element) {
             const rect = element.getBoundingClientRect();
             const centerX = rect.left + (rect.width / 2);
             const centerY = rect.top + (rect.height / 2);
             for (let i = 0; i < 20; i++) {
                 const dot = document.createElement('div');
-                dot.className = 'vfx-dot';
-                dot.style.left = centerX + 'px';
-                dot.style.top = centerY + 'px';
+                dot.style.cssText = `position:fixed; width:8px; height:8px; background:gold; border-radius:50%; z-index:999; left:${centerX}px; top:${centerY}px; box-shadow:0 0 10px gold;`;
                 document.body.appendChild(dot);
                 const angle = Math.random() * Math.PI * 2;
                 const dist = Math.random() * 10 + 5;
                 let curX = 0, curY = 0, opacity = 1;
                 const anim = setInterval(() => {
-                    curX += Math.cos(angle) * dist;
-                    curY += Math.sin(angle) * dist + 1.5;
-                    opacity -= 0.04;
-                    dot.style.transform = `translate(${curX}px, ${curY}px)`;
-                    dot.style.opacity = opacity;
+                    curX += Math.cos(angle) * dist; curY += Math.sin(angle) * dist + 1.5; opacity -= 0.04;
+                    dot.style.transform = `translate(${curX}px, ${curY}px)`; dot.style.opacity = opacity;
                     if (opacity <= 0) { clearInterval(anim); dot.remove(); }
                 }, 20);
             }
         }
 
-        // --- THE CHAMPIONSHIP CONFETTI ENGINE ---
         function triggerConfetti() {
-            const colors = ['#e60000', '#00FF00', '#FFD700', '#fff', '#800000'];
-            for(let i=0; i<80; i++) {
+            const colors = ['#e60000', '#00FF00', '#FFD700', '#fff'];
+            for(let i=0; i<60; i++) {
                 const c = document.createElement('div');
-                c.className = 'confetti';
-                // Spawn randomly along the top half of the screen
-                c.style.left = (Math.random() * 100) + 'vw';
-                c.style.top = (Math.random() * 50) + 'vh';
-                
-                // Assign a color
-                c.style.background = colors[Math.floor(Math.random()*colors.length)];
-                
-                // Add a glowing effect to the gold/red pieces
-                if(c.style.background === '#FFD700' || c.style.background === '#e60000') {
-                    c.style.boxShadow = `0 0 10px ${c.style.background}`;
-                }
-
+                c.style.cssText = `position:fixed; width:10px; height:10px; z-index:2000; left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`;
                 document.body.appendChild(c);
-                
-                // Realistic confetti drift math
-                const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 10 + 5;
-                const rotation = Math.random() * 720 - 360;
-                let cx = 0, cy = 0;
-                let opacity = 1;
-                
+                let cy = 0, opacity = 1;
                 const drift = setInterval(() => {
-                    cy += Math.sin(angle) * speed + 2; // drift down
-                    cx += Math.cos(angle) * 1; // gentle sway
-                    opacity -= 0.01; // fade out slowly
-                    c.style.transform = `translate(${cx}px, ${cy}px) rotate(${cy * rotation / 100}deg)`;
-                    c.style.opacity = opacity;
-                    if (cy > window.innerHeight) { clearInterval(drift); c.remove(); }
+                    cy += Math.random() * 5 + 2; opacity -= 0.01;
+                    c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = opacity;
+                    if (opacity <= 0) { clearInterval(drift); c.remove(); }
                 }, 20);
             }
         }
@@ -177,4 +144,79 @@
             saveGame(); updateUI();
             if (!musicStarted) {
                 document.getElementById("bgMusic").volume = 0.2;
-                document
+                document.getElementById("bgMusic").play().catch(e => {});
+                musicStarted = true;
+            }
+            document.getElementById("cheerSound").currentTime = 0;
+            document.getElementById("cheerSound").play();
+            const area = document.getElementById('pack-area');
+            area.innerHTML = ''; 
+            for (let i = 0; i < 5; i++) {
+                const randomNum = Math.floor(Math.random() * totalCards) + 1;
+                const fileName = `card (${randomNum}).jpg`; 
+                const grade = Math.floor(Math.random() * 4) + 7;
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                cardDiv.innerHTML = `<div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}', ${grade}); spark(this)"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${fileName}')"><div class="grade-tag">PSA ${grade}</div></div></div>`;
+                area.appendChild(cardDiv);
+            }
+        }
+
+        function saveCard(img, grade) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            if (!col.find(c => c.img === img)) {
+                col.push({ img: img, wins: 0, hof: false, grade: grade });
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                displayCollection(); updateUI();
+            } else { userCash += 50; saveGame(); updateUI(); }
+        }
+
+        function startMatch(cardImg, cardIndex) {
+            const overlay = document.getElementById('battle-overlay');
+            const bCard = document.getElementById('battle-card');
+            const bText = document.getElementById('battle-text');
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            overlay.style.display = 'flex';
+            bCard.style.backgroundImage = `url('${folderPath}/${cardImg}')`;
+            bCard.className = 'rumble';
+            bText.innerHTML = "FIGHTING...";
+            setTimeout(() => {
+                bCard.classList.remove('rumble');
+                if (Math.random() > 0.5) {
+                    bText.innerHTML = "WINNER!"; bText.style.color = "#00FF00";
+                    triggerConfetti(); col[cardIndex].wins++;
+                    if(col[cardIndex].wins >= 100) col[cardIndex].hof = true;
+                } else {
+                    bText.innerHTML = "DEFEAT"; bText.style.color = "red";
+                }
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); }, 2000);
+            }, 1500);
+        }
+
+        function displayCollection() {
+            const grid = document.getElementById('collection-grid');
+            const hofGrid = document.getElementById('hof-grid');
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            document.getElementById('collection-title').innerHTML = `MY EWF COLLECTION (${col.length} / ${totalCards})`;
+            grid.innerHTML = ''; hofGrid.innerHTML = '';
+            col.forEach((card, index) => {
+                const div = document.createElement('div');
+                div.className = `saved-card ${card.hof ? 'hof-card' : ''}`;
+                div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
+                div.innerHTML = `<div class="grade-tag" style="font-size:9px; top:5px; left:5px;">PSA ${card.grade || 10}</div>`;
+                if (card.hof) {
+                    div.innerHTML += `<div class="win-count" style="background:gold; color:black;">100</div>`;
+                    hofGrid.appendChild(div);
+                } else {
+                    div.onclick = () => startMatch(card.img, index);
+                    if(card.wins > 0) div.innerHTML += `<div class="win-count">${card.wins}</div>`;
+                    grid.appendChild(div);
+                }
+            });
+        }
+
+        function clearEverything() { if(confirm("RESET ALL?")) { localStorage.clear(); location.reload(); } }
+    </script>
+</body>
+</html>
