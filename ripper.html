@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF Elite Manager</title>
+    <title>EWF Hall of Fame Manager</title>
     <style>
         body { 
             background: url('background.jpg') center/cover no-repeat fixed; 
@@ -13,9 +13,12 @@
         #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
 
+        /* Pack Shake Animation */
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+        .ripping { animation: shake 0.5s; }
+
         #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 350px; }
         
-        /* CARD STYLES */
         .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; position: relative; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
@@ -23,22 +26,22 @@
         .back { background: url('wrapper.jpg') center/cover; border: 3px solid #D4AF37; }
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; border: 4px solid #fff; }
 
-        /* RARITY BORDERS */
         .elite-border { border-color: #FFD700 !important; box-shadow: 0 0 20px #FFD700; }
         .legendary-border { border-color: #ff00ff !important; animation: rainbow 2s infinite linear; }
         @keyframes rainbow { 0% { box-shadow: 0 0 15px red; } 33% { box-shadow: 0 0 15px cyan; } 66% { box-shadow: 0 0 15px lime; } 100% { box-shadow: 0 0 15px red; } }
 
-        .rarity-tag { position: absolute; bottom: 10px; width: 100%; background: rgba(0,0,0,0.7); font-size: 12px; color: gold; padding: 2px 0; border-radius: 0 0 8px 8px; }
+        /* Hall of Fame Style */
+        .hof-card { border: 5px solid #ff4500 !important; box-shadow: 0 0 30px #ff4500, inset 0 0 15px #ff4500; filter: contrast(1.2); }
+        .hof-tag { background: linear-gradient(to right, #800000, #ff4500); color: white; font-weight: bold; }
 
-        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
+        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
         button:disabled { background: #444; opacity: 0.5; cursor: not-allowed; }
-        .daily-btn { background: linear-gradient(#00c6ff, #0072ff); }
 
-        #collection-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; }
+        #collection-grid, #hof-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; }
         .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #fff; transition: 0.3s; position: relative; }
         .saved-card:hover { transform: scale(1.2); z-index: 10; }
-        .win-count { position: absolute; top: -10px; right: -10px; background: red; border-radius: 50%; width: 25px; height: 25px; font-size: 14px; line-height: 25px; }
-
+        .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 30px; height: 30px; font-size: 14px; line-height: 30px; border: 2px solid white; font-weight: bold; }
     </style>
 </head>
 <body onload="initGame()">
@@ -50,7 +53,7 @@
     
     <div id="stats-bar">
         <div id="cash-display">FUNDS: $0</div>
-        <button id="daily-btn" class="daily-btn" onclick="claimDaily()">DAILY REWARD (+$500)</button>
+        <button id="daily-btn" style="background: linear-gradient(#00c6ff, #0072ff);" onclick="claimDaily()">COLLECT SPONSORSHIP (+$500)</button>
     </div>
     <br>
     <button id="rip-btn" onclick="ripPack()">RIP ELITE PACK ($100)</button>
@@ -61,7 +64,12 @@
         CHAMPIONSHIP ROSTER (0 / 23)
     </h2>
     <div id="collection-grid"></div>
-    <button style="font-size: 10px; padding: 5px;" onclick="clearEverything()">Nuke Save</button>
+
+    <h1 style="color: #ff4500; text-shadow: 0 0 20px #ff4500; margin-top: 80px;">🏆 HALL OF FAME 🏆</h1>
+    <p style="font-style: italic; color: #ccc;">Requires 100 Career Wins</p>
+    <div id="hof-grid"></div>
+
+    <button style="font-size: 10px; padding: 5px; margin-top: 100px;" onclick="clearEverything()">Reset Save Data</button>
 
     <script>
         const totalCards = 23; 
@@ -72,17 +80,14 @@
         function initGame() {
             updateUI();
             displayCollection();
-            setInterval(() => { userCash += 5; saveGame(); updateUI(); }, 60000); // Passive $5/min
+            setInterval(() => { userCash += 10; saveGame(); updateUI(); }, 30000); 
         }
 
         function updateUI() {
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
             document.getElementById('rip-btn').disabled = (userCash < 100);
-            
-            // Daily check
             const now = new Date().getTime();
-            const oneDay = 24 * 60 * 60 * 1000;
-            document.getElementById('daily-btn').disabled = (now - lastDaily < oneDay);
+            document.getElementById('daily-btn').disabled = (now - lastDaily < 86400000);
         }
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
@@ -91,30 +96,29 @@
             userCash += 500;
             lastDaily = new Date().getTime();
             localStorage.setItem('EWF_Daily', lastDaily);
-            saveGame();
-            updateUI();
-            alert("Sponsorship Deal Signed! +$500");
+            saveGame(); updateUI();
+            alert("The TV Network just paid you! +$500");
         }
 
         function ripPack() {
             if (userCash < 100) return;
             userCash -= 100;
-            saveGame();
-            updateUI();
+            saveGame(); updateUI();
+            
+            // Shake the area for effect
+            const area = document.getElementById('pack-area');
+            area.classList.add('ripping');
+            setTimeout(() => area.classList.remove('ripping'), 500);
+
             document.getElementById("cheerSound").currentTime = 0;
             document.getElementById("cheerSound").play();
 
-            const area = document.getElementById('pack-area');
             area.innerHTML = ''; 
-            
             for (let i = 0; i < 5; i++) {
                 const randomNum = Math.floor(Math.random() * totalCards) + 1;
                 const fileName = `card (${randomNum}).jpg`; 
-                
-                // RARITY LOGIC
                 const roll = Math.random() * 100;
-                let rarity = "Common";
-                let rarityClass = "";
+                let rarity = "Common"; let rarityClass = "";
                 if (roll > 98) { rarity = "LEGENDARY"; rarityClass = "legendary-border"; }
                 else if (roll > 85) { rarity = "ELITE"; rarityClass = "elite-border"; }
 
@@ -124,7 +128,7 @@
                     <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}', '${rarity}')">
                         <div class="back"></div>
                         <div class="front ${rarityClass}" style="background-image: url('${folderPath}/${fileName}')">
-                            <div class="rarity-tag">${rarity}</div>
+                            <div style="position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.7); font-size: 12px; color: gold;">${rarity}</div>
                         </div>
                     </div>`;
                 area.appendChild(cardDiv);
@@ -133,57 +137,59 @@
 
         function saveCard(img, rarity) {
             let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            
-            // Find if card exists
             const existing = collection.find(c => c.img === img);
-            
             if (!existing) {
-                collection.push({ img: img, rarity: rarity, wins: 0 });
+                collection.push({ img: img, rarity: rarity, wins: 0, hof: false });
                 localStorage.setItem('EWF_Collection', JSON.stringify(collection));
                 displayCollection();
             } else {
-                // SELL DUPLICATE
-                userCash += 50;
-                saveGame();
-                updateUI();
-                console.log("Duplicate sold for $50");
+                userCash += 50; saveGame(); updateUI();
             }
         }
 
         function displayCollection() {
             const grid = document.getElementById('collection-grid');
+            const hofGrid = document.getElementById('hof-grid');
             const collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            
             document.getElementById('collection-title').innerHTML = `CHAMPIONSHIP ROSTER (${collection.length} / ${totalCards})`;
             grid.innerHTML = '';
+            hofGrid.innerHTML = '';
             
             collection.forEach(card => {
                 const div = document.createElement('div');
-                div.className = `saved-card ${card.rarity === 'ELITE' ? 'elite-border' : ''} ${card.rarity === 'LEGENDARY' ? 'legendary-border' : ''}`;
-                div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
                 
-                // Click to "Battle" (Simulate match)
-                div.onclick = () => {
-                    if(confirm(`Send ${card.img} into a match?`)) {
-                        if(Math.random() > 0.4) {
-                            card.wins++;
-                            alert("WINNER! Record updated.");
-                        } else {
-                            alert("Tough loss at the Pay-Per-View.");
+                if (card.hof) {
+                    // Hall of Fame Card
+                    div.className = `saved-card hof-card`;
+                    div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
+                    div.innerHTML = `<div class="win-count" style="background: gold; color: black;">100</div>`;
+                    hofGrid.appendChild(div);
+                } else {
+                    // Regular Roster Card
+                    div.className = `saved-card ${card.rarity === 'ELITE' ? 'elite-border' : ''} ${card.rarity === 'LEGENDARY' ? 'legendary-border' : ''}`;
+                    div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
+                    div.onclick = () => {
+                        if(confirm(`Send ${card.img} to the Ring?`)) {
+                            if(Math.random() > 0.5) {
+                                card.wins++;
+                                if(card.wins >= 100) {
+                                    card.hof = true;
+                                    alert("🏆 LEGEND STATUS! This wrestler has entered the Hall of Fame!");
+                                } else { alert("WINNER!"); }
+                            } else { alert("They lost the match."); }
+                            localStorage.setItem('EWF_Collection', JSON.stringify(collection));
+                            displayCollection();
                         }
-                        localStorage.setItem('EWF_Collection', JSON.stringify(collection));
-                        displayCollection();
-                    }
-                };
-                
-                if(card.wins > 0) {
-                    div.innerHTML = `<div class="win-count">${card.wins}</div>`;
+                    };
+                    if(card.wins > 0) div.innerHTML = `<div class="win-count">${card.wins}</div>`;
+                    grid.appendChild(div);
                 }
-                grid.appendChild(div);
             });
         }
 
         function clearEverything() {
-            if(confirm("Wipe everything?")) { localStorage.clear(); location.reload(); }
+            if(confirm("Erase all Manager progress?")) { localStorage.clear(); location.reload(); }
         }
     </script>
 </body>
