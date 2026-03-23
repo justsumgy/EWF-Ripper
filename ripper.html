@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EWF Elite Pack Ripper</title>
+    <style>
+        body { 
+            background: url('background.jpg') center/cover no-repeat fixed; 
+            color: white; 
+            font-family: 'Arial Black', sans-serif; 
+            text-align: center; 
+            padding: 20px;
+            border: 5px solid #D4AF37;
+            min-height: 90vh;
+        }
+
+        h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
+        h2 { color: #fff; font-size: 1.2em; letter-spacing: 5px; margin-top: 0; opacity: 0.8; text-shadow: 1px 1px #000; }
+
+        #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; }
+        .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; border: 3px solid #D4AF37; box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
+        .back { background: url('wrapper.jpg') center/cover; background-color: #1a1a1a; }
+        .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
+
+        button { 
+            padding: 18px 35px; font-size: 22px; 
+            background: linear-gradient(#e60000, #800000); color: white; 
+            border: 2px solid #fff; cursor: pointer; border-radius: 8px; 
+            font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body>
+    
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="cheerSound">
+        <source src="cheer.mp3" type="audio/mpeg">
+    </audio>
+
+    <h1>ELITE WRESTLING FEDERATION</h1>
+    <h2>SERIES 1: LEGENDS EDITION</h2>
+    
+    <br>
+    <button onclick="ripPack()">RIP NEW PACK</button>
+    <div id="pack-area"></div>
+
+    <script>
+        const totalCards = 50; 
+        let musicStarted = false;
+
+        function ripPack() {
+            // 1. START BACKGROUND MUSIC (Only on the first click)
+            const bgMusic = document.getElementById("bgMusic");
+            if (!musicStarted) {
+                bgMusic.volume = 0.4; // Set background music volume lower
+                bgMusic.play();
+                musicStarted = true;
+            }
+
+            // 2. PLAY THE CHEER SOUND
+            const cheer = document.getElementById("cheerSound");
+            cheer.currentTime = 0;
+            cheer.play();
+
+            // 3. GENERATE CARDS
+            const area = document.getElementById('pack-area');
+            area.innerHTML = ''; 
+            
+            for (let i = 0; i < 5; i++) {
+                const randomNum = Math.floor(Math.random() * totalCards) + 1;
+                const fileName = "card (" + randomNum + ").jpg";
+
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                cardDiv.innerHTML = `
+                    <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped')">
+                        <div class="back"></div>
+                        <div class="front" style="background-image: url('Rare EWF Cards/${fileName}')"></div>
+                    </div>`;
+                area.appendChild(cardDiv);
+            }
+        }
+    </script>
+</body>
+</html>
