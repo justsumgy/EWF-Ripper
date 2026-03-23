@@ -12,8 +12,23 @@
         #progress-container { width: 100%; height: 12px; background: #222; border-radius: 6px; margin-top: 10px; border: 1px solid #555; overflow: hidden; }
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #D4AF37, #fff, #D4AF37); background-size: 200% 100%; transition: 0.5s; }
 
-        /* AUDIO TOGGLE */
-        #music-toggle { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer; color: white; }
+        /* FIXED AUDIO TOGGLE - TOP RIGHT OF SITE */
+        #music-toggle { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            background: rgba(0,0,0,0.8); 
+            border: 2px solid #D4AF37; 
+            font-size: 16px; 
+            font-weight: bold;
+            color: white; 
+            cursor: pointer; 
+            padding: 10px 15px;
+            border-radius: 8px;
+            z-index: 9999;
+            transition: 0.2s;
+        }
+        #music-toggle:hover { background: #D4AF37; color: black; }
 
         /* PACK AREA */
         #pack-area { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; min-height: 250px; }
@@ -57,6 +72,8 @@
 </head>
 <body onload="initGame()">
     
+    <button id="music-toggle" onclick="toggleMusic()">🔇 Play Music</button>
+
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
     <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
@@ -67,7 +84,6 @@
 
     <h1>ELITE WRESTLING FEDERATION</h1>
     <div id="stats-bar">
-        <button id="music-toggle" onclick="toggleMusic()">🔇 Play Music</button>
         <div id="cash-display">CONTRACT FUNDS: $0</div>
         <div id="rank-display" style="color:gold; margin-top:5px;">RANK: ROOKIE PROMOTER</div>
         <div id="progress-container"><div id="progress-fill"></div></div>
@@ -100,7 +116,6 @@
             setInterval(() => { userCash += 25; saveGame(); updateUI(); }, 30000);
         }
 
-        // --- AUDIO FIX ---
         function toggleMusic() {
             const music = document.getElementById("bgMusic");
             const btn = document.getElementById("music-toggle");
@@ -152,11 +167,8 @@
             if (userCash < cost) return;
             userCash -= cost; saveGame(); updateUI();
             
-            // Play cheer sound when ripping pack
             const cheer = document.getElementById("cheerSound");
-            cheer.volume = 0.5;
-            cheer.currentTime = 0;
-            cheer.play().catch(e=>{});
+            cheer.volume = 0.5; cheer.currentTime = 0; cheer.play().catch(e=>{});
 
             const area = document.getElementById('pack-area'); area.innerHTML = ''; 
             for (let i = 0; i < 5; i++) {
@@ -182,13 +194,11 @@
             } else { userCash += 50; saveGame(); updateUI(); }
         }
 
-        // --- CINEMATIC BATTLE ENGINE ---
         function runBattle(img, idx) {
             const overlay = document.getElementById('battle-overlay');
             const bCard = document.getElementById('battle-card');
             const bText = document.getElementById('battle-text');
             
-            // Show overlay & Rumble
             overlay.style.display = 'flex';
             bCard.style.backgroundImage = `url('${folderPath}/${img}')`;
             bCard.className = 'rumble';
@@ -196,34 +206,24 @@
             bText.style.color = "white";
 
             setTimeout(() => {
-                bCard.classList.remove('rumble'); // Stop shaking
+                bCard.classList.remove('rumble'); 
                 const win = Math.random() > 0.5;
                 let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
                 
                 if (win) {
-                    bText.innerHTML = "WINNER!";
-                    bText.style.color = "#00FF00";
-                    triggerConfetti();
-                    col[idx].wins++;
+                    bText.innerHTML = "WINNER!"; bText.style.color = "#00FF00"; triggerConfetti(); col[idx].wins++;
                 } else {
-                    bText.innerHTML = "DEFEAT";
-                    bText.style.color = "red";
+                    bText.innerHTML = "DEFEAT"; bText.style.color = "red";
                 }
 
-                // Update History Log
                 matchHistory.unshift({ name: img.replace('.jpg',''), res: win ? 'WIN' : 'LOSS' });
                 if(matchHistory.length > 5) matchHistory.pop();
                 
                 localStorage.setItem('EWF_Collection', JSON.stringify(col));
                 localStorage.setItem('EWF_History', JSON.stringify(matchHistory));
                 
-                setTimeout(() => {
-                    overlay.style.display = 'none'; // Hide overlay after 2 seconds
-                    displayCollection(); 
-                    displayHistory();
-                }, 2000);
-
-            }, 1500); // Rumbles for 1.5 seconds
+                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); displayHistory(); }, 2000);
+            }, 1500); 
         }
 
         function setupInspector(card) {
@@ -233,10 +233,8 @@
                 const rect = card.getBoundingClientRect();
                 const clientX = (e.clientX || (e.touches && e.touches[0].clientX));
                 const clientY = (e.clientY || (e.touches && e.touches[0].clientY));
-                const x = clientX - rect.left;
-                const y = clientY - rect.top;
-                const rotateX = ((rect.height / 2) - y) / 6;
-                const rotateY = (x - (rect.width / 2)) / 6;
+                const x = clientX - rect.left; const y = clientY - rect.top;
+                const rotateX = ((rect.height / 2) - y) / 6; const rotateY = (x - (rect.width / 2)) / 6;
 
                 card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
                 card.style.boxShadow = `${-rotateY}px ${rotateX}px 30px rgba(0,0,0,0.6)`;
@@ -276,8 +274,6 @@
                 `;
                 
                 setupInspector(cardDiv);
-                
-                // IMPORTANT: DOUBLE-CLICK TRIGGERS BATTLE OVERLAY
                 cardDiv.ondblclick = () => runBattle(card.img, index);
                 
                 container.appendChild(cardDiv);
