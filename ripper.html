@@ -10,7 +10,7 @@
         }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
-        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; display: block; }
         #rank-display { color: #D4AF37; font-size: 18px; display: block; margin-top: 5px; letter-spacing: 2px; }
 
@@ -23,22 +23,28 @@
         .back { background: url('wrapper.jpg') center/cover; background-color: #111; }
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
 
-        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; transition: 0.2s; }
+        /* PSA GRADE TAG - With Glow */
+        .grade-tag { 
+            position: absolute; top: 10px; left: 10px; background: white; color: black; 
+            padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; 
+            border: 1px solid #333; z-index: 5; box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
         button:disabled { background: #444; opacity: 0.5; }
 
         .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #D4AF37; transition: 0.3s; position: relative; display: inline-block; margin: 10px; }
         .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; font-weight: bold; }
         
-        /* Particle Style - Made sure it's on top */
-        .vfx-particle { 
-            position: absolute; width: 10px; height: 10px; background: gold; 
-            pointer-events: none; border-radius: 50%; z-index: 9999; 
-            box-shadow: 0 0 10px gold;
+        /* THE VFX PARTICLES */
+        .vfx-dot { 
+            position: fixed; width: 8px; height: 8px; background: #FFD700; 
+            border-radius: 50%; pointer-events: none; z-index: 9999; 
+            box-shadow: 0 0 8px #FFF, 0 0 15px #FFD700;
         }
 
-        /* Screen Shake */
-        @keyframes shake { 0% { transform: translate(1px, 1px); } 10% { transform: translate(-1px, -2px); } 20% { transform: translate(-3px, 0px); } 100% { transform: translate(0,0); } }
-        .shake-effect { animation: shake 0.2s; }
+        @keyframes screen-rumble { 0% { transform: translate(0,0); } 25% { transform: translate(3px,3px); } 50% { transform: translate(-3px,-3px); } 100% { transform: translate(0,0); } }
+        .rumble { animation: screen-rumble 0.1s linear 3; }
     </style>
 </head>
 <body onload="initGame()">
@@ -78,26 +84,31 @@
             setInterval(() => { userCash += 15; saveGame(); updateUI(); }, 30000); 
         }
 
-        // --- NEW VFX ENGINE ---
-        function burst(e) {
-            for (let i = 0; i < 12; i++) {
-                const p = document.createElement('div');
-                p.className = 'vfx-particle';
-                // Spawn at click position
-                p.style.left = e.pageX + 'px';
-                p.style.top = e.pageY + 'px';
-                document.body.appendChild(p);
+        // --- THE BULLETPROOF VFX ENGINE ---
+        function spark(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + (rect.width / 2);
+            const centerY = rect.top + (rect.height / 2);
+
+            for (let i = 0; i < 20; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'vfx-dot';
+                dot.style.left = centerX + 'px';
+                dot.style.top = centerY + 'px';
+                document.body.appendChild(dot);
 
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 8 + 4;
-                let x = 0, y = 0;
-                
-                const move = setInterval(() => {
-                    x += Math.cos(angle) * speed;
-                    y += Math.sin(angle) * speed + 2; // gravity
-                    p.style.transform = `translate(${x}px, ${y}px)`;
-                    p.style.opacity = p.style.opacity ? p.style.opacity - 0.05 : 1;
-                    if (p.style.opacity <= 0) { clearInterval(move); p.remove(); }
+                const dist = Math.random() * 10 + 5;
+                let curX = 0, curY = 0;
+                let opacity = 1;
+
+                const anim = setInterval(() => {
+                    curX += Math.cos(angle) * dist;
+                    curY += Math.sin(angle) * dist + 1.5; // gravity
+                    opacity -= 0.04;
+                    dot.style.transform = `translate(${curX}px, ${curY}px)`;
+                    dot.style.opacity = opacity;
+                    if (opacity <= 0) { clearInterval(anim); dot.remove(); }
                 }, 20);
             }
         }
@@ -105,12 +116,12 @@
         function updateUI() {
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
             document.getElementById('rip-btn').disabled = (userCash < 100);
-            const collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            let rank = "ROOKIE PROMOTER";
-            if (collection.length >= 19) rank = "LEGENDARY COLLECTOR";
-            else if (collection.length >= 13) rank = "ELITE EXECUTIVE";
-            else if (collection.length >= 6) rank = "PRO MANAGER";
-            document.getElementById('rank-display').innerHTML = `RANK: ${rank}`;
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let r = "ROOKIE PROMOTER";
+            if (col.length >= 19) r = "LEGENDARY COLLECTOR";
+            else if (col.length >= 13) r = "ELITE EXECUTIVE";
+            else if (col.length >= 6) r = "PRO MANAGER";
+            document.getElementById('rank-display').innerHTML = `RANK: ${r}`;
         }
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
@@ -135,10 +146,10 @@
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'card';
                 cardDiv.innerHTML = `
-                    <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}', ${grade}); burst(event)">
+                    <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}', ${grade}); spark(this)">
                         <div class="back"></div>
                         <div class="front" style="background-image: url('${folderPath}/${fileName}')">
-                            <div style="position: absolute; top: 10px; left: 10px; background: white; color: black; padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #333; z-index: 5;">PSA ${grade}</div>
+                            <div class="grade-tag">PSA ${grade}</div>
                         </div>
                     </div>`;
                 area.appendChild(cardDiv);
@@ -146,11 +157,11 @@
         }
 
         function saveCard(img, grade) {
-            let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            const existing = collection.find(c => c.img === img);
-            if (!existing) {
-                collection.push({ img: img, wins: 0, hof: false, grade: grade });
-                localStorage.setItem('EWF_Collection', JSON.stringify(collection));
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            const exists = col.find(c => c.img === img);
+            if (!exists) {
+                col.push({ img: img, wins: 0, hof: false, grade: grade });
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
                 displayCollection(); updateUI();
             } else { userCash += 50; saveGame(); updateUI(); }
         }
@@ -158,28 +169,28 @@
         function displayCollection() {
             const grid = document.getElementById('collection-grid');
             const hofGrid = document.getElementById('hof-grid');
-            const collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            document.getElementById('collection-title').innerHTML = `MY EWF COLLECTION (${collection.length} / ${totalCards})`;
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            document.getElementById('collection-title').innerHTML = `MY EWF COLLECTION (${col.length} / ${totalCards})`;
             grid.innerHTML = ''; hofGrid.innerHTML = '';
-            collection.forEach(card => {
+            col.forEach(card => {
                 const div = document.createElement('div');
                 div.className = `saved-card ${card.hof ? 'hof-card' : ''}`;
                 div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
-                div.innerHTML = `<div style="position: absolute; top: 5px; left: 5px; background: white; color: black; padding: 1px 4px; border-radius: 3px; font-size: 9px; font-weight: bold; border: 1px solid #333;">PSA ${card.grade || 10}</div>`;
+                div.innerHTML = `<div class="grade-tag" style="font-size:9px; top:5px; left:5px; padding:1px 4px;">PSA ${card.grade || 10}</div>`;
                 if (card.hof) {
                     div.innerHTML += `<div class="win-count" style="background: gold; color: black;">100</div>`;
                     hofGrid.appendChild(div);
                 } else {
                     div.onclick = () => {
-                        document.body.classList.add('shake-effect');
-                        setTimeout(() => document.body.classList.remove('shake-effect'), 200);
+                        document.body.classList.add('rumble');
+                        setTimeout(() => document.body.classList.remove('rumble'), 300);
                         if(confirm("Enter match?")) {
                             if(Math.random() > 0.5) {
                                 card.wins++;
                                 if(card.wins >= 100) card.hof = true;
                                 alert("WIN!");
                             } else { alert("LOSS."); }
-                            localStorage.setItem('EWF_Collection', JSON.stringify(collection));
+                            localStorage.setItem('EWF_Collection', JSON.stringify(col));
                             displayCollection();
                         }
                     };
@@ -189,7 +200,7 @@
             });
         }
 
-        function clearEverything() { if(confirm("RESET ALL DATA?")) { localStorage.clear(); location.reload(); } }
+        function clearEverything() { if(confirm("RESET ALL?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
 </html>
