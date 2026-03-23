@@ -5,12 +5,8 @@
     <style>
         body { 
             background: url('background.jpg') center/cover no-repeat fixed; 
-            color: white; 
-            font-family: 'Arial Black', sans-serif; 
-            text-align: center; 
-            padding: 20px;
-            border: 5px solid #D4AF37;
-            min-height: 100vh;
+            color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px;
+            border: 5px solid #D4AF37; min-height: 100vh;
         }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         h2 { color: #fff; font-size: 1.2em; letter-spacing: 5px; margin-top: 0; opacity: 0.8; }
@@ -23,7 +19,6 @@
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
         button { padding: 18px 35px; font-size: 22px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; }
         
-        /* Collection Styles */
         #collection-title { margin-top: 60px; color: #FFD700; border-top: 2px solid #D4AF37; padding-top: 20px; }
         #collection-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 20px; }
         .saved-card { width: 120px; height: 180px; border: 2px solid #D4AF37; border-radius: 8px; background-size: cover; background-position: center; transition: 0.3s; cursor: pointer; }
@@ -47,14 +42,15 @@
     <button id="clear-btn" onclick="clearCollection()">Reset Collection</button>
 
     <script>
-        const totalCards = 23; // UPDATED FOR YOUR 23 CARDS
+        // Check this number! If you have 23 cards, this MUST be 23.
+        const totalCards = 23; 
         let musicStarted = false;
 
         function ripPack() {
             if (!musicStarted) {
                 const bgMusic = document.getElementById("bgMusic");
                 bgMusic.volume = 0.3;
-                bgMusic.play();
+                bgMusic.play().catch(e => console.log("Music waiting for interaction"));
                 musicStarted = true;
             }
             document.getElementById("cheerSound").currentTime = 0;
@@ -69,7 +65,7 @@
 
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'card';
-                // This flip also triggers the save!
+                // NOTE: No folder path here!
                 cardDiv.innerHTML = `
                     <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}')">
                         <div class="back"></div>
@@ -95,8 +91,8 @@
             collection.forEach(img => {
                 const div = document.createElement('div');
                 div.className = 'saved-card';
+                // NOTE: No folder path here!
                 div.style.backgroundImage = `url('${img}')`;
-                // Option to click saved card to "inspect" it
                 div.onclick = () => { window.open(img, '_blank'); };
                 grid.appendChild(div);
             });
