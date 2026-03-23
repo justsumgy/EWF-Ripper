@@ -2,7 +2,7 @@
     // 1. Updated for your 23 wrestlers
     const totalCards = 23; 
     
-    // 2. Matches your GitHub folder name EXACTLY (all lowercase)
+    // 2. THIS MUST MATCH GITHUB EXACTLY: all lowercase with the space
     const folderPath = "rare ewf cards"; 
 
     let musicStarted = false;
@@ -11,7 +11,7 @@
         if (!musicStarted) {
             const bgMusic = document.getElementById("bgMusic");
             bgMusic.volume = 0.3;
-            bgMusic.play().catch(e => console.log("Music blocked"));
+            bgMusic.play().catch(e => console.log("Audio waiting for user click"));
             musicStarted = true;
         }
         document.getElementById("cheerSound").currentTime = 0;
@@ -22,7 +22,7 @@
         
         for (let i = 0; i < 5; i++) {
             const randomNum = Math.floor(Math.random() * totalCards) + 1;
-            // CHECK: Make sure your cards are named "card (1).jpg"
+            // CHECK: Make sure your cards are named "card (1).jpg" (with the space)
             const fileName = "card (" + randomNum + ").jpg"; 
 
             const cardDiv = document.createElement('div');
@@ -33,6 +33,15 @@
                     <div class="front" style="background-image: url('${folderPath}/${fileName}')"></div>
                 </div>`;
             area.appendChild(cardDiv);
+        }
+    }
+
+    function saveCard(cardImg) {
+        let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+        if (!collection.includes(cardImg)) {
+            collection.push(cardImg);
+            localStorage.setItem('EWF_Collection', JSON.stringify(collection));
+            displayCollection();
         }
     }
 
@@ -47,15 +56,6 @@
             div.onclick = () => { window.open(`${folderPath}/${img}`, '_blank'); };
             grid.appendChild(div);
         });
-    }
-
-    function saveCard(cardImg) {
-        let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-        if (!collection.includes(cardImg)) {
-            collection.push(cardImg);
-            localStorage.setItem('EWF_Collection', JSON.stringify(collection));
-            displayCollection();
-        }
     }
 
     function clearCollection() {
