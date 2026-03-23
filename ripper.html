@@ -74,12 +74,21 @@
             }
         }
 
-        function saveCard(cardImg) {
-            let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            if (!collection.includes(cardImg)) {
-                collection.push(cardImg);
-                localStorage.setItem('EWF_Collection', JSON.stringify(collection));
-                displayCollection();
+       function saveCard(cardImg) {
+    // 1. Get the current collection
+    let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+    
+    // 2. CHECK: Only add if the card is NOT already in the list
+    if (!collection.includes(cardImg)) {
+        collection.push(cardImg);
+        // 3. Save the updated list
+        localStorage.setItem('EWF_Collection', JSON.stringify(collection));
+        // 4. Update the screen
+        displayCollection();
+    } else {
+        console.log("Duplicate wrestler! Already in the roster.");
+    }
+}
             }
         }
 
