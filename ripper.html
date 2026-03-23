@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF Elite Pack Ripper</title>
+    <title>EWF Elite Manager</title>
     <style>
         body { 
             background: url('background.jpg') center/cover no-repeat fixed; 
@@ -10,35 +10,35 @@
         }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
-        /* Currency Display */
-        #stats-bar { background: rgba(0,0,0,0.8); border: 2px solid #D4AF37; display: inline-block; padding: 10px 30px; border-radius: 50px; margin-bottom: 20px; }
-        #cash-display { color: #00FF00; font-size: 24px; text-shadow: 0 0 5px #000; }
+        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; }
+        #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
 
         #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 350px; }
-        .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; }
+        
+        /* CARD STYLES */
+        .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; position: relative; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
-        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; border: 3px solid #D4AF37; box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
-        .back { background: url('wrapper.jpg') center/cover; background-color: #1a1a1a; }
-        .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
+        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
+        .back { background: url('wrapper.jpg') center/cover; border: 3px solid #D4AF37; }
+        .front { transform: rotateY(180deg); background-size: cover; background-position: center; border: 4px solid #fff; }
 
-        button { padding: 18px 35px; font-size: 22px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; }
-        button:disabled { background: #555; cursor: not-allowed; opacity: 0.6; }
+        /* RARITY BORDERS */
+        .elite-border { border-color: #FFD700 !important; box-shadow: 0 0 20px #FFD700; }
+        .legendary-border { border-color: #ff00ff !important; animation: rainbow 2s infinite linear; }
+        @keyframes rainbow { 0% { box-shadow: 0 0 15px red; } 33% { box-shadow: 0 0 15px cyan; } 66% { box-shadow: 0 0 15px lime; } 100% { box-shadow: 0 0 15px red; } }
 
-        #collection-title { margin-top: 60px; color: #FFD700; border-top: 2px solid #D4AF37; padding-top: 20px; }
-        #collection-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 20px; }
-        
-        /* Shiny Roster Effect */
-        .saved-card { 
-            width: 120px; height: 180px; border: 2px solid #D4AF37; border-radius: 8px; 
-            background-size: cover; background-position: center; transition: 0.3s; cursor: pointer;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
-            animation: glow 3s infinite alternate;
-        }
-        @keyframes glow { from { box-shadow: 0 0 5px #D4AF37; } to { box-shadow: 0 0 20px #FFD700; } }
-        .saved-card:hover { transform: scale(1.3); z-index: 10; }
-        
-        #clear-btn { background: #333; color: #ccc; font-size: 12px; border: 1px solid #555; cursor: pointer; padding: 5px 10px; margin-top: 20px;}
+        .rarity-tag { position: absolute; bottom: 10px; width: 100%; background: rgba(0,0,0,0.7); font-size: 12px; color: gold; padding: 2px 0; border-radius: 0 0 8px 8px; }
+
+        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
+        button:disabled { background: #444; opacity: 0.5; cursor: not-allowed; }
+        .daily-btn { background: linear-gradient(#00c6ff, #0072ff); }
+
+        #collection-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; }
+        .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #fff; transition: 0.3s; position: relative; }
+        .saved-card:hover { transform: scale(1.2); z-index: 10; }
+        .win-count { position: absolute; top: -10px; right: -10px; background: red; border-radius: 50%; width: 25px; height: 25px; font-size: 14px; line-height: 25px; }
+
     </style>
 </head>
 <body onload="initGame()">
@@ -49,57 +49,58 @@
     <h1>ELITE WRESTLING FEDERATION</h1>
     
     <div id="stats-bar">
-        <span id="cash-display">CONTRACT FUNDS: $0</span>
+        <div id="cash-display">FUNDS: $0</div>
+        <button id="daily-btn" class="daily-btn" onclick="claimDaily()">DAILY REWARD (+$500)</button>
     </div>
     <br>
     <button id="rip-btn" onclick="ripPack()">RIP ELITE PACK ($100)</button>
     
     <div id="pack-area"></div>
 
-    <h1 id="collection-title">CHAMPIONSHIP ROSTER (0 / 23)</h1>
+    <h2 id="collection-title" style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">
+        CHAMPIONSHIP ROSTER (0 / 23)
+    </h2>
     <div id="collection-grid"></div>
-    <button id="clear-btn" onclick="clearEverything()">Full Reset (Wipe Save)</button>
+    <button style="font-size: 10px; padding: 5px;" onclick="clearEverything()">Nuke Save</button>
 
     <script>
         const totalCards = 23; 
         const folderPath = "rare ewf cards"; 
-        const packCost = 100;
-        let userCash = parseInt(localStorage.getItem('EWF_Cash')) || 200; // Starts with $200
-        let musicStarted = false;
+        let userCash = parseInt(localStorage.getItem('EWF_Cash')) || 300;
+        let lastDaily = localStorage.getItem('EWF_Daily') || 0;
 
         function initGame() {
             updateUI();
             displayCollection();
-            // EARN MONEY: $10 every 30 seconds
-            setInterval(() => {
-                userCash += 10;
-                saveGame();
-                updateUI();
-            }, 30000);
+            setInterval(() => { userCash += 5; saveGame(); updateUI(); }, 60000); // Passive $5/min
         }
 
         function updateUI() {
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
-            document.getElementById('rip-btn').disabled = (userCash < packCost);
+            document.getElementById('rip-btn').disabled = (userCash < 100);
+            
+            // Daily check
+            const now = new Date().getTime();
+            const oneDay = 24 * 60 * 60 * 1000;
+            document.getElementById('daily-btn').disabled = (now - lastDaily < oneDay);
         }
 
-        function saveGame() {
-            localStorage.setItem('EWF_Cash', userCash);
+        function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
+
+        function claimDaily() {
+            userCash += 500;
+            lastDaily = new Date().getTime();
+            localStorage.setItem('EWF_Daily', lastDaily);
+            saveGame();
+            updateUI();
+            alert("Sponsorship Deal Signed! +$500");
         }
 
         function ripPack() {
-            if (userCash < packCost) return;
-            
-            userCash -= packCost;
+            if (userCash < 100) return;
+            userCash -= 100;
             saveGame();
             updateUI();
-
-            if (!musicStarted) {
-                const bgMusic = document.getElementById("bgMusic");
-                bgMusic.volume = 0.3;
-                bgMusic.play().catch(e => console.log("Audio blocked"));
-                musicStarted = true;
-            }
             document.getElementById("cheerSound").currentTime = 0;
             document.getElementById("cheerSound").play();
 
@@ -108,48 +109,81 @@
             
             for (let i = 0; i < 5; i++) {
                 const randomNum = Math.floor(Math.random() * totalCards) + 1;
-                const fileName = "card (" + randomNum + ").jpg"; 
+                const fileName = `card (${randomNum}).jpg`; 
+                
+                // RARITY LOGIC
+                const roll = Math.random() * 100;
+                let rarity = "Common";
+                let rarityClass = "";
+                if (roll > 98) { rarity = "LEGENDARY"; rarityClass = "legendary-border"; }
+                else if (roll > 85) { rarity = "ELITE"; rarityClass = "elite-border"; }
 
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'card';
                 cardDiv.innerHTML = `
-                    <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}')">
+                    <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}', '${rarity}')">
                         <div class="back"></div>
-                        <div class="front" style="background-image: url('${folderPath}/${fileName}')"></div>
+                        <div class="front ${rarityClass}" style="background-image: url('${folderPath}/${fileName}')">
+                            <div class="rarity-tag">${rarity}</div>
+                        </div>
                     </div>`;
                 area.appendChild(cardDiv);
             }
         }
 
-        function saveCard(cardImg) {
+        function saveCard(img, rarity) {
             let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            if (!collection.includes(cardImg)) {
-                collection.push(cardImg);
+            
+            // Find if card exists
+            const existing = collection.find(c => c.img === img);
+            
+            if (!existing) {
+                collection.push({ img: img, rarity: rarity, wins: 0 });
                 localStorage.setItem('EWF_Collection', JSON.stringify(collection));
                 displayCollection();
+            } else {
+                // SELL DUPLICATE
+                userCash += 50;
+                saveGame();
+                updateUI();
+                console.log("Duplicate sold for $50");
             }
         }
 
         function displayCollection() {
             const grid = document.getElementById('collection-grid');
-            const title = document.getElementById('collection-title');
             const collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            title.innerHTML = `CHAMPIONSHIP ROSTER (${collection.length} / ${totalCards})`;
+            document.getElementById('collection-title').innerHTML = `CHAMPIONSHIP ROSTER (${collection.length} / ${totalCards})`;
             grid.innerHTML = '';
-            collection.forEach(img => {
+            
+            collection.forEach(card => {
                 const div = document.createElement('div');
-                div.className = 'saved-card';
-                div.style.backgroundImage = `url('${folderPath}/${img}')`;
-                div.onclick = () => { window.open(`${folderPath}/${img}`, '_blank'); };
+                div.className = `saved-card ${card.rarity === 'ELITE' ? 'elite-border' : ''} ${card.rarity === 'LEGENDARY' ? 'legendary-border' : ''}`;
+                div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
+                
+                // Click to "Battle" (Simulate match)
+                div.onclick = () => {
+                    if(confirm(`Send ${card.img} into a match?`)) {
+                        if(Math.random() > 0.4) {
+                            card.wins++;
+                            alert("WINNER! Record updated.");
+                        } else {
+                            alert("Tough loss at the Pay-Per-View.");
+                        }
+                        localStorage.setItem('EWF_Collection', JSON.stringify(collection));
+                        displayCollection();
+                    }
+                };
+                
+                if(card.wins > 0) {
+                    div.innerHTML = `<div class="win-count">${card.wins}</div>`;
+                }
                 grid.appendChild(div);
             });
         }
 
         function clearEverything() {
-            if(confirm("This will wipe your cash AND your collection. Start over?")) {
-                localStorage.clear();
-                location.reload();
-            }
+            if(confirm("Wipe everything?")) { localStorage.clear(); location.reload(); }
         }
     </script>
 </body>
