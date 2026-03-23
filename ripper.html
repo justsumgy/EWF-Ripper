@@ -120,3 +120,170 @@
             const colors = ['#e60000', '#00FF00', '#FFD700', '#fff'];
             for(let i=0; i<60; i++) {
                 const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.cssText = `left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`;
+                document.body.appendChild(c);
+                let cy = 0, opacity = 1;
+                const drift = setInterval(() => {
+                    cy += Math.random() * 5 + 2; opacity -= 0.01;
+                    c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = opacity;
+                    if (opacity <= 0) { clearInterval(drift); c.remove(); }
+                }, 20);
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
+            document.getElementById('rip-std-btn').disabled = (userCash < 100);
+            document.getElementById('rip-super-btn').disabled = (userCash < 500);
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let r = "ROOKIE PROMOTER"; let next = 6; let base = 0;
+            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; }
+            else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; }
+            else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
+            document.getElementById('rank-display').innerHTML = `RANK: ${r}`;
+            const progress = Math.min(((col.length - base) / (next - base)) * 100, 100);
+            document.getElementById('progress-fill').style.width = progress + "%";
+        }
+
+        function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
+
+        function ripPack(cost, holoChance) {
+            if (userCash < cost) return;
+            userCash -= cost; saveGame(); updateUI();
+            
+            // Play cheer sound when ripping pack
+            const cheer = document.getElementById("cheerSound");
+            cheer.volume = 0.5;
+            cheer.currentTime = 0;
+            cheer.play().catch(e=>{});
+
+            const area = document.getElementById('pack-area'); area.innerHTML = ''; 
+            for (let i = 0; i < 5; i++) {
+                const num = Math.floor(Math.random() * totalCards) + 1;
+                const isHolo = Math.random() < holoChance;
+                const imgFile = `card (${num}).jpg`;
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'pack-card';
+                cardDiv.innerHTML = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${imgFile}'); ${isHolo ? 'border-color:cyan; box-shadow: 0 0 10px cyan;' : ''}"></div></div>`;
+                cardDiv.onclick = function() {
+                    if(!this.classList.contains('flipped')) { this.classList.add('flipped'); saveCard(imgFile, isHolo); }
+                };
+                area.appendChild(cardDiv);
+            }
+        }
+
+        function saveCard(img, holo) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            if (!col.find(c => c.img === img)) {
+                col.push({ img, wins: 0, holo });
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                displayCollection(); updateUI();
+            } else { userCash += 50; saveGame(); updateUI(); }
+        }
+
+        // --- CINEMATIC BATTLE ENGINE ---
+        function runBattle(img, idx) {
+            const overlay = document.getElementById('battle-overlay');
+            const bCard = document.getElementById('battle-card');
+            const bText = document.getElementById('battle-text');
+            
+            // Show overlay & Rumble
+            overlay.style.display = 'flex';
+            bCard.style.backgroundImage = `url('${folderPath}/${img}')`;
+            bCard.className = 'rumble';
+            bText.innerHTML = "FIGHTING...";
+            bText.style.color = "white";
+
+            setTimeout(() => {
+                bCard.classList.remove('rumble'); // Stop shaking
+                const win = Math.random() > 0.5;
+                let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+                
+                if (win) {
+                    bText.innerHTML = "WINNER!";
+                    bText.style.color = "#00FF00";
+                    triggerConfetti();
+                    col[idx].wins++;
+                } else {
+                    bText.innerHTML = "DEFEAT";
+                    bText.style.color = "red";
+                }
+
+                // Update History Log
+                matchHistory.unshift({ name: img.replace('.jpg',''), res: win ? 'WIN' : 'LOSS' });
+                if(matchHistory.length > 5) matchHistory.pop();
+                
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                localStorage.setItem('EWF_History', JSON.stringify(matchHistory));
+                
+                setTimeout(() => {
+                    overlay.style.display = 'none'; // Hide overlay after 2 seconds
+                    displayCollection(); 
+                    displayHistory();
+                }, 2000);
+
+            }, 1500); // Rumbles for 1.5 seconds
+        }
+
+        function setupInspector(card) {
+            let isDragging = false;
+            const update = (e) => {
+                if (!isDragging) return;
+                const rect = card.getBoundingClientRect();
+                const clientX = (e.clientX || (e.touches && e.touches[0].clientX));
+                const clientY = (e.clientY || (e.touches && e.touches[0].clientY));
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+                const rotateX = ((rect.height / 2) - y) / 6;
+                const rotateY = (x - (rect.width / 2)) / 6;
+
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
+                card.style.boxShadow = `${-rotateY}px ${rotateX}px 30px rgba(0,0,0,0.6)`;
+                card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`);
+                card.style.setProperty('--hx', `${100 - (x/rect.width*100)}%`); card.style.setProperty('--hy', `${100 - (y/rect.height*100)}%`);
+                card.style.setProperty('--sx', `${-rotateY}px`); card.style.setProperty('--sy', `${-rotateX}px`);
+            };
+            card.onmousedown = (e) => { isDragging = true; update(e); };
+            window.onmousemove = (e) => update(e);
+            window.onmouseup = () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; };
+            card.ontouchstart = (e) => { isDragging = true; update(e); };
+            window.ontouchmove = (e) => update(e);
+            window.ontouchend = () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; };
+        }
+
+        function displayHistory() {
+            document.getElementById('history-list').innerHTML = matchHistory.map(h => 
+                `<div style="padding:4px; border-bottom:1px solid #333">${h.name}: <span style="color:${h.res==='WIN'?'#0f0':'#f00'}">${h.res}</span></div>`
+            ).join('');
+        }
+
+        function displayCollection() {
+            const grid = document.getElementById('collection-grid'), col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            grid.innerHTML = '';
+            col.forEach((card, index) => {
+                const container = document.createElement('div');
+                container.className = 'card-container';
+                const cardDiv = document.createElement('div');
+                cardDiv.className = `saved-card ${card.holo ? 'is-holo' : ''}`;
+                cardDiv.style.backgroundImage = `url('${folderPath}/${card.img}')`;
+                
+                cardDiv.innerHTML = `
+                    <div class="shine-layer"></div>
+                    <div class="sparkle-layer"></div>
+                    <div class="holo-foil"></div>
+                    ${card.wins > 0 ? `<div class="win-count">${card.wins}</div>` : ''}
+                `;
+                
+                setupInspector(cardDiv);
+                
+                // IMPORTANT: DOUBLE-CLICK TRIGGERS BATTLE OVERLAY
+                cardDiv.ondblclick = () => runBattle(card.img, index);
+                
+                container.appendChild(cardDiv);
+                grid.appendChild(container);
+            });
+        }
+    </script>
+</body>
+</html>
