@@ -11,7 +11,7 @@
         if (!musicStarted) {
             const bgMusic = document.getElementById("bgMusic");
             bgMusic.volume = 0.3;
-            bgMusic.play().catch(e => console.log("Music blocked until click"));
+            bgMusic.play().catch(e => console.log("Music blocked"));
             musicStarted = true;
         }
         document.getElementById("cheerSound").currentTime = 0;
@@ -22,7 +22,7 @@
         
         for (let i = 0; i < 5; i++) {
             const randomNum = Math.floor(Math.random() * totalCards) + 1;
-            // CHECK: Make sure your cards are named "card (1).jpg" on GitHub
+            // CHECK: Make sure your cards are named "card (1).jpg"
             const fileName = "card (" + randomNum + ").jpg"; 
 
             const cardDiv = document.createElement('div');
@@ -43,10 +43,25 @@
         collection.forEach(img => {
             const div = document.createElement('div');
             div.className = 'saved-card';
-            // Matches the lowercase folder name here too
             div.style.backgroundImage = `url('${folderPath}/${img}')`;
             div.onclick = () => { window.open(`${folderPath}/${img}`, '_blank'); };
             grid.appendChild(div);
         });
+    }
+
+    function saveCard(cardImg) {
+        let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+        if (!collection.includes(cardImg)) {
+            collection.push(cardImg);
+            localStorage.setItem('EWF_Collection', JSON.stringify(collection));
+            displayCollection();
+        }
+    }
+
+    function clearCollection() {
+        if(confirm("Vacate all titles? (Reset Roster)")) {
+            localStorage.removeItem('EWF_Collection');
+            displayCollection();
+        }
     }
 </script>
