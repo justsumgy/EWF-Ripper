@@ -6,14 +6,23 @@
         body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; margin: 0; overflow-x: hidden; user-select: none; }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
-        /* NEW EARLY ACCESS TAG */
         #early-access { position: fixed; top: 20px; left: 20px; background: #c00; color: white; padding: 8px 12px; font-weight: bold; border-radius: 5px; font-size: 14px; z-index: 9999; border: 2px solid white; box-shadow: 0 0 15px rgba(255,0,0,0.8); transform: rotate(-5deg); letter-spacing: 1px; pointer-events: none; }
+
+        /* PRESTIGE BORDER SYSTEM */
+        #prestige-border { position: fixed; inset: 0; pointer-events: none; z-index: 9998; border: 8px solid transparent; display: none; }
+        .prestige-active #prestige-border { display: block; border-image: linear-gradient(45deg, #00FFFF, #FF00FF, #FFFF00, #00FFFF) 1; box-shadow: inset 0 0 50px rgba(0,255,255,0.4), 0 0 50px rgba(255,0,255,0.4); animation: prestige-pulse 3s infinite alternate; }
+        @keyframes prestige-pulse { 0% { opacity: 0.7; } 100% { opacity: 1; } }
 
         #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; position: relative; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
         #income-display { color: #aaa; font-size: 14px; letter-spacing: 1px; margin-top: 5px; }
         #progress-container { width: 100%; height: 12px; background: #222; border-radius: 6px; margin-top: 10px; border: 1px solid #555; overflow: hidden; }
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #D4AF37, #fff, #D4AF37); background-size: 200% 100%; transition: 0.5s; }
+
+        /* REBIRTH BUTTON */
+        #rebirth-btn { display: none; width: 100%; margin-top: 15px; padding: 10px; background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff); background-size: 200% auto; color: white; font-weight: 900; font-size: 16px; border: 2px solid white; cursor: pointer; text-shadow: 0 0 5px black; box-shadow: 0 0 15px cyan; animation: shine-scroll 2s linear infinite; border-radius: 8px; }
+        @keyframes shine-scroll { to { background-position: 200% center; } }
+        #rebirth-btn:hover { transform: scale(1.05); }
 
         #music-toggle { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.8); border: 2px solid #D4AF37; font-size: 16px; font-weight: bold; color: white; cursor: pointer; padding: 10px 15px; border-radius: 8px; z-index: 9999; transition: 0.2s; }
         #music-toggle:hover { background: #D4AF37; color: black; }
@@ -27,29 +36,34 @@
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
 
         .card-container { width: 160px; height: 350px; perspective: 1000px; display: inline-block; margin: 15px; vertical-align: top; }
-        .saved-card { width: 100%; height: 230px; border-radius: 12px; border: 3px solid silver; background-size: cover; background-position: center; position: relative; transition: transform 0.1s ease-out, box-shadow 0.1s ease-out; cursor: pointer; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.5); padding-top: 30px; background-color: white; }
+        .saved-card { width: 100%; height: 230px; border-radius: 12px; border: 3px solid silver; position: relative; transition: transform 0.1s ease-out, box-shadow 0.1s ease-out; cursor: pointer; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.5); padding-top: 30px; background-color: white; }
         
-        .grade-label { position: absolute; top: 0; left: 0; width: 100%; background: #c00; border-bottom: 2px solid silver; color: white; font-family: 'Arial', sans-serif; text-align: center; border-top-left-radius: 9px; border-top-right-radius: 9px; z-index: 6; pointer-events: none; }
+        .grade-label { position: absolute; top: 0; left: 0; width: 100%; background: #c00; border-bottom: 2px solid silver; color: white; font-family: 'Arial', sans-serif; text-align: center; border-top-left-radius: 9px; border-top-right-radius: 9px; z-index: 20; pointer-events: none; }
         .grade-title { font-size: 8px; font-weight: bold; letter-spacing: 1px; padding-top: 2px; }
         .grade-score { font-size: 14px; font-weight: 900; padding-bottom: 2px; }
         .gem-mint { background: linear-gradient(45deg, #D4AF37, #FFDF00, #D4AF37); color: black; border-bottom: 2px solid black; }
         
-        .shine-layer { position: absolute; inset: 0; border-radius: 12px; background: radial-gradient(circle at var(--lx) var(--ly), rgba(255,255,255,0.7) 0%, transparent 50%); z-index: 5; pointer-events: none; opacity: 0; mix-blend-mode: screen; transition: opacity 0.3s; }
-        .holo-foil { position: absolute; inset: 0; border-radius: 12px; background-image: linear-gradient(110deg, transparent 15%, #ff00ff4d 30%, #00ffff4d 50%, #ffff004d 70%, transparent 85%); background-size: 200% 200%; background-position: var(--hx) var(--hy); mix-blend-mode: color-dodge; z-index: 4; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
-        .sparkle-layer { position: absolute; inset: 0; border-radius: 12px; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-repeat: repeat; background-position: var(--sx) var(--sy); mix-blend-mode: color-dodge; z-index: 3; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
-        .is-holo { box-shadow: 0 0 15px cyan; border-color: cyan !important; }
+        @keyframes ambient-shimmer { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .win-count { position: absolute; top: 15px; left: -10px; background: red; color: white; border-radius: 5px; padding: 2px 8px; font-size: 12px; border: 2px solid white; z-index: 10; font-weight: bold; box-shadow: 0 0 5px black; }
-        .dupe-count { position: absolute; top: 15px; right: -10px; background: #0088ff; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; z-index: 10; font-weight: bold; box-shadow: 0 0 5px black; }
-        .streak-badge { position: absolute; bottom: 15px; right: -10px; font-size: 20px; z-index: 11; filter: drop-shadow(0 0 5px black); }
-        .stamina-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #333; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; overflow: hidden; z-index: 10; border-top: 1px solid black; }
+        .shine-layer { position: absolute; inset: 0; border-radius: 12px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(255,255,255,0.8) 0%, transparent 60%); z-index: 15; pointer-events: none; opacity: 0; mix-blend-mode: overlay; transition: opacity 0.3s; }
+        .holo-foil { position: absolute; inset: 0; border-radius: 12px; background-image: linear-gradient(110deg, transparent 15%, rgba(255,0,255,0.4) 30%, rgba(0,255,255,0.4) 50%, rgba(255,255,0,0.4) 70%, transparent 85%); background-size: 200% 200%; mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+        .sparkle-layer { position: absolute; inset: 0; border-radius: 12px; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-repeat: repeat; mix-blend-mode: color-dodge; z-index: 13; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+        
+        .is-holo { box-shadow: 0 0 15px cyan, 0 0 5px cyan inset; border-color: cyan !important; }
+        .is-holo .holo-foil { opacity: 0.9 !important; animation: ambient-shimmer 4s ease-in-out infinite; } 
+        .saved-card:hover .shine-layer, .saved-card:hover .sparkle-layer { opacity: 1; }
+
+        .win-count { position: absolute; top: 15px; left: -10px; background: red; color: white; border-radius: 5px; padding: 2px 8px; font-size: 12px; border: 2px solid white; z-index: 21; font-weight: bold; box-shadow: 0 0 5px black; }
+        .dupe-count { position: absolute; top: 15px; right: -10px; background: #0088ff; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; z-index: 21; font-weight: bold; box-shadow: 0 0 5px black; }
+        .streak-badge { position: absolute; bottom: 15px; right: -10px; font-size: 20px; z-index: 21; filter: drop-shadow(0 0 5px black); }
+        .stamina-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #333; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; overflow: hidden; z-index: 21; border-top: 1px solid black; }
         .stamina-fill { height: 100%; width: 100%; background: #00FF00; transition: width 0.2s linear; }
-        .injured-overlay { position: absolute; inset: 0; background: rgba(255,0,0,0.6); z-index: 12; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; pointer-events: none; }
-        .training-overlay { position: absolute; inset: 0; background: rgba(0,0,255,0.8); z-index: 12; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; pointer-events: none; }
-        .buff-icon { position: absolute; top: 40px; right: -10px; font-size: 24px; z-index: 11; filter: drop-shadow(0 0 5px gold); }
+        .injured-overlay { position: absolute; inset: 0; background: rgba(255,0,0,0.6); z-index: 25; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; pointer-events: none; }
+        .training-overlay { position: absolute; inset: 0; background: rgba(0,0,255,0.8); z-index: 25; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; pointer-events: none; }
+        .buff-icon { position: absolute; top: 40px; right: -10px; font-size: 24px; z-index: 21; filter: drop-shadow(0 0 5px gold); }
 
         .gm-controls { display: flex; flex-direction: column; gap: 3px; margin-top: 8px; }
-        .gm-btn { padding: 4px; font-size: 11px; color: white; border: 1px solid #aaa; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .gm-btn { padding: 4px; font-size: 11px; color: white; border: 1px solid #aaa; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; z-index: 30; position: relative; }
         .btn-sell { background: #228B22; } .btn-ppv { background: #800080; border-color: #ff00ff; } .btn-forge { background: #ff4500; border-color: gold; } .btn-train { background: #0055ff; border-color: cyan; } .btn-heal { background: #fff; color: red; border-color: red; } .btn-gear { background: #888; border-color: #fff; }
 
         #battle-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
@@ -61,7 +75,7 @@
 
         button.main-btn { padding: 12px 15px; font-size: 13px; color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 3px; transition: 0.2s; }
         .rip-std { background: linear-gradient(#e60000, #800000); } .rip-super { background: linear-gradient(#D4AF37, #8a6d3b); color: black; } .rip-gear { background: linear-gradient(#555, #222); border-color: silver; }
-        .btn-arena { background: linear-gradient(#0044ff, #001188); border-color: cyan; } .btn-bounty { background: linear-gradient(#ff8c00, #8b4500); border-color: gold; }
+        .btn-arena { background: linear-gradient(#0044ff, #001188); border-color: cyan; } .btn-bounty { background: linear-gradient(#ff8c00, #8b4500); border-color: gold; } .btn-faction { background: linear-gradient(#000080, #0000ff); border-color: cyan; }
         button.main-btn:hover { transform: scale(1.05); } button.main-btn:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
         
         .modal { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 450px; background: rgba(0,0,0,0.95); border: 3px solid gold; border-radius: 10px; padding: 20px; z-index: 5000; display: none; box-shadow: 0 0 50px black; }
@@ -71,7 +85,6 @@
         .modal-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
         .close-btn { margin-top:20px; padding:10px; background:red; color:white; font-weight:bold; border:none; border-radius:5px; cursor:pointer; width: 100%; }
 
-        /* WIN-LOSS RECORD CSS */
         #record-box { background: rgba(0,0,0,0.85); border: 2px solid #D4AF37; max-width: 350px; margin: 40px auto; padding: 20px; border-radius: 12px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
         #record-display { font-size: 36px; font-weight: 900; letter-spacing: 2px; margin: 10px 0; }
         .win-text { color: #00FF00; text-shadow: 0 0 10px rgba(0,255,0,0.5); }
@@ -82,12 +95,13 @@
 </head>
 <body onload="initGame()">
     
+    <div id="prestige-border"></div>
     <div id="early-access">EARLY ACCESS GAME</div>
     <button id="music-toggle" onclick="toggleMusic()">🔇 Play Music</button>
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
     <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
-    <div id="battle-overlay" onclick="this.style.display='none';"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
+    <div id="battle-overlay" onclick="if(!factionSimulating) this.style.display='none';"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
 
     <div id="arena-modal" class="modal">
         <h2>🏟️ VENUE INFRASTRUCTURE</h2>
@@ -114,6 +128,9 @@
         <div id="income-display">PASSIVE INCOME: $25 / tick</div>
         <div id="rank-display" style="color:gold; margin-top:5px;">RANK: ROOKIE PROMOTER</div>
         <div id="progress-container"><div id="progress-fill"></div></div>
+        
+        <button id="rebirth-btn" onclick="doRebirth()">🔥 INITIATE REBIRTH 🔥</button>
+        
         <button style="background:#222; color:white; font-size:10px; padding:5px; margin-top:10px; cursor:pointer;" onclick="hardReset()">FULL DATA RESET ($3000)</button>
     </div>
     <br>
@@ -123,8 +140,11 @@
         <button class="main-btn rip-super" id="rip-super-btn" onclick="ripPack(500, 0.65, 'super')">SUPER HOLO ($500)</button>
         <button class="main-btn rip-gear" id="rip-gear-btn" onclick="ripGearPack()">GEAR PACK ($250)</button>
         <button class="main-btn btn-arena" onclick="openArena()">🏟️ ARENA</button>
+        <button class="main-btn btn-faction" id="faction-btn" onclick="toggleFactionWar()">3v3 WAR ($500)</button>
         <button class="main-btn btn-bounty" onclick="openBounties()">📋 BOUNTIES</button>
     </div>
+    
+    <h2 id="faction-msg" style="color: #00FF00; display: none; text-shadow: 0 0 10px #00FF00;">SELECT 3 WRESTLERS FOR COMBAT!</h2>
     
     <div id="pack-area"></div>
     <h2 style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF ROSTER</h2>
@@ -153,6 +173,14 @@
         let totalWins = parseInt(localStorage.getItem('EWF_Wins')) || 0;
         let totalLosses = parseInt(localStorage.getItem('EWF_Losses')) || 0;
         
+        // --- PRESTIGE SYSTEM VARIABLES ---
+        let prestigeLevel = parseInt(localStorage.getItem('EWF_Prestige')) || 0;
+        let multi = 1 + prestigeLevel; // 1x, 2x, 3x etc.
+        
+        let factionMode = false;
+        let factionTeam = [];
+        let factionSimulating = false;
+
         const arenas = [
             { name: "Local Gym", income: 25, cost: 0 },
             { name: "Bingo Hall", income: 100, cost: 5000 },
@@ -170,9 +198,30 @@
         };
 
         function initGame() {
+            if(prestigeLevel > 0) document.body.classList.add('prestige-active');
             migrateData(); updateUI(); displayCollection(); displayRecord();
             setInterval(() => { tick(); }, 30000); 
             setInterval(() => { refreshTrainingTimers(); }, 1000); 
+        }
+
+        // --- THE REBIRTH PROTOCOL ---
+        function doRebirth() {
+            if(confirm("⚠️ ARE YOU SURE? ⚠️\n\nThis will wipe your ENTIRE roster, cash, arena, gear, and stats!\n\nIn exchange, you will permanently gain +1x Global Cash Multiplier and unlock the exclusive Prestige Border.")) {
+                prestigeLevel++;
+                localStorage.setItem('EWF_Prestige', prestigeLevel);
+                
+                // Nuclear Wipe
+                localStorage.removeItem('EWF_Collection');
+                localStorage.removeItem('EWF_Cash');
+                localStorage.removeItem('EWF_Arena');
+                localStorage.removeItem('EWF_Gear');
+                localStorage.removeItem('EWF_Wins');
+                localStorage.removeItem('EWF_Losses');
+                localStorage.removeItem('EWF_Bounties');
+                
+                alert(`🔥 REBIRTH COMPLETE! Welcome to PRESTIGE ${prestigeLevel}! 🔥`);
+                location.reload();
+            }
         }
 
         function migrateData() {
@@ -188,7 +237,9 @@
         function tick() {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             const hofCount = col.filter(c => c.wins >= 200).length;
-            userCash += (arenas[currentArena].income + (hofCount * 25)); 
+            
+            // CASH MULTIPLIER APPLIED TO TICK
+            userCash += ((arenas[currentArena].income + (hofCount * 25)) * multi); 
             
             let mod = false;
             col.forEach(c => {
@@ -231,7 +282,7 @@
                 if(i === currentArena) status = `<span style="color:#00FF00;">ACTIVE</span>`;
                 else if(i < currentArena) status = `<span style="color:#888;">OWNED</span>`;
                 else if(userCash < a.cost) status = `<button class="modal-btn" disabled>TOO POOR</button>`;
-                html += `<div class="modal-item"><div><b>${a.name}</b><br><small>+$${a.income}/tick</small></div><div>${status}</div></div>`;
+                html += `<div class="modal-item"><div><b>${a.name}</b><br><small>+$${a.income * multi}/tick</small></div><div>${status}</div></div>`;
             });
             document.getElementById('arena-list').innerHTML = html;
             document.getElementById('arena-modal').style.display = 'block';
@@ -270,6 +321,55 @@
             saveGame(); updateUI(); openBounties();
         }
 
+        function toggleFactionWar() {
+            if(userCash < 500) return;
+            factionMode = !factionMode;
+            factionTeam = [];
+            document.getElementById('faction-msg').style.display = factionMode ? 'block' : 'none';
+            document.getElementById('faction-btn').innerHTML = factionMode ? "CANCEL WAR" : "3v3 WAR ($500)";
+            displayCollection(); updateUI();
+        }
+
+        function confirmFactionWar() {
+            if(confirm("Start Faction War with these 3 wrestlers for $500?")) {
+                userCash -= 500; saveGame();
+                factionMode = false; 
+                document.getElementById('faction-msg').style.display = 'none';
+                document.getElementById('faction-btn').innerHTML = "3v3 WAR ($500)";
+                
+                factionSimulating = true;
+                const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
+                overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble';
+                bText.innerHTML = "FACTION WAR SIMULATING..."; bText.style.color = "gold";
+
+                setTimeout(() => {
+                    bCard.classList.remove('rumble');
+                    let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+                    let teamWins = 0;
+                    
+                    factionTeam.forEach(idx => {
+                        col[idx].stamina--; 
+                        let winChance = col[idx].baseWin;
+                        if(col[idx].streak >= 3) winChance += 0.1; 
+                        if(Math.random() < winChance) teamWins++;
+                    });
+                    
+                    if(teamWins >= 2) {
+                        const payout = 5000 * multi; // PRESTIGE MULTIPLIED PAYOUT
+                        bText.innerHTML = `FACTION WINS ${teamWins}-` + (3-teamWins) + `! ($${payout} PAYOUT)`; bText.style.color = "#00FF00";
+                        userCash += payout; saveGame(); triggerConfetti();
+                    } else {
+                        bText.innerHTML = `FACTION DEFEATED ${teamWins}-` + (3-teamWins); bText.style.color = "red";
+                    }
+
+                    localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                    setTimeout(() => { overlay.style.display = 'none'; factionSimulating = false; displayCollection(); updateUI(); }, 3000);
+                }, 2000);
+            } else {
+                toggleFactionWar();
+            }
+        }
+
         function ripGearPack() {
             if(userCash < 250) return;
             userCash -= 250; saveGame(); updateUI();
@@ -301,28 +401,18 @@
             let html = "";
             html += `<div class="modal-item"><div>🥤 Energy Drink <small>(x${inventory.drink})</small><br><span style="font-size:10px; color:#aaa;">Instantly restores 5 Stamina</span></div>`;
             html += `<div><button class="modal-btn" ${inventory.drink > 0 ? '' : 'disabled'} onclick="useGear('drink')">USE</button></div></div>`;
-            
             html += `<div class="modal-item"><div>🪑 Steel Chair <small>(x${inventory.chair})</small><br><span style="font-size:10px; color:#aaa;">+25% Win Chance for 1 Match</span></div>`;
             html += `<div><button class="modal-btn" ${inventory.chair > 0 ? '' : 'disabled'} onclick="useGear('chair')">USE</button></div></div>`;
-
             document.getElementById('gear-list').innerHTML = html;
             document.getElementById('gear-modal').style.display = 'block';
         }
 
         function useGear(type) {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection'));
-            let card = col[activeGearTarget];
-            
-            if(type === 'drink' && inventory.drink > 0) {
-                inventory.drink--; card.stamina = 5;
-            } else if(type === 'chair' && inventory.chair > 0) {
-                inventory.chair--; card.buff = 'chair';
-            }
-            
-            localStorage.setItem('EWF_Gear', JSON.stringify(inventory));
-            localStorage.setItem('EWF_Collection', JSON.stringify(col));
-            document.getElementById('gear-modal').style.display = 'none';
-            displayCollection();
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[activeGearTarget];
+            if(type === 'drink' && inventory.drink > 0) { inventory.drink--; card.stamina = 5; } 
+            else if(type === 'chair' && inventory.chair > 0) { inventory.chair--; card.buff = 'chair'; }
+            localStorage.setItem('EWF_Gear', JSON.stringify(inventory)); localStorage.setItem('EWF_Collection', JSON.stringify(col));
+            document.getElementById('gear-modal').style.display = 'none'; displayCollection();
         }
 
         function trainCard(idx) {
@@ -330,9 +420,8 @@
             if(confirm("Send to Camp for $1000? They will be locked for 5 Minutes but gain a permanent +10% Win Rate.")) {
                 userCash -= 1000; saveGame(); updateUI();
                 let col = JSON.parse(localStorage.getItem('EWF_Collection'));
-                col[idx].trainingUntil = Date.now() + (5 * 60 * 1000); // 5 mins
-                localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                displayCollection();
+                col[idx].trainingUntil = Date.now() + (5 * 60 * 1000); 
+                localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection();
             }
         }
 
@@ -343,15 +432,30 @@
         function updateUI() {
             const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
-            document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${arenas[currentArena].income + (col.filter(c => c.wins >= 200).length * 25)} / 30s`;
-            document.getElementById('rip-std-btn').disabled = (userCash < 100);
-            document.getElementById('rip-super-btn').disabled = (userCash < 500);
-            document.getElementById('rip-gear-btn').disabled = (userCash < 250);
+            document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${(arenas[currentArena].income + (col.filter(c => c.wins >= 200).length * 25)) * multi} / 30s`;
             
-            let r = "ROOKIE PROMOTER"; let next = 6; let base = 0;
-            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; } else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; } else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
-            document.getElementById('rank-display').innerHTML = `RANK: ${r}`;
+            document.getElementById('rip-std-btn').disabled = (userCash < 100) || factionMode;
+            document.getElementById('rip-super-btn').disabled = (userCash < 500) || factionMode;
+            document.getElementById('rip-gear-btn').disabled = (userCash < 250) || factionMode;
+            document.getElementById('faction-btn').disabled = (userCash < 500) || col.length < 3;
+            
+            let r = "ROOKIE PROMOTER"; let next = 6; let base = 0; let isLegendary = false;
+            if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; isLegendary = true; } 
+            else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; } 
+            else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
+            
+            let rankText = `RANK: ${r}`;
+            if(prestigeLevel > 0) rankText += ` <span style="color:cyan; font-weight:900;">[PRESTIGE ${prestigeLevel}]</span>`;
+            document.getElementById('rank-display').innerHTML = rankText;
             document.getElementById('progress-fill').style.width = Math.min(((col.length - base) / (next - base)) * 100, 100) + "%";
+
+            // CHECK REBIRTH UNLOCK
+            const hofCount = col.filter(c => c.wins >= 200).length;
+            if (isLegendary && hofCount >= 5) {
+                document.getElementById('rebirth-btn').style.display = 'block';
+            } else {
+                document.getElementById('rebirth-btn').style.display = 'none';
+            }
         }
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
@@ -388,7 +492,6 @@
             localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI();
         }
 
-        // RESTORED DISPLAY RECORD LOGIC
         function displayRecord() {
             document.getElementById('win-count').innerHTML = `${totalWins} W`;
             document.getElementById('loss-count').innerHTML = `${totalLosses} L`;
@@ -399,14 +502,12 @@
 
         function runBattle(idx, isPPV = false) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let card = col[idx];
-            if(card.injured || card.trainingUntil > Date.now()) return;
+            if(card.injured || card.trainingUntil > Date.now() || factionMode) return;
             
             if(card.stamina <= 0) {
                 if(Math.random() < 0.5) { card.injured = true; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); alert("🚑 INJURY! Pay $500 to heal."); return; }
             } else {
-                card.stamina--; 
-                localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                displayCollection(); 
+                card.stamina--; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); 
             }
 
             const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
@@ -424,31 +525,23 @@
                 
                 if (win) { 
                     bText.innerHTML = "WINNER!"; bText.style.color = "#00FF00"; triggerConfetti(); 
-                    card.wins++; totalWins++;
-                    card.streak = (card.streak > 0) ? card.streak + 1 : 1;
-                    if(isPPV) card.champion = true;
-                    updateBounty('wins', 1);
+                    card.wins++; totalWins++; card.streak = (card.streak > 0) ? card.streak + 1 : 1;
+                    if(isPPV) card.champion = true; updateBounty('wins', 1);
                 } else { 
-                    bText.innerHTML = "DEFEAT"; bText.style.color = "red"; totalLosses++;
-                    card.streak = (card.streak < 0) ? card.streak - 1 : -1;
+                    bText.innerHTML = "DEFEAT"; bText.style.color = "red"; totalLosses++; card.streak = (card.streak < 0) ? card.streak - 1 : -1;
                 }
 
-                localStorage.setItem('EWF_Wins', totalWins);
-                localStorage.setItem('EWF_Losses', totalLosses);
-                localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                
-                setTimeout(() => { 
-                    overlay.style.display = 'none'; 
-                    displayCollection(); 
-                    displayRecord(); 
-                }, 2000);
+                localStorage.setItem('EWF_Wins', totalWins); localStorage.setItem('EWF_Losses', totalLosses); localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); displayRecord(); updateUI(); }, 2000);
             }, 1500); 
         }
 
         function getCardValue(card) {
             let baseVal = 20; if (card.grade === 10) baseVal = 500; else if (card.grade === 9) baseVal = 100; else if (card.grade === 8) baseVal = 40;
             let total = card.holo ? baseVal * 4 : baseVal; if (card.champion) total *= 5; if (card.streak >= 3) total *= 1.5; if (card.streak <= -3) total *= 0.5;
-            return Math.floor(total);
+            
+            // CASH MULTIPLIER APPLIED TO SELLS
+            return Math.floor(total * multi);
         }
 
         function sellCard(idx) {
@@ -469,15 +562,37 @@
         function ppvMatch(idx) { if(userCash < 1000) return; if(confirm("Book a $1000 Title Match?")) { userCash -= 1000; saveGame(); updateUI(); runBattle(idx, true); } }
 
         function setupInspector(card) {
-            let isDragging = false;
             const update = (e) => {
-                if (!isDragging) return; const rect = card.getBoundingClientRect(); const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left; const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
-                const rX = ((rect.height / 2) - y) / 6; const rY = (x - (rect.width / 2)) / 6;
-                card.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) scale(1.1)`; card.style.boxShadow = `${-rY}px ${rX}px 30px rgba(0,0,0,0.6)`;
-                card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`); card.style.setProperty('--hx', `${100 - (x/rect.width*100)}%`); card.style.setProperty('--hy', `${100 - (y/rect.height*100)}%`); card.style.setProperty('--sx', `${-rY}px`); card.style.setProperty('--sy', `${-rX}px`);
+                const rect = card.getBoundingClientRect(); 
+                const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left; 
+                const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+                const rX = ((rect.height / 2) - y) / 10; 
+                const rY = (x - (rect.width / 2)) / 10;
+                if(!factionMode) {
+                    card.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) scale(1.05)`; 
+                    card.style.boxShadow = `${-rY}px ${rX}px 25px rgba(0,0,0,0.6)`;
+                }
+                card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`); 
             };
-            card.addEventListener('mousedown', (e) => { isDragging = true; update(e); }); card.addEventListener('mousemove', (e) => update(e));
-            card.addEventListener('mouseup', () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; }); card.addEventListener('mouseleave', () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; });
+            card.addEventListener('mousemove', update);
+            card.addEventListener('mouseleave', () => { 
+                card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; 
+                card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; 
+            });
+        }
+
+        function handleCardClick(idx) {
+            if(!factionMode) return;
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            if(col[idx].injured || col[idx].wins >= 200) { alert("Cannot select injured or retired wrestlers!"); return; }
+            
+            const teamIdx = factionTeam.indexOf(idx);
+            if(teamIdx > -1) { factionTeam.splice(teamIdx, 1); } 
+            else if(factionTeam.length < 3) { factionTeam.push(idx); } 
+            
+            displayCollection();
+            
+            if(factionTeam.length === 3) setTimeout(() => confirmFactionWar(), 300);
         }
 
         function displayCollection() {
@@ -487,8 +602,15 @@
             
             col.forEach((card, index) => {
                 const container = document.createElement('div'); container.className = 'card-container';
-                const cardDiv = document.createElement('div'); cardDiv.className = `saved-card ${card.holo ? 'is-holo' : ''}`;
+                const cardDiv = document.createElement('div'); 
                 
+                let classes = `saved-card ${card.holo ? 'is-holo' : ''}`;
+                if(factionMode && factionTeam.includes(index)) {
+                    classes += ' faction-selected';
+                    cardDiv.style.borderColor = '#00FF00'; cardDiv.style.boxShadow = '0 0 20px #00FF00'; cardDiv.style.transform = 'scale(1.05)';
+                }
+                cardDiv.className = classes;
+
                 const isHof = card.wins >= 200;
                 let streakHtml = ''; if(card.streak >= 3) streakHtml = '<div class="streak-badge">🔥</div>'; if(card.streak <= -3) streakHtml = '<div class="streak-badge">❄️</div>';
                 let buffHtml = ''; if(card.buff === 'chair') buffHtml = '<div class="buff-icon">🪑</div>';
@@ -500,7 +622,7 @@
 
                 cardDiv.innerHTML = `
                     <div class="grade-label ${card.grade === 10 ? 'gem-mint' : ''}"><div class="grade-title">${card.champion ? '🏆 EWF AUTHENTIC 🏆' : 'EWF AUTHENTIC'}</div><div class="grade-score">${card.grade === 10 ? 'GEM MINT 10' : `MINT ${card.grade}`}</div></div>
-                    <div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px;"></div>
+                    <div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; z-index: 10;"></div>
                     <div class="shine-layer"></div><div class="sparkle-layer"></div><div class="holo-foil"></div>
                     <div class="win-count">${card.wins} W</div>
                     ${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}
@@ -511,11 +633,16 @@
                 `;
                 
                 setupInspector(cardDiv); 
-                if(!isHof && !card.injured && !isTraining) cardDiv.ondblclick = () => runBattle(index, false); 
+                
+                if(factionMode) {
+                    cardDiv.onclick = () => handleCardClick(index);
+                } else if(!isHof && !card.injured && !isTraining) {
+                    cardDiv.ondblclick = () => runBattle(index, false); 
+                }
 
                 container.appendChild(cardDiv);
 
-                if(!isHof && !isTraining) {
+                if(!isHof && !isTraining && !factionMode) {
                     const controls = document.createElement('div'); controls.className = 'gm-controls';
                     if(card.injured) {
                         controls.innerHTML = `<button class="gm-btn btn-heal" onclick="healCard(${index})">HEAL ($500)</button>`;
