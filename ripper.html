@@ -3,63 +3,43 @@
 <head>
     <title>My EWF Collection 2026</title>
     <style>
-        body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; margin: 0; overflow-x: hidden; }
+        body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; margin: 0; overflow-x: hidden; user-select: none; }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
         #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
 
-        /* THE TILT CONTAINER */
-        .card-container { 
-            width: 160px; height: 230px; 
-            perspective: 1000px; 
-            display: inline-block; 
-            margin: 15px; 
-            vertical-align: top;
-        }
+        /* THE INSPECTOR CONTAINER */
+        .card-container { width: 180px; height: 260px; perspective: 1200px; display: inline-block; margin: 15px; vertical-align: top; }
         
         .saved-card { 
-            width: 100%; height: 100%; border-radius: 12px; border: 2px solid #D4AF37;
+            width: 100%; height: 100%; border-radius: 14px; border: 3px solid #D4AF37;
             background-size: cover; background-position: center; 
-            position: relative; 
-            transform-style: preserve-3d; 
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+            position: relative; transform-style: preserve-3d; 
+            cursor: grab; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease-out;
         }
+        .saved-card:active { cursor: grabbing; }
 
-        /* REALISTIC SHINE LAYER */
-        .shine {
+        /* MULTI-LAYER SHIMMER (Pimped Out) */
+        .shine-layer {
             position: absolute; inset: 0; border-radius: 12px;
-            background: radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%);
-            z-index: 3; pointer-events: none; opacity: 0; transition: opacity 0.3s;
+            background: radial-gradient(circle at var(--lx) var(--ly), rgba(255,255,255,0.8) 0%, transparent 50%);
+            z-index: 5; pointer-events: none; opacity: 0; mix-blend-mode: overlay;
         }
-        .saved-card:hover .shine { opacity: 1; }
-
-        /* HOLO FOIL LAYER */
-        .holo-layer {
+        .holo-foil {
             position: absolute; inset: 0; border-radius: 12px;
-            background-image: 
-                linear-gradient(110deg, transparent 25%, rgba(255, 219, 112, 0.3) 48%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 219, 112, 0.3) 52%, transparent 75%);
-            background-size: 200% 200%; background-position: var(--pos-x) var(--pos-y);
-            mix-blend-mode: color-dodge; z-index: 2; pointer-events: none; opacity: 0;
+            background-image: linear-gradient(110deg, transparent 20%, rgba(255,0,255,0.3) 30%, rgba(0,255,255,0.3) 50%, rgba(255,255,0,0.3) 70%, transparent 80%);
+            background-size: 200% 200%; background-position: var(--hx) var(--hy);
+            mix-blend-mode: color-dodge; z-index: 4; pointer-events: none; opacity: 0;
         }
-        .is-holo .holo-layer { opacity: 0.8; }
+        .is-holo .holo-foil { opacity: 1; }
+        .saved-card:hover .shine-layer { opacity: 0.4; }
 
         .win-count { position: absolute; top: -12px; right: -12px; background: red; color: white; border-radius: 50%; width: 30px; height: 30px; font-size: 14px; line-height: 30px; border: 2px solid white; z-index: 10; font-weight: bold; }
 
-        /* PACK OPENING STUFF */
-        #pack-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 300px; padding: 20px; }
-        .pack-card { width: 180px; height: 260px; perspective: 1000px; cursor: pointer; }
-        .card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
-        .pack-card.flipped .card-inner { transform: rotateY(180deg); }
-        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px; border: 3px solid #D4AF37; }
-        .back { background: url('wrapper.jpg') center/cover; }
-        .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
-
         button { padding: 15px 35px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 10px; font-weight: bold; transition: 0.2s; }
         button:hover { transform: scale(1.05); box-shadow: 0 0 15px red; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body onload="initGame()">
@@ -70,9 +50,9 @@
         <div id="rank-display" style="color:gold; margin-top:5px; font-size:14px; letter-spacing:2px;">RANK: ROOKIE PROMOTER</div>
     </div>
     <br>
-    <button id="rip-btn" onclick="ripPack()">RIP 2026 PACK ($100)</button>
+    <button onclick="ripPack()">RIP 2026 PACK ($100)</button>
     
-    <div id="pack-area"></div>
+    <div id="pack-area" style="padding:20px;"></div>
 
     <h2 id="collection-title" style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF COLLECTION</h2>
     <div id="collection-grid"></div>
@@ -90,7 +70,6 @@
 
         function updateUI() {
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
-            document.getElementById('rip-btn').disabled = (userCash < 100);
         }
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
@@ -102,18 +81,14 @@
             for (let i = 0; i < 5; i++) {
                 const num = Math.floor(Math.random() * totalCards) + 1;
                 const isHolo = Math.random() > 0.8;
-                const div = document.createElement('div');
-                div.className = 'pack-card';
-                div.innerHTML = `
-                    <div class="card-inner">
-                        <div class="back"></div>
-                        <div class="front" style="background-image: url('${folderPath}/card (${num}).jpg')"></div>
-                    </div>`;
-                div.onclick = () => {
-                    div.classList.add('flipped');
+                const btn = document.createElement('button');
+                btn.innerHTML = `OPEN CARD ${i+1}`;
+                btn.onclick = () => {
                     saveCard(`card (${num}).jpg`, isHolo);
+                    btn.disabled = true;
+                    btn.innerHTML = isHolo ? "✨ HOLO ✨" : "COMMON";
                 };
-                area.appendChild(div);
+                area.appendChild(btn);
             }
         }
 
@@ -126,32 +101,40 @@
             } else { userCash += 50; saveGame(); updateUI(); }
         }
 
-        // --- THE "GOD-TIER" TILT & SHINE ---
-        function applyEffects(e, card) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left; 
-            const y = e.clientY - rect.top;
-            
-            // Calculate rotation
-            const rotateX = ((rect.height / 2) - y) / 5;
-            const rotateY = (x - (rect.width / 2)) / 5;
-            
-            // Apply 3D Tilt
-            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.08)`;
-            card.style.boxShadow = `${-rotateY}px ${rotateX}px 30px rgba(0,0,0,0.6)`;
+        // --- THE INTERACTIVE INSPECTOR ---
+        function setupInspector(card) {
+            let isDragging = false;
 
-            // Move the Shine (The "Light Bulb" effect)
-            card.style.setProperty('--x', `${x}px`);
-            card.style.setProperty('--y', `${y}px`);
+            const update = (e) => {
+                if (!isDragging) return;
+                const rect = card.getBoundingClientRect();
+                const clientX = e.clientX || e.touches[0].clientX;
+                const clientY = e.clientY || e.touches[0].clientY;
 
-            // Move the Holo Shimmer (Opposite to mouse for realism)
-            card.style.setProperty('--pos-x', `${100 - (x / rect.width * 100)}%`);
-            card.style.setProperty('--pos-y', `${100 - (y / rect.height * 100)}%`);
-        }
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+                
+                const rotateX = ((rect.height / 2) - y) / 3;
+                const rotateY = (x - (rect.width / 2)) / 3;
 
-        function clearEffects(card) {
-            card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-            card.style.boxShadow = `0 10px 20px rgba(0,0,0,0.5)`;
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`;
+                card.style.setProperty('--lx', `${x}px`);
+                card.style.setProperty('--ly', `${y}px`);
+                card.style.setProperty('--hx', `${100 - (x/rect.width*100)}%`);
+                card.style.setProperty('--hy', `${100 - (y/rect.height*100)}%`);
+            };
+
+            card.onmousedown = (e) => { isDragging = true; update(e); };
+            window.onmousemove = (e) => update(e);
+            window.onmouseup = () => { 
+                isDragging = false; 
+                card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; 
+            };
+
+            // Mobile support
+            card.ontouchstart = (e) => { isDragging = true; update(e); };
+            window.ontouchmove = (e) => update(e);
+            window.ontouchend = () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; };
         }
 
         function displayCollection() {
@@ -165,21 +148,17 @@
                 const cardDiv = document.createElement('div');
                 cardDiv.className = `saved-card ${card.holo ? 'is-holo' : ''}`;
                 cardDiv.style.backgroundImage = `url('${folderPath}/${card.img}')`;
-                
-                cardDiv.innerHTML = `
-                    <div class="shine"></div>
-                    <div class="holo-layer"></div>
-                    ${card.wins > 0 ? `<div class="win-count">${card.wins}</div>` : ''}
-                `;
+                cardDiv.innerHTML = `<div class="shine-layer"></div><div class="holo-foil"></div>${card.wins > 0 ? `<div class="win-count">${card.wins}</div>` : ''}`;
 
-                cardDiv.onmousemove = (e) => applyEffects(e, cardDiv);
-                cardDiv.onmouseleave = () => clearEffects(cardDiv);
-                cardDiv.onclick = () => {
+                setupInspector(cardDiv);
+                
+                // Double click to battle
+                cardDiv.ondblclick = () => {
                     const win = Math.random() > 0.5;
                     if(win) card.wins++;
                     localStorage.setItem('EWF_Collection', JSON.stringify(col));
                     displayCollection();
-                    alert(win ? "WINNER!" : "DEFEATED");
+                    alert(win ? "WIN!" : "LOSS");
                 };
 
                 container.appendChild(cardDiv);
