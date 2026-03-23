@@ -10,8 +10,8 @@
         }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
-        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; }
-        #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
+        #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+        #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; display: block; }
         #rank-display { color: #D4AF37; font-size: 18px; display: block; margin-top: 5px; letter-spacing: 2px; }
 
         #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 350px; }
@@ -26,7 +26,7 @@
         .grade-tag { position: absolute; top: 10px; left: 10px; background: white; color: black; padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #333; z-index: 5; }
 
         button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
-        button:disabled { background: #444; opacity: 0.5; }
+        button:disabled { background: #444; opacity: 0.5; cursor: not-allowed; }
 
         .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #D4AF37; transition: 0.3s; position: relative; display: inline-block; margin: 10px; }
         .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; font-weight: bold; }
@@ -43,8 +43,8 @@
     
     <div id="stats-bar">
         <div id="cash-display">CONTRACT FUNDS: $0</div>
-        <div id="rank-display">RANK: LOADING...</div>
-        <button style="background: #222; font-size: 10px; padding: 5px; margin-top: 5px;" onclick="clearEverything()">RESET COLLECTION</button>
+        <div id="rank-display">RANK: ROOKIE PROMOTER</div>
+        <button style="background: #222; font-size: 10px; padding: 5px; margin-top: 10px; border: 1px solid #555;" onclick="clearEverything()">RESET ALL DATA</button>
     </div>
     <br>
     <button id="rip-btn" onclick="ripPack()">RIP 2026 PACK ($100)</button>
@@ -60,32 +60,43 @@
     <script>
         const totalCards = 23; 
         const folderPath = "rare ewf cards"; 
-        let userCash = parseInt(localStorage.getItem('EWF_Cash')) || 300;
+        
+        // Load cash or give $300 if starting fresh
+        let userCash = parseInt(localStorage.getItem('EWF_Cash'));
+        if (isNaN(userCash)) userCash = 300; 
+
         let musicStarted = false;
 
         function initGame() {
             updateUI();
             displayCollection();
+            // Earn money every 30 seconds
             setInterval(() => { userCash += 10; saveGame(); updateUI(); }, 30000); 
         }
 
         function updateUI() {
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
             document.getElementById('rip-btn').disabled = (userCash < 100);
+            
             const collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             let rank = "ROOKIE PROMOTER";
             if (collection.length >= 19) rank = "LEGENDARY COLLECTOR";
             else if (collection.length >= 13) rank = "ELITE EXECUTIVE";
             else if (collection.length >= 6) rank = "PRO MANAGER";
+            
             document.getElementById('rank-display').innerHTML = `RANK: ${rank}`;
         }
 
-        function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
+        function saveGame() { 
+            localStorage.setItem('EWF_Cash', userCash); 
+        }
 
         function ripPack() {
             if (userCash < 100) return;
             userCash -= 100;
-            saveGame(); updateUI();
+            saveGame();
+            updateUI();
+            
             if (!musicStarted) {
                 document.getElementById("bgMusic").volume = 0.2;
                 document.getElementById("bgMusic").play().catch(e => {});
@@ -123,7 +134,9 @@
                 displayCollection();
                 updateUI();
             } else {
-                userCash += 50; saveGame(); updateUI();
+                userCash += 50; 
+                saveGame(); 
+                updateUI();
             }
         }
 
@@ -138,7 +151,6 @@
                 const div = document.createElement('div');
                 div.className = `saved-card ${card.hof ? 'hof-card' : ''}`;
                 div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
-                // Fix for undefined grade
                 const displayGrade = card.grade || 10;
                 div.innerHTML = `<div class="grade-tag" style="font-size:10px; top:5px; left:5px;">PSA ${displayGrade}</div>`;
                 
@@ -150,4 +162,25 @@
                         if(confirm("Enter match?")) {
                             if(Math.random() > 0.5) {
                                 card.wins++;
-                                if(card.wins >=
+                                if(card.wins >= 100) card.hof = true;
+                                alert("WIN!");
+                            } else { alert("LOSS."); }
+                            localStorage.setItem('EWF_Collection', JSON.stringify(collection));
+                            displayCollection();
+                        }
+                    };
+                    if(card.wins > 0) div.innerHTML += `<div class="win-count">${card.wins}</div>`;
+                    grid.appendChild(div);
+                }
+            });
+        }
+
+        function clearEverything() {
+            if(confirm("RESET ALL DATA?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
