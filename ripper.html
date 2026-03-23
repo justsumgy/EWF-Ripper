@@ -3,45 +3,40 @@
 <head>
     <title>My EWF Collection 2026</title>
     <style>
-        body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; margin: 0; overflow-x: hidden; user-select: none; }
+        body { background: url('background.jpg') center/cover no-repeat fixed; color: white; font-family: 'Arial Black', sans-serif; text-align: center; padding: 20px; margin: 0; overflow-x: hidden; }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
         
         #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
 
-        .card-container { width: 180px; height: 260px; perspective: 1200px; display: inline-block; margin: 15px; vertical-align: top; }
+        #pack-area { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; min-height: 100px; }
+        
+        /* CARD CONTAINER */
+        .card-container { width: 160px; height: 230px; perspective: 1000px; display: inline-block; margin: 15px; vertical-align: top; }
         
         .saved-card { 
-            width: 100%; height: 100%; border-radius: 14px; border: 3px solid #D4AF37;
-            background-size: cover; background-position: center; background-repeat: no-repeat;
-            position: relative; transform-style: preserve-3d; 
-            cursor: grab; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            transition: transform 0.1s ease-out;
+            width: 100%; height: 100%; border-radius: 12px; border: 3px solid #D4AF37;
+            background-size: cover; background-position: center; 
+            position: relative; transition: transform 0.1s ease-out; 
+            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
         }
 
-        /* LIGHTING & SHIMMER */
-        .shine-layer {
+        /* SHINE EFFECT */
+        .shine {
             position: absolute; inset: 0; border-radius: 12px;
-            background: radial-gradient(circle at var(--lx) var(--ly), rgba(255,255,255,0.3) 0%, transparent 60%);
-            z-index: 5; pointer-events: none; opacity: 0; 
+            background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+            background-size: 200% 200%; pointer-events: none; z-index: 2; opacity: 0;
         }
-        .holo-foil {
-            position: absolute; inset: 0; border-radius: 12px;
-            background-image: linear-gradient(110deg, transparent 20%, rgba(255,0,255,0.2) 30%, rgba(0,255,255,0.2) 50%, rgba(255,255,0,0.2) 70%, transparent 80%);
-            background-size: 200% 200%; background-position: var(--hx) var(--hy);
-            mix-blend-mode: color-dodge; z-index: 4; pointer-events: none; opacity: 0;
-        }
-        .is-holo .holo-foil { opacity: 1; }
-        .saved-card:hover .shine-layer { opacity: 1; }
+        .saved-card:hover .shine { opacity: 1; }
+        .is-holo { border-color: cyan !important; box-shadow: 0 0 20px cyan; }
 
         .win-count { position: absolute; top: -12px; right: -12px; background: red; color: white; border-radius: 50%; width: 30px; height: 30px; font-size: 14px; line-height: 30px; border: 2px solid white; z-index: 10; font-weight: bold; }
 
-        /* PACK OPENING */
-        #pack-area { padding: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-        .pack-btn { padding: 10px 20px; background: #800000; color: white; border: 2px solid gold; cursor: pointer; border-radius: 5px; font-weight: bold; }
-        .pack-btn:disabled { background: #333; color: #777; border-color: #555; }
+        button { padding: 12px 25px; font-size: 16px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        button.main-rip { padding: 15px 35px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 10px; font-weight: bold; }
+        #history-box { background: rgba(0,0,0,0.8); border: 1px solid #555; max-width: 400px; margin: 20px auto; padding: 10px; border-radius: 8px; font-size: 13px; }
     </style>
 </head>
 <body onload="initGame()">
@@ -49,29 +44,38 @@
     <h1>ELITE WRESTLING FEDERATION</h1>
     <div id="stats-bar">
         <div id="cash-display">CONTRACT FUNDS: $0</div>
-        <div id="rank-display" style="color:gold; margin-top:5px; font-size:14px;">RANK: ROOKIE PROMOTER</div>
+        <div id="rank-display" style="color:gold; margin-top:5px;">RANK: ROOKIE PROMOTER</div>
+        <button style="background:#222; font-size:10px; padding:5px;" onclick="localStorage.clear(); location.reload();">RESET COLLECTION</button>
     </div>
     <br>
-    <button class="main-rip" onclick="ripPack()">RIP 2026 PACK ($100)</button>
+    <button id="rip-btn" onclick="ripPack()">RIP 2026 PACK ($100)</button>
     
     <div id="pack-area"></div>
 
     <h2 id="collection-title" style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF COLLECTION</h2>
     <div id="collection-grid"></div>
 
+    <div id="history-box">
+        <h3 style="margin:0; color:#D4AF37;">LATEST RESULTS</h3>
+        <div id="history-list"></div>
+    </div>
+
     <script>
         const totalCards = 23;
         const folderPath = "rare ewf cards";
         let userCash = parseInt(localStorage.getItem('EWF_Cash')) || 500;
+        let matchHistory = JSON.parse(localStorage.getItem('EWF_History')) || [];
 
         function initGame() {
             updateUI();
             displayCollection();
+            displayHistory();
             setInterval(() => { userCash += 20; saveGame(); updateUI(); }, 30000);
         }
 
         function updateUI() {
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
+            document.getElementById('rip-btn').disabled = (userCash < 100);
         }
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
@@ -82,53 +86,36 @@
             const area = document.getElementById('pack-area'); area.innerHTML = '';
             for (let i = 0; i < 5; i++) {
                 const num = Math.floor(Math.random() * totalCards) + 1;
-                const isHolo = Math.random() > 0.8;
+                const isHolo = Math.random() > 0.85;
                 const btn = document.createElement('button');
-                btn.className = 'pack-btn';
                 btn.innerHTML = `REVEAL CARD ${i+1}`;
                 btn.onclick = () => {
                     saveCard(`card (${num}).jpg`, isHolo);
-                    btn.disabled = true;
-                    btn.innerHTML = isHolo ? "✨ HOLO ✨" : "COMMON";
-                    btn.style.background = isHolo ? "gold" : "#444";
-                    btn.style.color = isHolo ? "black" : "white";
+                    btn.style.display = 'none';
                 };
                 area.appendChild(btn);
             }
         }
 
-        function saveCard(imgName, holo) {
+        function saveCard(img, holo) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            if (!col.find(c => c.img === imgName)) {
-                col.push({ img: imgName, wins: 0, holo });
+            if (!col.find(c => c.img === img)) {
+                col.push({ img, wins: 0, holo });
                 localStorage.setItem('EWF_Collection', JSON.stringify(col));
                 displayCollection();
             } else { userCash += 50; saveGame(); updateUI(); }
         }
 
-        function setupInspector(card) {
-            let isDragging = false;
-            const update = (e) => {
-                if (!isDragging) return;
-                const rect = card.getBoundingClientRect();
-                const clientX = (e.clientX || (e.touches && e.touches[0].clientX));
-                const clientY = (e.clientY || (e.touches && e.touches[0].clientY));
-                const x = clientX - rect.left;
-                const y = clientY - rect.top;
-                const rotateX = ((rect.height / 2) - y) / 4;
-                const rotateY = (x - (rect.width / 2)) / 4;
-                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
-                card.style.setProperty('--lx', `${x}px`);
-                card.style.setProperty('--ly', `${y}px`);
-                card.style.setProperty('--hx', `${100 - (x/rect.width*100)}%`);
-                card.style.setProperty('--hy', `${100 - (y/rect.height*100)}%`);
-            };
-            card.onmousedown = (e) => { isDragging = true; update(e); };
-            window.onmousemove = (e) => update(e);
-            window.onmouseup = () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; };
-            card.ontouchstart = (e) => { isDragging = true; update(e); };
-            window.ontouchmove = (e) => update(e);
-            window.ontouchend = () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; };
+        // --- TILT LOGIC ---
+        function applyTilt(e, card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotateX = ((rect.height / 2) - y) / 7;
+            const rotateY = (x - (rect.width / 2)) / 7;
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
+            const shine = card.querySelector('.shine');
+            if(shine) shine.style.backgroundPosition = `${(x/rect.width)*100}% ${(y/rect.height)*100}%`;
         }
 
         function displayCollection() {
@@ -140,18 +127,30 @@
                 container.className = 'card-container';
                 const cardDiv = document.createElement('div');
                 cardDiv.className = `saved-card ${card.holo ? 'is-holo' : ''}`;
-                // FIXED IMAGE PATH
+                // FIXED IMAGE LOADING
                 cardDiv.style.backgroundImage = `url('${folderPath}/${card.img}')`;
-                cardDiv.innerHTML = `<div class="shine-layer"></div><div class="holo-foil"></div>${card.wins > 0 ? `<div class="win-count">${card.wins}</div>` : ''}`;
-                setupInspector(cardDiv);
-                cardDiv.ondblclick = () => {
-                    if(Math.random() > 0.5) { card.wins++; alert("WIN!"); } else { alert("LOSS"); }
+                cardDiv.innerHTML = `<div class="shine"></div>${card.wins > 0 ? `<div class="win-count">${card.wins}</div>` : ''}`;
+                
+                cardDiv.onmousemove = (e) => applyTilt(e, cardDiv);
+                cardDiv.onmouseleave = () => cardDiv.style.transform = "rotateX(0) rotateY(0) scale(1)";
+                cardDiv.onclick = () => {
+                    const win = Math.random() > 0.5;
+                    if(win) card.wins++;
+                    matchHistory.unshift({ name: card.img.replace('.jpg',''), res: win ? 'WIN' : 'LOSS' });
+                    if(matchHistory.length > 5) matchHistory.pop();
                     localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                    displayCollection();
+                    localStorage.setItem('EWF_History', JSON.stringify(matchHistory));
+                    displayCollection(); displayHistory();
                 };
                 container.appendChild(cardDiv);
                 grid.appendChild(container);
             });
+        }
+
+        function displayHistory() {
+            document.getElementById('history-list').innerHTML = matchHistory.map(h => 
+                `<div style="padding:2px; border-bottom:1px solid #333">${h.name}: <span style="color:${h.res==='WIN'?'#0f0':'#f00'}">${h.res}</span></div>`
+            ).join('');
         }
     </script>
 </body>
