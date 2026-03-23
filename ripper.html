@@ -9,159 +9,28 @@
             border: 5px solid #D4AF37; min-height: 100vh; margin: 0;
         }
         h1 { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); font-size: 3em; margin-bottom: 5px; }
+        h2 { color: #fff; letter-spacing: 3px; font-size: 1.2em; margin-top: 0; }
         
         #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
 
         #pack-area { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; min-height: 350px; }
         
+        /* CARD STYLES */
         .card { width: 220px; height: 320px; perspective: 1000px; cursor: pointer; position: relative; }
         .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
         .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; border: 3px solid #D4AF37; box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
-        .back { background: url('wrapper.jpg') center/cover; }
+        .back { background: url('wrapper.jpg') center/cover; background-color: #111; }
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
 
         /* PSA GRADE TAG */
-        .grade-tag { position: absolute; top: 10px; left: 10px; background: white; color: black; padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #333; z-index: 5; }
+        .grade-tag { position: absolute; top: 10px; left: 10px; background: white; color: black; padding: 2px 8px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #333; z-index: 5; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
 
-        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; }
-        button:disabled { background: #444; opacity: 0.5; }
+        button { padding: 15px 30px; font-size: 18px; background: linear-gradient(#e60000, #800000); color: white; border: 2px solid #fff; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 5px; transition: 0.2s; }
+        button:hover { transform: scale(1.05); }
+        button:disabled { background: #444; opacity: 0.5; cursor: not-allowed; }
 
-        .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #D4AF37; transition: 0.3s; position: relative; display: inline-block; margin: 10px; }
-        .saved-card:hover { transform: scale(1.1); z-index: 10; box-shadow: 0 0 15px gold; }
-        .win-count { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; }
-    </style>
-</head>
-<body onload="initGame()">
-    
-    <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
-    <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
-
-    <h1>ELITE WRESTLING FEDERATION</h1>
-    <h2 style="color: #fff; letter-spacing: 3px;">SERIES 1: 2026 EDITION</h2>
-    
-    <div id="stats-bar">
-        <div id="cash-display">FUNDS: $0</div>
-        <button id="daily-btn" style="background: linear-gradient(#00c6ff, #0072ff);" onclick="claimDaily()">SPONSORSHIP (+$500)</button>
-    </div>
-    <br>
-    <button id="rip-btn" onclick="ripPack()">RIP 2026 PACK ($100)</button>
-    
-    <div id="pack-area"></div>
-
-    <h2 id="collection-title" style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">CHAMPIONSHIP ROSTER (0 / 23)</h2>
-    <div id="collection-grid"></div>
-
-    <h1 style="color: #ff4500; text-shadow: 0 0 20px #ff4500; margin-top: 60px;">🏆 HALL OF FAME 🏆</h1>
-    <div id="hof-grid"></div>
-<div style="margin-top: 50px; padding-bottom: 50px;">
-        <button id="clear-btn" 
-                style="background: #333; color: #ccc; font-size: 12px; border: 1px solid #555; padding: 8px 15px;" 
-                onclick="clearEverything()">
-            FULL RESET (WIPE ALL DATA)
-        </button>
-    </div>
-    <script>
-        const totalCards = 23; 
-        const folderPath = "rare ewf cards"; 
-        let userCash = parseInt(localStorage.getItem('EWF_Cash')) || 300;
-        let lastDaily = localStorage.getItem('EWF_Daily') || 0;
-
-        function initGame() {
-            updateUI();
-            displayCollection();
-            setInterval(() => { userCash += 10; saveGame(); updateUI(); }, 30000); 
-        }
-
-        function updateUI() {
-            document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
-            document.getElementById('rip-btn').disabled = (userCash < 100);
-            const now = new Date().getTime();
-            document.getElementById('daily-btn').disabled = (now - lastDaily < 86400000);
-        }
-
-        function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
-
-        function claimDaily() {
-            userCash += 500;
-            lastDaily = new Date().getTime();
-            localStorage.setItem('EWF_Daily', lastDaily);
-            saveGame(); updateUI();
-            alert("Sponsorship Collected!");
-        }
-
-        function ripPack() {
-            if (userCash < 100) return;
-            userCash -= 100;
-            saveGame(); updateUI();
-            document.getElementById("cheerSound").currentTime = 0;
-            document.getElementById("cheerSound").play();
-
-            const area = document.getElementById('pack-area');
-            area.innerHTML = ''; 
-            for (let i = 0; i < 5; i++) {
-                const randomNum = Math.floor(Math.random() * totalCards) + 1;
-                const fileName = `card (${randomNum}).jpg`; 
-                const grade = Math.floor(Math.random() * 4) + 7; // Grades 7-10 for packs
-
-                const cardDiv = document.createElement('div');
-                cardDiv.className = 'card';
-                cardDiv.innerHTML = `
-                    <div class="card-inner" onclick="this.parentElement.classList.toggle('flipped'); saveCard('${fileName}', ${grade})">
-                        <div class="back"></div>
-                        <div class="front" style="background-image: url('${folderPath}/${fileName}')">
-                            <div class="grade-tag">PSA ${grade}</div>
-                        </div>
-                    </div>`;
-                area.appendChild(cardDiv);
-            }
-        }
-
-        function saveCard(img, grade) {
-            let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            const existing = collection.find(c => c.img === img);
-            if (!existing) {
-                collection.push({ img: img, wins: 0, hof: false, grade: grade });
-                localStorage.setItem('EWF_Collection', JSON.stringify(collection));
-                displayCollection();
-            } else {
-                userCash += 50; saveGame(); updateUI();
-            }
-        }
-
-        function displayCollection() {
-            const grid = document.getElementById('collection-grid');
-            const hofGrid = document.getElementById('hof-grid');
-            const collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            document.getElementById('collection-title').innerHTML = `CHAMPIONSHIP ROSTER (${collection.length} / ${totalCards})`;
-            grid.innerHTML = ''; hofGrid.innerHTML = '';
-            
-            collection.forEach(card => {
-                const div = document.createElement('div');
-                div.className = `saved-card ${card.hof ? 'hof-card' : ''}`;
-                div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
-                div.innerHTML = `<div class="grade-tag" style="font-size:10px;">PSA ${card.grade}</div>`;
-                
-                if (card.hof) {
-                    hofGrid.appendChild(div);
-                } else {
-                    div.onclick = () => {
-                        if(confirm("Start Match?")) {
-                            if(Math.random() > 0.5) {
-                                card.wins++;
-                                if(card.wins >= 100) card.hof = true;
-                                alert("WINNER!");
-                            } else { alert("Lost."); }
-                            localStorage.setItem('EWF_Collection', JSON.stringify(collection));
-                            displayCollection();
-                        }
-                    };
-                    if(card.wins > 0) div.innerHTML += `<div class="win-count">${card.wins}</div>`;
-                    grid.appendChild(div);
-                }
-            });
-        }
-    </script>
-</body>
-</html>
+        /* SAVED ROSTER STYLES */
+        .saved-card { width: 140px; height: 200px; border-radius: 8px; background-size: cover; border: 2px solid #D4AF37; transition: 0.3s; position: relative; display: inline-block; margin: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        .saved-card:hover { transform
