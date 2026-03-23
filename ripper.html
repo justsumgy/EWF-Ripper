@@ -8,6 +8,7 @@
         
         #stats-bar { background: rgba(0,0,0,0.9); border: 2px solid #D4AF37; display: inline-block; padding: 15px 40px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 0 20px black; position: relative; }
         #cash-display { color: #00FF00; font-size: 28px; font-weight: bold; }
+        #income-display { color: #aaa; font-size: 14px; letter-spacing: 1px; margin-top: 5px; }
         
         #progress-container { width: 100%; height: 12px; background: #222; border-radius: 6px; margin-top: 10px; border: 1px solid #555; overflow: hidden; }
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #D4AF37, #fff, #D4AF37); background-size: 200% 100%; transition: 0.5s; }
@@ -23,8 +24,8 @@
         .back { background: url('wrapper.jpg') center/cover; background-color: #222; }
         .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
 
-        /* INCREASED HEIGHT FOR SELL BUTTON */
-        .card-container { width: 160px; height: 280px; perspective: 1000px; display: inline-block; margin: 15px; vertical-align: top; }
+        /* INCREASED HEIGHT FOR NEW BUTTONS */
+        .card-container { width: 160px; height: 320px; perspective: 1000px; display: inline-block; margin: 15px; vertical-align: top; }
         .saved-card { width: 100%; height: 230px; border-radius: 12px; border: 3px solid silver; background-size: cover; background-position: center; position: relative; transition: transform 0.1s ease-out, box-shadow 0.1s ease-out; cursor: pointer; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.5); padding-top: 30px; background-color: white; }
         
         .grade-label { position: absolute; top: 0; left: 0; width: 100%; background: #c00; border-bottom: 2px solid silver; color: white; font-family: 'Arial', sans-serif; text-align: center; border-top-left-radius: 9px; border-top-right-radius: 9px; z-index: 6; pointer-events: none; }
@@ -39,15 +40,20 @@
         .saved-card:hover .shine-layer, .saved-card:hover .sparkle-layer { opacity: 1; }
         .is-holo.saved-card .holo-foil { opacity: 1; }
 
-        .win-count { position: absolute; top: 15px; right: -12px; background: red; color: white; border-radius: 50%; width: 30px; height: 30px; font-size: 14px; line-height: 30px; border: 2px solid white; z-index: 10; font-weight: bold; box-shadow: 0 0 10px black; }
+        /* BADGES */
+        .win-count { position: absolute; top: 15px; left: -10px; background: red; color: white; border-radius: 5px; padding: 2px 8px; font-size: 12px; border: 2px solid white; z-index: 10; font-weight: bold; box-shadow: 0 0 5px black; }
+        .dupe-count { position: absolute; top: 15px; right: -10px; background: #0088ff; color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 12px; line-height: 25px; border: 2px solid white; z-index: 10; font-weight: bold; box-shadow: 0 0 5px black; }
         
-        /* SELL BUTTON */
-        .sell-btn { width: 100%; margin-top: 10px; padding: 5px; font-size: 14px; background: #228B22; color: white; border: 1px solid gold; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .sell-btn:hover { background: #32CD32; transform: scale(1.05); }
+        /* GM BUTTONS */
+        .gm-controls { display: flex; flex-direction: column; gap: 3px; margin-top: 8px; }
+        .gm-btn { padding: 4px; font-size: 11px; color: white; border: 1px solid #aaa; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-sell { background: #228B22; } .btn-sell:hover { background: #32CD32; }
+        .btn-ppv { background: #800080; border-color: #ff00ff; } .btn-ppv:hover { background: #ff00ff; }
+        .btn-forge { background: #ff4500; border-color: gold; } .btn-forge:hover { background: #ff8c00; }
 
         #battle-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         #battle-card { width: 280px; height: 400px; border: 5px solid gold; border-radius: 15px; background-size: cover; background-position: center; z-index: 1001; box-shadow: 0 0 30px gold; }
-        #battle-text { font-size: 4em; color: gold; text-shadow: 0 0 20px red; margin-top: 20px; font-style: italic; z-index: 1001; }
+        #battle-text { font-size: 4em; color: gold; text-shadow: 0 0 20px red; margin-top: 20px; font-style: italic; z-index: 1001; text-align: center; }
         .confetti { position: fixed; width: 10px; height: 10px; z-index: 2000; pointer-events: none; }
         @keyframes rumble { 0% { transform: translate(3px,3px); } 50% { transform: translate(-3px,-3px); } 100% { transform: translate(0,0); } }
         .rumble { animation: rumble 0.1s linear infinite; }
@@ -57,24 +63,28 @@
         .rip-super { background: linear-gradient(#D4AF37, #8a6d3b); border-color: gold; color: black; }
         button.rip-btn:hover { transform: scale(1.05); }
         button.rip-btn:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
-        #history-box { background: rgba(0,0,0,0.8); border: 1px solid #555; max-width: 400px; margin: 20px auto; padding: 10px; border-radius: 8px; font-size: 13px; }
+        
+        #record-box { background: rgba(0,0,0,0.85); border: 2px solid #D4AF37; max-width: 350px; margin: 40px auto; padding: 20px; border-radius: 12px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
+        #record-display { font-size: 36px; font-weight: 900; letter-spacing: 2px; margin: 10px 0; }
+        .win-text { color: #00FF00; text-shadow: 0 0 10px rgba(0,255,0,0.5); }
+        .loss-text { color: #FF0000; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
+        
+        /* HALL OF FAME */
+        #hof-section { margin-top: 50px; padding: 40px 20px; background: rgba(212, 175, 55, 0.1); border-top: 5px solid gold; border-bottom: 5px solid gold; }
     </style>
 </head>
 <body onload="initGame()">
     
     <button id="music-toggle" onclick="toggleMusic()">🔇 Play Music</button>
-
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
     <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
-    <div id="battle-overlay">
-        <div id="battle-card"></div>
-        <div id="battle-text">FIGHTING...</div>
-    </div>
+    <div id="battle-overlay"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
 
     <h1>ELITE WRESTLING FEDERATION</h1>
     <div id="stats-bar">
         <div id="cash-display">CONTRACT FUNDS: $0</div>
+        <div id="income-display">PASSIVE INCOME: $25 / tick</div>
         <div id="rank-display" style="color:gold; margin-top:5px;">RANK: ROOKIE PROMOTER</div>
         <div id="progress-container"><div id="progress-fill"></div></div>
         <button style="background:#222; color:white; font-size:10px; padding:5px; margin-top:10px; cursor:pointer;" onclick="hardReset()">FULL DATA RESET ($3000)</button>
@@ -84,11 +94,21 @@
     <button class="rip-btn rip-super" id="rip-super-btn" onclick="ripPack(500, 0.65)">RIP SUPER HOLO PACK ($500)</button>
     
     <div id="pack-area"></div>
-    <h2 id="collection-title" style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF COLLECTION</h2>
+    <h2 style="color: gold; margin-top: 50px; border-top: 2px solid gold; padding-top: 20px;">MY EWF ROSTER</h2>
     <div id="collection-grid"></div>
-    <div id="history-box">
-        <h3 style="margin:0; color:#D4AF37;">LATEST MATCH RESULTS</h3>
-        <div id="history-list"></div>
+    
+    <div id="record-box">
+        <h3 style="margin:0; color:#D4AF37; font-size: 18px;">PROMOTER RECORD</h3>
+        <div id="record-display">
+            <span class="win-text" id="win-count">0 W</span> <span style="color:#555;">-</span> <span class="loss-text" id="loss-count">0 L</span>
+        </div>
+        <div id="win-rate" style="font-size: 14px; color: #ccc; letter-spacing: 1px;">WIN RATE: 0%</div>
+    </div>
+
+    <div id="hof-section">
+        <h1 style="color: gold; text-shadow: 0 0 20px gold; font-size: 2.5em; margin-bottom: 5px;">🏛️ EWF HALL OF FAME 🏛️</h1>
+        <p style="color: #ccc; font-size: 12px; margin-top: 0;">LEGENDS WITH 200+ WINS (GENERATES $25 PASSIVE INCOME EACH)</p>
+        <div id="hof-grid"></div>
     </div>
 
     <script>
@@ -96,40 +116,39 @@
         const folderPath = "rare ewf cards";
         let userCash = parseInt(localStorage.getItem('EWF_Cash'));
         if (isNaN(userCash) || userCash <= 0) userCash = 3000;
-        let matchHistory = JSON.parse(localStorage.getItem('EWF_History')) || [];
+        
+        let totalWins = parseInt(localStorage.getItem('EWF_Wins')) || 0;
+        let totalLosses = parseInt(localStorage.getItem('EWF_Losses')) || 0;
         let isMusicPlaying = false;
 
         function initGame() {
-            checkDailyLogin();
-            updateUI(); 
-            displayCollection(); 
-            displayHistory();
-            setInterval(() => { userCash += 25; saveGame(); updateUI(); }, 30000);
+            checkDailyLogin(); updateUI(); displayCollection(); displayRecord();
+            setInterval(() => { 
+                const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+                const hofCount = col.filter(c => c.wins >= 200).length;
+                const totalIncome = 25 + (hofCount * 25);
+                userCash += totalIncome; 
+                saveGame(); updateUI(); 
+            }, 30000);
         }
 
-        // --- DAILY LOGIN BONUS ---
         function checkDailyLogin() {
             const today = new Date().toDateString();
             const lastLogin = localStorage.getItem('EWF_LastLogin');
             if (lastLogin !== today) {
-                userCash += 500;
-                localStorage.setItem('EWF_LastLogin', today);
-                saveGame();
+                userCash += 500; localStorage.setItem('EWF_LastLogin', today); saveGame();
                 alert("🔔 DAILY PROMOTER PAYOUT! You received $500 for logging in today! 🔔");
             }
         }
 
         function hardReset() {
-            if(confirm("Wipe all cards and start fresh with $3000?")) {
-                localStorage.clear();
-                localStorage.setItem('EWF_Cash', 3000);
-                location.reload();
+            if(confirm("Wipe all cards, stats, and start fresh with $3000?")) {
+                localStorage.clear(); localStorage.setItem('EWF_Cash', 3000); location.reload();
             }
         }
 
         function toggleMusic() {
-            const music = document.getElementById("bgMusic");
-            const btn = document.getElementById("music-toggle");
+            const music = document.getElementById("bgMusic"); const btn = document.getElementById("music-toggle");
             if (isMusicPlaying) { music.pause(); btn.innerHTML = "🔇 Play Music"; isMusicPlaying = false; } 
             else { music.volume = 0.2; music.play().catch(e => {}); btn.innerHTML = "🔊 Mute Music"; isMusicPlaying = true; }
         }
@@ -150,10 +169,15 @@
         }
 
         function updateUI() {
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            const hofCount = col.filter(c => c.wins >= 200).length;
+            const totalIncome = 25 + (hofCount * 25);
+            
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
+            document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${totalIncome} / 30s`;
             document.getElementById('rip-std-btn').disabled = (userCash < 100);
             document.getElementById('rip-super-btn').disabled = (userCash < 500);
-            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            
             let r = "ROOKIE PROMOTER"; let next = 6; let base = 0;
             if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; }
             else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; }
@@ -164,103 +188,125 @@
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
 
-        // --- CALCULATE CARD VALUE ---
-        function getCardValue(grade, holo) {
+        function getCardValue(card) {
             let baseVal = 20;
-            if (grade === 10) baseVal = 500;
-            else if (grade === 9) baseVal = 100;
-            else if (grade === 8) baseVal = 40;
+            if (card.grade === 10) baseVal = 500;
+            else if (card.grade === 9) baseVal = 100;
+            else if (card.grade === 8) baseVal = 40;
             
-            return holo ? baseVal * 4 : baseVal; // A Grade 10 Holo = $2000!
+            let total = card.holo ? baseVal * 4 : baseVal; 
+            if (card.champion) total *= 5; // TITLE MULTIPLIER
+            return total;
         }
 
         function ripPack(cost, holoChance) {
             if (userCash < cost) return;
             userCash -= cost; saveGame(); updateUI();
-            
-            const cheer = document.getElementById("cheerSound");
-            cheer.volume = 0.5; cheer.currentTime = 0; cheer.play().catch(e=>{});
-
+            const cheer = document.getElementById("cheerSound"); cheer.volume = 0.5; cheer.currentTime = 0; cheer.play().catch(e=>{});
             const area = document.getElementById('pack-area'); area.innerHTML = ''; 
             for (let i = 0; i < 5; i++) {
                 const num = Math.floor(Math.random() * totalCards) + 1;
                 const isHolo = Math.random() < holoChance;
                 const imgFile = `card (${num}).jpg`;
-                
-                let grade = 7;
-                const gradeRoll = Math.random();
-                if(gradeRoll > 0.95) grade = 10; 
-                else if(gradeRoll > 0.80) grade = 9;
-                else if(gradeRoll > 0.40) grade = 8;
-
-                const cardDiv = document.createElement('div');
-                cardDiv.className = 'pack-card';
+                let grade = 7; const gradeRoll = Math.random();
+                if(gradeRoll > 0.95) grade = 10; else if(gradeRoll > 0.80) grade = 9; else if(gradeRoll > 0.40) grade = 8;
+                const cardDiv = document.createElement('div'); cardDiv.className = 'pack-card';
                 cardDiv.innerHTML = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${imgFile}'); ${isHolo ? 'border-color:cyan; box-shadow: 0 0 10px cyan;' : ''}"></div></div>`;
-                cardDiv.onclick = function() {
-                    if(!this.classList.contains('flipped')) { this.classList.add('flipped'); saveCard(imgFile, isHolo, grade); }
-                };
+                cardDiv.onclick = function() { if(!this.classList.contains('flipped')) { this.classList.add('flipped'); saveCard(imgFile, isHolo, grade); } };
                 area.appendChild(cardDiv);
             }
         }
 
         function saveCard(img, holo, grade) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            if (!col.find(c => c.img === img)) {
-                col.push({ img, wins: 0, holo, grade });
+            let existing = col.find(c => c.img === img);
+            if (!existing) {
+                col.push({ img, wins: 0, holo, grade, dupes: 0, champion: false });
+            } else { 
+                // DUPLICATES NOW STACK INSTEAD OF AUTO-SELLING!
+                existing.dupes = (existing.dupes || 0) + 1; 
+            }
+            localStorage.setItem('EWF_Collection', JSON.stringify(col));
+            displayCollection(); updateUI();
+        }
+
+        // --- GM CONTROLS ---
+        function sellCard(index) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            const card = col[index];
+            const val = getCardValue(card);
+            
+            if(confirm(`Sell 1 copy of this card for $${val}?`)) {
+                if(card.dupes > 0) { card.dupes--; } 
+                else { col.splice(index, 1); }
+                userCash += val; localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                saveGame(); updateUI(); displayCollection();
+            }
+        }
+
+        function forgeCard(index) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            if(confirm("Trade 3 copies of this wrestler to forge an EWF Authentic GEM MINT 10?")) {
+                col[index].dupes -= 2; // Consume 2 dupes + 1 base = 3 cards
+                col[index].grade = 10;
                 localStorage.setItem('EWF_Collection', JSON.stringify(col));
                 displayCollection(); updateUI();
-            } else { 
-                // Auto-sell duplicate based on its actual market value
-                const val = getCardValue(grade, holo);
-                userCash += val; 
-                saveGame(); updateUI(); 
+                alert("🔥 SUCCESS! Card upgraded to GEM MINT 10! 🔥");
             }
         }
 
-        // --- SELL SYSTEM ---
-        function sellCard(index, grade, holo) {
-            const val = getCardValue(grade, holo);
-            const label = grade === 10 ? "GEM MINT 10" : `MINT ${grade}`;
-            const holoText = holo ? "HOLO " : "";
+        function ppvMatch(index) {
+            if(userCash < 1000) { alert("You need $1000 Contract Funds to book a Title Match!"); return; }
+            if(confirm("Book a $1000 Title Match? If you win, this card becomes a Champion (5x Sell Value)!")) {
+                userCash -= 1000; saveGame(); updateUI();
+                runBattle(index, true);
+            }
+        }
+
+        function runBattle(idx, isPPV = false) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            const card = col[idx];
             
-            if(confirm(`Are you sure you want to sell this ${label} ${holoText}card for $${val}?`)) {
-                let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-                col.splice(index, 1); // Removes the card from the array
-                localStorage.setItem('EWF_Collection', JSON.stringify(col));
-                
-                userCash += val;
-                saveGame();
-                updateUI();
-                displayCollection(); // Refresh UI
-            }
-        }
-
-        function runBattle(img, idx) {
             const overlay = document.getElementById('battle-overlay');
             const bCard = document.getElementById('battle-card');
             const bText = document.getElementById('battle-text');
-            
-            overlay.style.display = 'flex';
-            bCard.style.backgroundImage = `url('${folderPath}/${img}')`;
-            bCard.className = 'rumble';
-            bText.innerHTML = "FIGHTING..."; bText.style.color = "white";
+            overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${card.img}')`;
+            bCard.className = 'rumble'; 
+            bText.innerHTML = isPPV ? "TITLE MATCH FIGHT..." : "FIGHTING..."; 
+            bText.style.color = "white";
 
             setTimeout(() => {
                 bCard.classList.remove('rumble'); 
                 const win = Math.random() > 0.5;
-                let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
                 
-                if (win) { bText.innerHTML = "WINNER!"; bText.style.color = "#00FF00"; triggerConfetti(); col[idx].wins++; } 
-                else { bText.innerHTML = "DEFEAT"; bText.style.color = "red"; }
+                if (win) { 
+                    bText.innerHTML = isPPV ? "NEW CHAMPION!" : "WINNER!"; 
+                    bText.style.color = "#00FF00"; triggerConfetti(); 
+                    col[idx].wins++; totalWins++; 
+                    if(isPPV) col[idx].champion = true;
+                } else { 
+                    bText.innerHTML = "DEFEAT"; bText.style.color = "red"; 
+                    totalLosses++; 
+                }
 
-                matchHistory.unshift({ name: img.replace('.jpg',''), res: win ? 'WIN' : 'LOSS' });
-                if(matchHistory.length > 5) matchHistory.pop();
-                
                 localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                localStorage.setItem('EWF_Wins', totalWins);
+                localStorage.setItem('EWF_Losses', totalLosses);
+                
+                matchHistory.unshift({ name: card.img.replace('.jpg',''), res: win ? 'WIN' : 'LOSS' });
+                if(matchHistory.length > 5) matchHistory.pop();
                 localStorage.setItem('EWF_History', JSON.stringify(matchHistory));
                 
-                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); displayHistory(); }, 2000);
+                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); displayRecord(); updateUI(); }, 2000);
             }, 1500); 
+        }
+
+        function displayRecord() {
+            document.getElementById('win-count').innerHTML = `${totalWins} W`;
+            document.getElementById('loss-count').innerHTML = `${totalLosses} L`;
+            const totalMatches = totalWins + totalLosses;
+            const winRate = totalMatches === 0 ? 0 : Math.round((totalWins / totalMatches) * 100);
+            document.getElementById('win-rate').innerHTML = `WIN RATE: ${winRate}%`;
         }
 
         function setupInspector(card) {
@@ -272,7 +318,6 @@
                 const clientY = (e.clientY || (e.touches && e.touches[0].clientY));
                 const x = clientX - rect.left; const y = clientY - rect.top;
                 const rotateX = ((rect.height / 2) - y) / 6; const rotateY = (x - (rect.width / 2)) / 6;
-
                 card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
                 card.style.boxShadow = `${-rotateY}px ${rotateX}px 30px rgba(0,0,0,0.6)`;
                 card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`);
@@ -283,50 +328,59 @@
             card.ontouchstart = (e) => { isDragging = true; update(e); }; window.ontouchmove = (e) => update(e); window.ontouchend = () => { isDragging = false; card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; card.style.boxShadow = "0 10px 20px rgba(0,0,0,0.5)"; };
         }
 
-        function displayHistory() {
-            document.getElementById('history-list').innerHTML = matchHistory.map(h => 
-                `<div style="padding:4px; border-bottom:1px solid #333">${h.name}: <span style="color:${h.res==='WIN'?'#0f0':'#f00'}">${h.res}</span></div>`
-            ).join('');
-        }
-
         function displayCollection() {
-            const grid = document.getElementById('collection-grid'), col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            grid.innerHTML = '';
+            const grid = document.getElementById('collection-grid');
+            const hofGrid = document.getElementById('hof-grid');
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            
+            grid.innerHTML = ''; hofGrid.innerHTML = '';
+            
             col.forEach((card, index) => {
-                const container = document.createElement('div');
-                container.className = 'card-container';
-                const cardDiv = document.createElement('div');
-                cardDiv.className = `saved-card ${card.holo ? 'is-holo' : ''}`;
+                const container = document.createElement('div'); container.className = 'card-container';
+                const cardDiv = document.createElement('div'); cardDiv.className = `saved-card ${card.holo ? 'is-holo' : ''}`;
                 
+                const isHof = card.wins >= 200;
+                let gradeTitle = card.champion ? '🏆 EWF AUTHENTIC 🏆' : 'EWF AUTHENTIC';
                 const gradeLabel = card.grade === 10 ? 'GEM MINT 10' : `MINT ${card.grade}`;
                 const gradeClass = card.grade === 10 ? 'gem-mint' : '';
-                const sellVal = getCardValue(card.grade, card.holo);
+                const sellVal = getCardValue(card);
+                const totalCopies = (card.dupes || 0) + 1;
 
                 cardDiv.innerHTML = `
-                    <div class="grade-label ${gradeClass}">
-                        <div class="grade-title">EWF AUTHENTIC</div>
-                        <div class="grade-score">${gradeLabel}</div>
-                    </div>
+                    <div class="grade-label ${gradeClass}"><div class="grade-title">${gradeTitle}</div><div class="grade-score">${gradeLabel}</div></div>
                     <div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px;"></div>
-                    <div class="shine-layer"></div>
-                    <div class="sparkle-layer"></div>
-                    <div class="holo-foil"></div>
-                    ${card.wins > 0 ? `<div class="win-count">${card.wins}</div>` : ''}
+                    <div class="shine-layer"></div><div class="sparkle-layer"></div><div class="holo-foil"></div>
+                    <div class="win-count">${card.wins} W</div>
+                    ${totalCopies > 1 ? `<div class="dupe-count">x${totalCopies}</div>` : ''}
                 `;
                 
-                setupInspector(cardDiv);
-                cardDiv.ondblclick = () => runBattle(card.img, index);
-                
-                // Add the Sell Button below the card
-                const sellBtn = document.createElement('button');
-                sellBtn.className = 'sell-btn';
-                sellBtn.innerHTML = `SELL ($${sellVal})`;
-                sellBtn.onclick = () => sellCard(index, card.grade, card.holo);
+                setupInspector(cardDiv); 
+                if(!isHof) {
+                    cardDiv.ondblclick = () => runBattle(index, false); // Standard Battle
+                }
 
                 container.appendChild(cardDiv);
-                container.appendChild(sellBtn);
-                grid.appendChild(container);
+
+                // ADD CONTROLS ONLY IF NOT IN HALL OF FAME
+                if(!isHof) {
+                    const controls = document.createElement('div'); controls.className = 'gm-controls';
+                    controls.innerHTML = `<button class="gm-btn btn-sell" onclick="sellCard(${index})">SELL ($${sellVal})</button>`;
+                    
+                    if(!card.champion && userCash >= 1000) {
+                        controls.innerHTML += `<button class="gm-btn btn-ppv" onclick="ppvMatch(${index})">PPV TITLE ($1000)</button>`;
+                    }
+                    if(card.dupes >= 2 && card.grade < 10) {
+                        controls.innerHTML += `<button class="gm-btn btn-forge" onclick="forgeCard(${index})">FORGE PSA 10 (3)</button>`;
+                    }
+                    container.appendChild(controls);
+                    grid.appendChild(container);
+                } else {
+                    hofGrid.appendChild(container);
+                }
             });
+
+            // Hide HOF section if empty
+            document.getElementById('hof-section').style.display = hofGrid.innerHTML === '' ? 'none' : 'block';
         }
     </script>
 </body>
