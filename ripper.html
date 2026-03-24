@@ -16,16 +16,13 @@
 
         body { background: url('background.jpg') center/cover no-repeat fixed; background-color: #111; color: white; font-family: 'Montserrat', sans-serif; text-align: center; padding: 0; margin: 0; overflow-x: hidden; user-select: none; transition: background 1s ease-in-out, box-shadow 0.5s; }
         
-        /* MARKET TICKER */
         #ticker-wrap { background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--gold); padding: 8px; overflow: hidden; white-space: nowrap; font-size: 13px; color: #ddd; position: relative; z-index: 100; letter-spacing: 2px; text-transform: uppercase; }
         #ticker-text { display: inline-block; animation: scroll-ticker 40s linear infinite; font-weight: 700; }
         @keyframes scroll-ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
 
-        /* RIVAL INVASION BANNER */
         #invasion-banner { position: fixed; top: 0; left: 0; width: 100%; background: #8b0000; border-bottom: 3px solid #ff0000; color: white; font-size: 20px; font-weight: 900; padding: 12px; z-index: 10000; display: none; cursor: pointer; animation: flash-red 1s infinite alternate; text-shadow: 0 0 10px black; }
         @keyframes flash-red { from { background: #8b0000; box-shadow: 0 0 20px red; } to { background: #ff0000; box-shadow: 0 0 50px red; } }
 
-        /* DASHBOARD & UI PANELS */
         h1 { color: var(--gold); text-shadow: 0 0 15px var(--gold-glow); font-size: 2.8em; margin: 25px 0 5px 0; font-weight: 900; letter-spacing: -1px; }
         
         .glass-panel { background: var(--dark-glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1); padding: 20px; }
@@ -40,14 +37,12 @@
         #progress-container { width: 100%; height: 8px; background: #222; border-radius: 4px; margin-top: 12px; overflow: hidden; box-shadow: inset 0 0 5px black; }
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), #fff, var(--gold)); background-size: 200% 100%; transition: width 0.5s ease-out; }
 
-        /* ACTION GRID (BUTTONS) */
         #action-panel { flex: 2; min-width: 400px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
         
         .main-btn { padding: 12px 10px; font-size: 11px; font-weight: 900; color: white; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.4); position: relative; overflow: hidden; }
         .main-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.5); }
         .main-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         
-        /* SPECIFIC BUTTON ACCENTS */
         .rip-std { border-bottom: 3px solid var(--red); } .rip-std:hover:not(:disabled) { background: rgba(231, 76, 60, 0.2); border-color: var(--red); }
         .rip-super { border-bottom: 3px solid var(--gold); } .rip-super:hover:not(:disabled) { background: rgba(212, 175, 55, 0.2); border-color: var(--gold); }
         .rip-gear { border-bottom: 3px solid silver; } .rip-gear:hover:not(:disabled) { background: rgba(192, 192, 192, 0.2); border-color: silver; }
@@ -69,7 +64,6 @@
         #boss-hp-bar { background: linear-gradient(90deg, #c0392b, #e74c3c); box-shadow: 0 0 15px rgba(231,76,60,0.5); }
         #boss-hp-text { line-height: 20px; font-size: 12px; letter-spacing: 1px; }
 
-        /* MODALS */
         .modal { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 450px; max-height: 80vh; overflow-y: auto; background: var(--dark-glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 25px; z-index: 5000; display: none; box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 0 100vw rgba(0,0,0,0.7); text-align: left; }
         .modal::-webkit-scrollbar { width: 6px; } .modal::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
         .modal h2 { color: var(--gold); margin-top: 0; text-align: center; font-weight: 900; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
@@ -80,14 +74,12 @@
         .close-btn { margin-top:25px; padding:12px; background: rgba(231, 76, 60, 0.1); color: var(--red); border: 1px solid var(--red); font-weight:900; border-radius:8px; cursor:pointer; width: 100%; transition: 0.2s; font-family: inherit; font-size: 14px; letter-spacing: 1px; }
         .close-btn:hover { background: var(--red); color: white; box-shadow: 0 0 15px rgba(231,76,60,0.4); }
 
-        /* AUCTION HOUSE */
         #auction-block { background: var(--dark-glass); backdrop-filter: blur(12px); border: 1px solid rgba(212, 175, 55, 0.4); padding: 20px; margin: 20px auto; width: 90%; max-width: 700px; border-radius: 16px; display: none; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
         #auction-content { display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; }
         .auction-text { color: #ccc; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         .auction-bid { font-size: 36px; color: var(--green); font-weight: 900; text-shadow: 0 0 15px rgba(46,204,113,0.3); margin: 5px 0; }
         .auction-time { color: var(--red); font-size: 16px; font-weight: 900; margin-top: 10px; }
 
-        /* CARDS & GM CONTROLS */
         .showcase-area { background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 40px; box-shadow: inset 0 0 50px rgba(0,0,0,0.8); min-height: 400px; }
         
         .card-container { width: 160px; height: 360px; perspective: 1000px; display: inline-block; margin: 15px; vertical-align: top; position: relative; }
@@ -96,7 +88,6 @@
         .gm-controls { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
         .gm-btn { padding: 6px; font-size: 10px; color: #aaa; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; font-weight: 700; transition: all 0.2s; font-family: inherit; letter-spacing: 0.5px; }
         
-        /* GM Button Hovers (Terminal Style) */
         .btn-sell:hover { border-color: var(--green); color: var(--green); background: rgba(46,204,113,0.1); }
         .btn-auction:hover { border-color: var(--gold); color: var(--gold); background: rgba(212,175,55,0.1); }
         .btn-gear:hover { border-color: silver; color: white; background: rgba(255,255,255,0.1); }
@@ -106,7 +97,6 @@
         .btn-splice:hover { border-color: #39ff14; color: #39ff14; background: rgba(57,255,20,0.1); }
         .btn-heal { border-color: rgba(231,76,60,0.5); color: var(--red); } .btn-heal:hover { border-color: var(--red); background: rgba(231,76,60,0.1); }
 
-        /* OTHER EXISTING STYLES (Animations, Specific Elements) */
         #music-toggle { position: fixed; top: 50px; right: 20px; background: rgba(0,0,0,0.8); border: 1px solid var(--gold); font-size: 12px; font-weight: bold; color: white; cursor: pointer; padding: 8px 12px; border-radius: 8px; z-index: 9999; transition: 0.2s; font-family: inherit; text-transform: uppercase; }
         #music-toggle:hover { background: var(--gold); color: black; }
         #early-access { position: fixed; top: 50px; left: 20px; background: var(--red); color: white; padding: 6px 10px; font-weight: 900; border-radius: 4px; font-size: 11px; z-index: 9999; letter-spacing: 1px; pointer-events: none; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
@@ -185,7 +175,7 @@
     <div id="invasion-banner" onclick="openInvasionModal()">🚨 RIVAL INVASION! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
 
     <div id="prestige-border"></div>
-    <div id="early-access">V5.0 EARLY ACCESS</div>
+    <div id="early-access">V5.0.1 EARLY ACCESS</div>
     <button id="music-toggle" onclick="toggleMusic()">🔇 Mute</button>
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
     <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
@@ -201,11 +191,11 @@
     <div id="invasion-modal" class="modal"><h2 style="color:var(--red); border-bottom-color:rgba(231,76,60,0.3);">🚨 DEFEND YOUR TURF 🚨</h2><p style="color:#ddd; text-align:center; font-size:13px;">Select your best available wrestler to fight the Rival Boss. Win for massive loot. Lose to be vandalized.</p><div id="invasion-roster" style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:20px; max-height:300px; overflow-y:auto; padding-right:5px;"></div><button class="close-btn" onclick="document.getElementById('invasion-modal').style.display='none'">FLEE (LOSE 15% CASH)</button></div>
 
     <div id="about-modal" class="modal">
-        <h2>❓ PROMOTER'S MANUAL (v5.0)</h2>
+        <h2>❓ PROMOTER'S MANUAL (v5.0.1)</h2>
         <div style="color: #bbb; font-size: 13px; line-height: 1.6;">
             <p><b style="color:var(--gold);">🤖 Auto-Booker:</b> Buy the GM upgrade in the Arena tab ($100k). Toggle it ON to automatically simulate matches for healthy cards every 5 seconds!</p>
             <p><b style="color:var(--gold);">🔨 Dark Web Auction House:</b> Every few minutes, a rare card hits the block. Bid against AI to win it! You can also click <b>AUCTION</b> on your own cards to sell them to AI bidders.</p>
-            <p><b style="color:var(--gold);">🚨 Rival Invasions:</b> Occasionally, a Rival will invade. You have 5 minutes to select a wrestler to fight them. Win for $25k+Loot. Lose/Timeout = Lose 15% Cash!</p>
+            <p><b style="color:var(--gold);">🚨 Rival Invasions:</b> Occasionally, a Rival will invade. Click the red banner (or double-click any card) to defend. Win for $25k+Loot. Lose/Timeout = Lose 15% Cash!</p>
             <p><b style="color:var(--gold);">📈 The Stock Market:</b> Market changes every 5 mins. Watch for Trends (+300% value) and Crashes (-50% value).</p>
             <p><b style="color:var(--gold);">👹 The World Raid Boss:</b> A massive 1000 HP Boss takes 1 damage when you win anywhere. Defeat it for a Mythic Diamond Card!</p>
             <p><b style="color:var(--gold);">🧪 Radioactive Splicing:</b> Spend $10k+Gear to Splice a card. Gains an 80% win rate and becomes IMMUNE to injury and stamina loss.</p>
@@ -343,7 +333,6 @@
             let mod = false; col.forEach(c => { if(!c.injured && !c.radioactive && c.stamina < 5) { c.stamina++; mod = true; } });
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col));
             
-            // MARKET TICK - SLOWED TO 5 MINUTES (300,000 ms)
             if(Date.now() - market.lastUpdate > 300000) {
                 market.boosted = Math.floor(Math.random() * totalCards) + 1; market.crashed = Math.floor(Math.random() * totalCards) + 1;
                 while(market.crashed === market.boosted) market.crashed = Math.floor(Math.random() * totalCards) + 1;
@@ -399,7 +388,12 @@
             if(fought) { localStorage.setItem('EWF_Wins', totalWins); localStorage.setItem('EWF_Losses', totalLosses); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); displayRecord(); }
         }
 
-        function triggerInvasion() { invasion = { active: true, timeLeft: 300 }; document.body.style.boxShadow = 'inset 0 0 100px rgba(231,76,60,0.5)'; localStorage.setItem('EWF_Invasion', JSON.stringify(invasion)); }
+        function triggerInvasion() { 
+            invasion = { active: true, timeLeft: 300 }; 
+            document.body.style.boxShadow = 'inset 0 0 100px rgba(231,76,60,0.5)'; 
+            localStorage.setItem('EWF_Invasion', JSON.stringify(invasion));
+            displayCollection(); // Update UI to show DEFEND buttons
+        }
 
         function openInvasionModal() {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let html = "";
@@ -428,6 +422,7 @@
             if(won) { alert("🚨 You defeated the Rival! Awarded $25,000 and a Diamond Briefcase!"); userCash += 25000; vault.push({ id: Date.now(), unlockAt: 0 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); } 
             else { let loss = Math.floor(userCash * 0.15); userCash -= loss; alert(`🚨 The Rival destroyed your arena! ${timeout ? 'You ran out of time! ' : ''}Lost $${loss}.`); }
             saveGame(); updateUI(); localStorage.removeItem('EWF_Invasion');
+            displayCollection(); // Remove DEFEND buttons from UI
         }
 
         function triggerAIAuction() {
@@ -564,6 +559,15 @@
         function runBattle(idx, isPPV = false) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let card = col[idx];
             if(card.injured || card.trainingUntil > Date.now() || factionMode || gauntlet.active) return;
+            
+            // --- INVASION INTERCEPT ---
+            if(invasion.active) {
+                if(confirm("🚨 RIVAL INVASION ACTIVE! 🚨\n\nDo you want to send this wrestler to defend your territory?")) {
+                    fightInvasion(idx);
+                    return;
+                }
+            }
+
             if(card.stamina <= 0) { if(!card.radioactive && Math.random() < 0.5) { card.injured = true; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); alert("🚑 INJURY! Pay $500 to heal."); return; } } 
             else { if(!card.radioactive) card.stamina--; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); }
 
@@ -643,6 +647,8 @@
                         if(!card.champion && userCash >= 1000) controls.innerHTML += `<button class="gm-btn btn-ppv" onclick="ppvMatch(${index})">PPV TITLE ($1000)</button>`; 
                         if(card.dupes >= 2 && card.grade < 10) controls.innerHTML += `<button class="gm-btn btn-forge" onclick="forgeCard(${index})">FORGE 10</button>`; 
                         if(!card.radioactive) controls.innerHTML += `<button class="gm-btn btn-splice" onclick="spliceCard(${index})">🧪 SPLICE ($10k+Gear)</button>`;
+                        // --- INVASION BUTTON OVERRIDE ---
+                        if(invasion.active) controls.innerHTML += `<button class="gm-btn" style="background:var(--red); color:white; border-color:white; box-shadow:0 0 10px rgba(231,76,60,0.8); animation:pulse 1s infinite;" onclick="fightInvasion(${index})">⚔️ DEFEND INVASION</button>`;
                     }
                     container.appendChild(controls); grid.appendChild(container);
                 } else if(isHof) { hofGrid.appendChild(container); } else { grid.appendChild(container); } 
