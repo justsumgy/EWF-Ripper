@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF RIPPED (TCG)</title>
+    <title>EWF RIPPED (TCG) - v7.2</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,11 +16,7 @@
         #ticker-text { display: inline-block; animation: scroll-ticker 40s linear infinite; font-weight: 700; }
         @keyframes scroll-ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
 
-        /* STATIC EARLY ACCESS BAR */
-        #early-access { position: fixed; top: 50px; left: 20px; background: var(--red); color: white; padding: 6px 12px; font-weight: 900; border-radius: 4px; font-size: 11px; z-index: 9999; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); }
-
-        #invasion-banner { position: fixed; top: 0; left: 0; width: 100%; background: #8b0000; border-bottom: 3px solid #ff0000; color: white; font-size: 20px; font-weight: 900; padding: 12px; z-index: 10000; display: none; cursor: pointer; animation: flash-red 1s infinite alternate; text-shadow: 0 0 10px black; }
-        @keyframes flash-red { from { background: #8b0000; } to { background: #ff0000; } }
+        #early-access { position: fixed; top: 60px; left: 20px; background: var(--red); color: white; padding: 6px 12px; font-weight: 900; border-radius: 4px; font-size: 11px; z-index: 9999; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); }
 
         .glass-panel { background: var(--dark-glass); backdrop-filter: blur(15px); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); padding: 20px; }
         
@@ -28,67 +24,64 @@
         
         #stats-panel { flex: 1; min-width: 250px; text-align: left; }
         #cash-display { color: var(--green); font-size: 32px; font-weight: 900; }
-        #heat-display { color: #f39c12; font-size: 12px; font-weight: 900; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        #heat-display { color: #f39c12; font-size: 12px; font-weight: 900; margin-top: 5px; text-transform: uppercase; }
         
         #social-feed { flex: 1.2; min-width: 300px; text-align: left; max-height: 200px; overflow-y: hidden; }
         .tweet { font-size: 11px; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
         #action-panel { flex: 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
         .main-btn { padding: 10px; font-size: 10px; font-weight: 900; color: white; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; cursor: pointer; text-transform: uppercase; }
-        
-        /* DILEMMA MODAL */
-        #dilemma-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 20000; display: none; align-items: center; justify-content: center; }
-        .dilemma-box { width: 400px; padding: 30px; border: 2px solid var(--gold); border-radius: 16px; background: #111; text-align: center; box-shadow: 0 0 50px black; }
 
-        /* CARDS */
-        .card-container { width: 160px; min-height: 480px; display: inline-flex; flex-direction: column; align-items: center; margin: 15px; vertical-align: top; position: relative; }
-        .saved-card { width: 100%; height: 230px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); position: relative; background-color: #1a1a1a; z-index: 10; }
+        /* PACK OPENING AREA */
+        #pack-area { margin: 20px 0; min-height: 320px; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; }
         
-        /* SPEECH BUBBLES */
-        .speech-bubble { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: white; color: black; padding: 2px 8px; border-radius: 10px; font-size: 9px; font-weight: 900; white-space: nowrap; z-index: 50; box-shadow: 0 4px 10px rgba(0,0,0,0.3); opacity: 0; transition: 0.3s; pointer-events: none; }
+        #sealed-pack { width: 180px; height: 260px; background: linear-gradient(135deg, #d4af37, #ffd700, #8a6d3b); border: 3px solid white; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden; transition: 0.3s; }
+        #sealed-pack:hover { transform: scale(1.05) rotate(2deg); }
+        #sealed-pack h2 { color: black; transform: rotate(-15deg); font-weight: 900; }
+
+        .pack-card { width: 150px; height: 210px; perspective: 1000px; cursor: pointer; }
+        .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; }
+        .pack-card.flipped .card-inner { transform: rotateY(180deg); }
+        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2); }
+        .back { background: url('wrapper.jpg') center/cover; background-color: #222; border-color: var(--gold); }
+        .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
+
+        /* RUMBLE ANIMATION */
+        .super-shake { animation: rumble 0.15s linear infinite; }
+        @keyframes rumble { 0% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -2px); } 100% { transform: translate(0,0); } }
+
+        /* COLLECTION CARDS */
+        .card-container { width: 170px; min-height: 480px; display: inline-flex; flex-direction: column; align-items: center; margin: 15px; vertical-align: top; position: relative; }
+        .saved-card { width: 100%; height: 240px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); position: relative; background-color: #1a1a1a; z-index: 10; overflow: hidden; }
+        
+        .grade-label { position: absolute; top: 0; left: 0; width: 100%; background: #c00; border-bottom: 2px solid #000; color: white; text-align: center; z-index: 20; }
+        .grade-title { font-size: 8px; font-weight: 900; padding-top: 4px; }
+        .grade-score { font-size: 13px; font-weight: 900; padding-bottom: 4px; }
+        .gem-mint { background: linear-gradient(45deg, #D4AF37, #FFDF00, #D4AF37); color: black; }
+
+        .win-tag { position: absolute; top: 12px; left: 5px; background: rgba(0,0,0,0.7); color: white; padding: 2px 5px; border-radius: 4px; font-size: 10px; font-weight: 900; z-index: 30; }
+        .speech-bubble { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: white; color: black; padding: 2px 8px; border-radius: 10px; font-size: 9px; font-weight: 900; white-space: nowrap; z-index: 50; opacity: 0; transition: 0.3s; }
         .speech-active { opacity: 1; transform: translateX(-50%) translateY(-5px); }
-        .speech-bubble::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid white; }
-
-        /* ALIGNMENT ICONS */
         .align-icon { position: absolute; bottom: 8px; left: 8px; font-size: 18px; z-index: 30; filter: drop-shadow(0 0 5px black); }
 
         .gm-controls { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; width: 100%; }
-        .gm-btn { padding: 6px; font-size: 9px; color: #aaa; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; font-weight: 700; text-transform: uppercase; }
-
-        #battle-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        #battle-card { width: 300px; height: 420px; border-radius: 16px; background-size: cover; background-position: center; border: 2px solid var(--gold); }
-        #battle-text { font-size: 3em; color: white; font-weight: 900; margin-top: 30px; text-align: center; text-transform: uppercase; }
+        .gm-btn { padding: 6px; font-size: 9px; color: #ccc; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; font-weight: 700; text-transform: uppercase; }
 
         .is-holo { border-color: cyan !important; box-shadow: 0 0 15px rgba(0,255,255,0.4); }
-        .is-radioactive { border-color: #39ff14 !important; }
-        .is-mythic { border-color: #e0b0ff !important; }
     </style>
 </head>
 <body onload="initGame()">
 
-    <div id="ticker-wrap"><div id="ticker-text">LOADING EWF DATA...</div></div>
-    <div id="early-access">V7.0 PROMOTER EDITION</div>
-    <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! DEFEND YOUR TURF! (<span id="invasion-time">5:00</span>)</div>
+    <div id="ticker-wrap"><div id="ticker-text">EWF STOCK EXCHANGE OPEN... BOUTIQUE TRADING CARDS IN STOCK...</div></div>
+    <div id="early-access">V7.2 RUMBLE BUILD</div>
     
-    <div id="dilemma-modal">
-        <div class="dilemma-box glass-panel">
-            <h2 id="dilemma-title" style="color:var(--gold);">BACKSTAGE DRAMA</h2>
-            <p id="dilemma-text" style="color:#ccc; font-size:14px;"></p>
-            <div id="dilemma-options" style="display:flex; flex-direction:column; gap:10px; margin-top:20px;"></div>
-        </div>
-    </div>
-
-    <div id="battle-overlay"><div id="battle-card"></div><div id="battle-text"></div></div>
-
     <h1>EWF RIPPED</h1>
 
     <div id="dashboard" class="glass-panel">
         <div id="stats-panel">
             <div id="cash-display">$0</div>
-            <div id="income-display">+$25 / tick</div>
-            <div id="heat-display">CROWD: 😐 LUKEWARM (1.0x)</div>
-            <div id="progress-container"><div id="progress-fill"></div></div>
-            <button id="auto-btn" class="toggle-btn toggle-off" onclick="toggleAuto()" style="display:none;">AUTO-BOOK: OFF</button>
+            <div id="heat-display">CROWD: 😐 LUKEWARM</div>
+            <button id="auto-btn" class="main-btn" onclick="toggleAuto()" style="display:none; margin-top:10px; width:100%;">AUTO-BOOK: OFF</button>
         </div>
 
         <div id="social-feed">
@@ -97,225 +90,127 @@
         </div>
 
         <div id="action-panel">
-            <button class="main-btn" style="border-bottom:3px solid var(--red);" onclick="ripPack(100, 0.15)">STANDARD ($100)</button>
-            <button class="main-btn" style="border-bottom:3px solid var(--gold);" onclick="ripPack(500, 0.65)">SUPER ($500)</button>
-            <button class="main-btn" style="border-bottom:3px solid silver;" onclick="ripGearPack()">GEAR ($250)</button>
-            <button class="main-btn" onclick="openArena()">🏟️ ARENA</button>
-            <button class="main-btn" onclick="openVault()">💼 VAULT</button>
-            <button class="main-btn" onclick="openBounties()">📋 BOUNTIES</button>
-            <button class="main-btn" onclick="document.getElementById('about-modal').style.display='block'">❓ HELP</button>
+            <button class="main-btn" style="border-bottom:3px solid var(--red);" onclick="buyPack(100, 0.15)">STANDARD ($100)</button>
+            <button class="main-btn" style="border-bottom:3px solid var(--gold);" onclick="buyPack(500, 0.65)">SUPER ($500)</button>
+            <button class="main-btn" onclick="hardReset()">RESET DATA</button>
         </div>
     </div>
 
-    <div id="auction-block">
-        <h2 style="color:var(--gold); font-size:18px;">🔨 DARK WEB AUCTION</h2>
-        <div id="auction-content"></div>
-    </div>
+    <div id="pack-area"></div>
 
     <div class="showcase-area">
-        <h2 style="font-weight:900; letter-spacing:2px;">MY ACTIVE ROSTER</h2>
+        <h2 style="font-weight:900;">MY ACTIVE ROSTER</h2>
         <div id="collection-grid"></div>
-    </div>
-
-    <div id="hof-section" style="display:none;">
-        <h2 style="color:var(--gold);">🏛️ HALL OF FAME</h2>
-        <div id="hof-grid"></div>
     </div>
 
     <script>
         const totalCards = 23; const folderPath = "rare ewf cards";
         let userCash = parseInt(localStorage.getItem('EWF_Cash')) || 3000;
-        let totalWins = parseInt(localStorage.getItem('EWF_Wins')) || 0;
-        let prestigeLevel = parseInt(localStorage.getItem('EWF_Prestige')) || 0;
-        let crowdHeat = 100; // 0 to 200
-        let autoBookerOwned = localStorage.getItem('EWF_AutoBooker') === 'true';
-        let autoMode = false;
-        
         let collection = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-        let market = JSON.parse(localStorage.getItem('EWF_Market')) || { boosted: 1, crashed: 2, lastUpdate: Date.now() };
-        let invasion = { active: false, timeLeft: 0, rivalName: "" };
-        let auction = { active: false, timeLeft: 0, currentBid: 0, highestBidder: "", card: null };
-
-        const rivals = [
-            { name: "Billionaire Ted", handle: "@TedMoney", trait: "greedy" },
-            { name: "The Trashman", handle: "@TrashyPromoter", trait: "scrappy" },
-            { name: "The Scrapper", handle: "@ScrapKing", trait: "aggro" }
-        ];
-
-        const moods = ["HYPED!", "I'M THE BEST.", "BORED.", "NEED A FIGHT.", "FEELING IT!", "SAD.", "READY TO RUMBLE!"];
-        const rivalTalk = [
-            "Just bought 10 packs. Got nothing but commons. This game is rigged.",
-            "If Billionaire Ted bids on my card again I'm going to lose it.",
-            "Anyone selling a Mint 10? I have cash.",
-            "I'm about to invade someone's arena. Who's ready?",
-            "Just Spliced my first card. I am a god now."
-        ];
+        let pendingPack = [];
 
         function initGame() {
-            if(autoBookerOwned) document.getElementById('auto-btn').style.display = 'block';
             updateUI(); displayCollection();
-            setInterval(tick, 30000);
-            setInterval(fastTick, 1000);
-            setInterval(aiChatTick, 15000);
-            setInterval(randomDilemma, 45000);
-            if(autoMode) setInterval(runAutoMatches, 5000);
-        }
-
-        function tick() {
-            let income = 25 * (1 + prestigeLevel) * (crowdHeat / 100);
-            userCash += Math.floor(income);
-            crowdHeat = Math.max(50, crowdHeat - 2); // Crowd gets bored slowly
-            saveGame(); updateUI();
-        }
-
-        function fastTick() {
-            if(invasion.active) {
-                invasion.timeLeft--;
-                if(invasion.timeLeft <= 0) resolveInvasion(false);
-                else {
-                    document.getElementById('invasion-banner').style.display = 'block';
-                    document.getElementById('invasion-time').innerText = Math.floor(invasion.timeLeft/60) + ":" + (invasion.timeLeft%60).toString().padStart(2,'0');
-                }
-            } else document.getElementById('invasion-banner').style.display = 'none';
-
-            // Random Speech Bubbles
-            if(Math.random() < 0.05) {
-                let cards = document.querySelectorAll('.speech-bubble');
-                if(cards.length > 0) {
-                    let r = Math.floor(Math.random() * cards.length);
-                    cards[r].innerText = moods[Math.floor(Math.random() * moods.length)];
-                    cards[r].classList.add('speech-active');
-                    setTimeout(() => cards[r].classList.remove('speech-active'), 3000);
-                }
-            }
-        }
-
-        function aiChatTick() {
-            let rival = rivals[Math.floor(Math.random() * rivals.length)];
-            let text = rivalTalk[Math.floor(Math.random() * rivalTalk.length)];
-            postTweet(text, rival.handle);
+            setInterval(() => { userCash += 25; saveGame(); updateUI(); }, 30000);
         }
 
         function postTweet(text, handle) {
             let feed = document.getElementById('social-content');
-            let tweet = `<div class="tweet"><b style="color:var(--gold);">${handle}:</b> ${text}</div>`;
-            feed.innerHTML = tweet + feed.innerHTML;
-            if(feed.children.length > 6) feed.lastElementChild.remove();
+            feed.innerHTML = `<div class="tweet"><b style="color:var(--gold);">${handle}:</b> ${text}</div>` + feed.innerHTML;
+            if(feed.children.length > 4) feed.lastElementChild.remove();
         }
 
-        function randomDilemma() {
-            if(Math.random() > 0.3) return;
-            const dList = [
-                { title: "THE TRASHMAN'S DEAL", text: "The Trashman offers you 2 'Hot' Gear packs for $300. But the police might be watching.", options: [
-                    { t: "Take the deal (-$300)", res: () => { 
-                        if(userCash < 300) return alert("Too poor!"); 
-                        userCash -= 300; 
-                        if(Math.random() > 0.3) { alert("Success! You got the gear."); inventory.drink += 2; }
-                        else { alert("BUSTED! You were fined $1000."); userCash -= 1000; }
-                    }},
-                    { t: "Refuse", res: () => {} }
-                ]},
-                { title: "LOCKER ROOM UNREST", text: "A wrestler is complaining about the catering. Pay $500 to fix it or ignore them?", options: [
-                    { t: "Fix it (-$500, +20 Heat)", res: () => { userCash -= 500; crowdHeat += 20; }},
-                    { t: "Ignore them (-10 Heat)", res: () => { crowdHeat -= 10; }}
-                ]}
-            ];
-            let d = dList[Math.floor(Math.random() * dList.length)];
-            showDilemma(d);
+        function buyPack(cost, holoChance) {
+            if(userCash < cost) return alert("Not enough cash!");
+            userCash -= cost;
+            pendingPack = [];
+            for(let i=0; i<5; i++) {
+                let num = Math.floor(Math.random() * totalCards) + 1;
+                let holo = Math.random() < holoChance;
+                let grade = Math.floor(Math.random() * 4) + 7;
+                pendingPack.push({ img: `card (${num}).jpg`, wins: 0, holo: holo, grade: grade, alignment: Math.random() > 0.5 ? "face" : "heel" });
+            }
+            renderSealedPack();
+            updateUI();
         }
 
-        function showDilemma(d) {
-            document.getElementById('dilemma-title').innerText = d.title;
-            document.getElementById('dilemma-text').innerText = d.text;
-            let optBox = document.getElementById('dilemma-options');
-            optBox.innerHTML = "";
-            d.options.forEach(o => {
-                let btn = document.createElement('button');
-                btn.className = "modal-btn";
-                btn.innerText = o.t;
-                btn.onclick = () => { o.res(); document.getElementById('dilemma-modal').style.display = 'none'; updateUI(); };
-                optBox.appendChild(btn);
+        function renderSealedPack() {
+            const area = document.getElementById('pack-area');
+            area.innerHTML = `<div id="sealed-pack" onclick="openPack()"><h2>RIP!</h2></div>`;
+        }
+
+        function openPack() {
+            const area = document.getElementById('pack-area');
+            area.innerHTML = "";
+            pendingPack.forEach((card, i) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = "pack-card";
+                // TRIGGER RUMBLE IF RARE
+                let shakeClass = (card.holo || card.grade === 10) ? "super-shake" : "";
+                
+                cardDiv.innerHTML = `
+                    <div class="card-inner ${shakeClass}">
+                        <div class="back"></div>
+                        <div class="front" style="background-image: url('${folderPath}/${card.img}'); ${card.holo ? 'border-color:cyan;' : ''}">
+                            <div class="grade-label ${card.grade === 10 ? 'gem-mint' : ''}">
+                                <div class="grade-title">EWF AUTHENTIC</div>
+                                <div class="grade-score">MINT ${card.grade}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                cardDiv.onclick = function() {
+                    if(!this.classList.contains('flipped')) {
+                        this.classList.add('flipped');
+                        this.querySelector('.card-inner').classList.remove('super-shake');
+                        saveCard(card);
+                    }
+                };
+                area.appendChild(cardDiv);
             });
-            document.getElementById('dilemma-modal').style.display = 'flex';
+        }
+
+        function saveCard(card) {
+            collection.push(card);
+            saveGame();
+            displayCollection();
+            if(card.holo) postTweet("JUST SAW A HOLO PULL! CRAZY!", "@PackPro");
         }
 
         function displayCollection() {
             const grid = document.getElementById('collection-grid');
             grid.innerHTML = "";
             collection.forEach((card, i) => {
-                if(!card.alignment) card.alignment = Math.random() > 0.5 ? "face" : "heel";
                 const container = document.createElement('div');
                 container.className = "card-container";
-                
-                let alignIcon = card.alignment === "face" ? "😇" : "💀";
-                let mood = moods[Math.floor(Math.random() * moods.length)];
-
                 container.innerHTML = `
-                    <div class="speech-bubble">${mood}</div>
-                    <div class="saved-card ${card.holo ? 'is-holo' : ''} ${card.radioactive ? 'is-radioactive' : ''}" 
-                         style="background-image: url('${folderPath}/${card.img}'); background-size: cover;">
+                    <div class="speech-bubble">READY!</div>
+                    <div class="saved-card ${card.holo ? 'is-holo' : ''}" style="background-image: url('${folderPath}/${card.img}'); background-size: cover;">
                         <div class="grade-label ${card.grade === 10 ? 'gem-mint' : ''}">
+                            <div class="grade-title">EWF AUTHENTIC</div>
                             <div class="grade-score">MINT ${card.grade}</div>
                         </div>
-                        <div class="align-icon">${alignIcon}</div>
-                        <div class="win-count">${card.wins}W</div>
+                        <div class="win-tag">${card.wins}W</div>
+                        <div class="align-icon">${card.alignment === "face" ? "😇" : "💀"}</div>
                     </div>
                     <div class="gm-controls">
-                        <button class="gm-btn btn-sell" onclick="runBattle(${i})">FIGHT</button>
-                        <button class="gm-btn" onclick="sellCard(${i})">SELL ($${getCardValue(card)})</button>
-                        ${invasion.active ? `<button class="gm-btn" style="background:var(--red); color:white;" onclick="fightInvasion(${i})">DEFEND</button>` : ''}
+                        <button class="gm-btn" onclick="sellCard(${i})">SELL ($${(card.grade * 20)})</button>
                     </div>
                 `;
                 grid.appendChild(container);
             });
         }
 
-        function runBattle(idx) {
-            let card = collection[idx];
-            const overlay = document.getElementById('battle-overlay');
-            const bText = document.getElementById('battle-text');
-            overlay.style.display = 'flex';
-            document.getElementById('battle-card').style.backgroundImage = `url('${folderPath}/${card.img}')`;
-            
-            let win = Math.random() < 0.6;
-            bText.innerText = "MATCH IN PROGRESS...";
-            
-            setTimeout(() => {
-                if(win) {
-                    bText.innerText = "WINNER!";
-                    card.wins++;
-                    crowdHeat += 5;
-                    postTweet(`${card.alignment === 'face' ? '😇' : '💀'} just won a huge match! Crowd is going wild!`, "FanNetwork");
-                } else {
-                    bText.innerText = "DEFEAT...";
-                }
-                saveGame();
-                setTimeout(() => { overlay.style.display='none'; displayCollection(); updateUI(); }, 1500);
-            }, 2000);
-        }
-
         function updateUI() {
             document.getElementById('cash-display').innerText = "$" + userCash.toLocaleString();
-            let heatLevel = crowdHeat > 150 ? "🔥 ON FIRE" : crowdHeat > 100 ? "😊 HOT" : "😐 LUKEWARM";
-            document.getElementById('heat-display').innerText = `CROWD: ${heatLevel} (${(crowdHeat/100).toFixed(1)}x)`;
-            document.getElementById('progress-fill').style.width = Math.min(crowdHeat, 100) + "%";
         }
 
-        function ripPack(cost, holoChance) {
-            if(userCash < cost) return alert("Not enough cash!");
-            userCash -= cost;
-            let num = Math.floor(Math.random() * totalCards) + 1;
-            let holo = Math.random() < holoChance;
-            collection.push({ img: `card (${num}).jpg`, wins: 0, holo: holo, grade: Math.floor(Math.random()*4)+7, alignment: Math.random() > 0.5 ? "face" : "heel" });
-            saveGame(); displayCollection(); updateUI();
-            if(holo) postTweet("OMG! Just saw a legendary pull! The luck is insane! ✨", "@PackAddict");
+        function saveGame() { 
+            localStorage.setItem('EWF_Cash', userCash); 
+            localStorage.setItem('EWF_Collection', JSON.stringify(collection)); 
         }
 
-        function getCardValue(card) { return (card.wins * 10) + (card.holo ? 500 : 50); }
-        function saveGame() { localStorage.setItem('EWF_Cash', userCash); localStorage.setItem('EWF_Collection', JSON.stringify(collection)); }
-        function sellCard(i) { userCash += getCardValue(collection[i]); collection.splice(i, 1); saveGame(); displayCollection(); updateUI(); }
-        function toggleAuto() { autoMode = !autoMode; }
-        // Remaining functions like ripGear, Arena, etc would follow the same logic as previous versions.
+        function hardReset() { localStorage.clear(); location.reload(); }
     </script>
 </body>
 </html>
