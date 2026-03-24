@@ -12,7 +12,7 @@
 
         body { background: url('background.jpg') center/cover no-repeat fixed; background-color: #111; color: white; font-family: 'Montserrat', sans-serif; text-align: center; padding: 0; margin: 0; overflow-x: hidden; user-select: none; transition: background 1s ease-in-out, box-shadow 0.5s; }
         
-        #ticker-wrap { background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--gold); padding: 8px; overflow: hidden; white-space: nowrap; font-size: 13px; color: #ddd; position: relative; z-index: 100; letter-spacing: 2px; text-transform: uppercase; }
+        #ticker-wrap { background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--gold); padding: 8px; overflow: hidden; white-space: nowrap; font-size: 13px; color: #ddd; position: relative; z-index: 1000; letter-spacing: 2px; text-transform: uppercase; }
         #ticker-text { display: inline-block; animation: scroll-ticker 40s linear infinite; font-weight: 700; }
         @keyframes scroll-ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
 
@@ -32,9 +32,8 @@
         #progress-container { width: 100%; height: 8px; background: #222; border-radius: 4px; margin-top: 12px; overflow: hidden; box-shadow: inset 0 0 5px black; }
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), #fff, var(--gold)); background-size: 200% 100%; transition: width 0.5s ease-out; }
 
-        /* THE DIRT SHEET FEED */
-        #social-feed { flex: 1; min-width: 250px; text-align: left; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-        .tweet { font-size: 12px; margin-bottom: 8px; line-height: 1.4; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; animation: slideInFeed 0.3s ease-out forwards; }
+        #social-feed { flex: 1; min-width: 250px; text-align: left; position: relative; overflow: hidden; display: flex; flex-direction: column; max-height: 250px; }
+        .tweet { font-size: 11px; margin-bottom: 8px; line-height: 1.4; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; animation: slideInFeed 0.3s ease-out forwards; }
         @keyframes slideInFeed { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
         #action-panel { flex: 2; min-width: 400px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; align-content: start; }
@@ -82,7 +81,6 @@
 
         .showcase-area { background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 40px; box-shadow: inset 0 0 50px rgba(0,0,0,0.8); min-height: 400px; }
         
-        /* THE FIX: Flexible height card container */
         .card-container { width: 160px; min-height: 460px; height: auto; perspective: 1000px; display: inline-flex; flex-direction: column; align-items: center; margin: 15px; vertical-align: top; position: relative; padding-bottom: 10px; }
         
         .saved-card { width: 100%; height: 230px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); position: relative; transition: transform 0.1s ease-out, box-shadow 0.1s ease-out; cursor: pointer; transform-style: preserve-3d; box-shadow: 0 15px 25px rgba(0,0,0,0.6); padding-top: 30px; background-color: #1a1a1a; flex-shrink: 0; }
@@ -90,24 +88,26 @@
         .gm-controls { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; width: 100%; }
         .gm-btn { padding: 6px; font-size: 10px; color: #aaa; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; font-weight: 700; transition: all 0.2s; font-family: inherit; letter-spacing: 0.5px; text-transform: uppercase; }
         
-        .btn-sell:hover { border-color: var(--green); color: var(--green); background: rgba(46,204,113,0.1); }
-        .btn-auction:hover { border-color: var(--gold); color: var(--gold); background: rgba(212,175,55,0.1); }
-        .btn-gear:hover { border-color: silver; color: white; background: rgba(255,255,255,0.1); }
-        .btn-train:hover { border-color: var(--blue); color: var(--blue); background: rgba(52,152,219,0.1); }
-        .btn-ppv:hover { border-color: var(--purple); color: var(--purple); background: rgba(155,89,182,0.1); }
-        .btn-forge:hover { border-color: #f39c12; color: #f39c12; background: rgba(243,156,18,0.1); }
-        .btn-splice:hover { border-color: #39ff14; color: #39ff14; background: rgba(57,255,20,0.1); }
-        .btn-heal { border-color: rgba(231,76,60,0.5); color: var(--red); } .btn-heal:hover { border-color: var(--red); background: rgba(231,76,60,0.1); }
+        .btn-sell:hover { border-color: var(--green); color: var(--green); background: rgba(46, 204, 113, 0.1); }
+        .btn-auction:hover { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
+        .btn-gear:hover { border-color: silver; color: white; background: rgba(255, 255, 255, 0.1); }
+        .btn-train:hover { border-color: var(--blue); color: var(--blue); background: rgba(52, 152, 219, 0.1); }
+        .btn-ppv:hover { border-color: var(--purple); color: var(--purple); background: rgba(155, 89, 182, 0.1); }
+        .btn-forge:hover { border-color: #f39c12; color: #f39c12; background: rgba(243, 156, 18, 0.1); }
+        .btn-splice:hover { border-color: #39ff14; color: #39ff14; background: rgba(57, 255, 20, 0.1); }
+        .btn-heal { border-color: rgba(231, 76, 60, 0.5); color: var(--red); } .btn-heal:hover { border-color: var(--red); background: rgba(231, 76, 60, 0.1); }
 
-        #music-toggle { position: fixed; top: 50px; right: 20px; background: rgba(0,0,0,0.8); border: 1px solid var(--gold); font-size: 12px; font-weight: bold; color: white; cursor: pointer; padding: 8px 12px; border-radius: 8px; z-index: 9999; transition: 0.2s; font-family: inherit; text-transform: uppercase; }
+        #music-toggle { position: fixed; top: 60px; right: 20px; background: rgba(0,0,0,0.8); border: 1px solid var(--gold); font-size: 12px; font-weight: bold; color: white; cursor: pointer; padding: 8px 12px; border-radius: 8px; z-index: 9999; transition: 0.2s; font-family: inherit; text-transform: uppercase; }
         #music-toggle:hover { background: var(--gold); color: black; }
-        #early-access { position: fixed; top: 50px; left: 20px; background: var(--red); color: white; padding: 6px 10px; font-weight: 900; border-radius: 4px; font-size: 11px; z-index: 9999; letter-spacing: 1px; pointer-events: none; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        
+        /* FIXED EARLY ACCESS BAR */
+        #early-access { position: fixed; top: 60px; left: 20px; background: var(--red); color: white; padding: 6px 10px; font-weight: 900; border-radius: 4px; font-size: 11px; z-index: 9999; letter-spacing: 1px; pointer-events: none; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         
         #record-box { max-width: 350px; margin: 40px auto; padding: 25px; text-align: center; }
         #record-box h3 { margin:0; color:var(--gold); font-size: 16px; letter-spacing: 2px; }
         #record-display { font-size: 40px; font-weight: 900; letter-spacing: 2px; margin: 10px 0; }
-        .win-text { color: var(--green); text-shadow: 0 0 15px rgba(46,204,113,0.4); }
-        .loss-text { color: var(--red); text-shadow: 0 0 15px rgba(231,76,60,0.4); }
+        .win-text { color: var(--green); text-shadow: 0 0 15px rgba(46, 204, 113, 0.4); }
+        .loss-text { color: var(--red); text-shadow: 0 0 15px rgba(231, 76, 60, 0.4); }
         #hof-section { margin-top: 50px; padding: 50px 0; background: rgba(0,0,0,0.6); border-top: 1px solid var(--gold); }
 
         #pack-area { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; min-height: 250px; align-items: center; }
@@ -293,14 +293,37 @@
         let invasion = JSON.parse(localStorage.getItem('EWF_Invasion')) || { active: false, timeLeft: 0, rivalName: "" };
 
         const aiRivals = [
-            { name: "Billionaire Ted", style: "whale" },
-            { name: "The Trashman", style: "cheap" },
-            { name: "The Scrapper", style: "aggro" }
+            { name: "Billionaire Ted", style: "whale", handle: "@TedMoney" },
+            { name: "The Trashman", style: "cheap", handle: "@TrashyPromoter" },
+            { name: "The Scrapper", style: "aggro", handle: "@ScrapKing" }
         ];
 
         let tweets = [
             `<div class="tweet"><b style="color:var(--gold);">@EWF_Insider:</b> Welcome to EWF Ripped v6.0! The world is watching...</div>`
         ];
+
+        const chatLogic = {
+            rivalBeef: [
+                "Just outbid @YOU at the auction. Too easy. 💸",
+                "I'm about to invade someone's arena. Better have your best cards ready. 🚨",
+                "Why is Billionaire Ted always bidding on my targets? Pissing me off.",
+                "The Scrapper is literally just a bot. Zero strategy.",
+                "Anyone selling a Mint 10? I'm sitting on a mountain of cash."
+            ],
+            fanTheories: [
+                "I heard the Raid Boss is dropping a Mythic tonight. Is that true?? 👹",
+                "Imagine not having a Spliced card in 2026. Low energy promoter.",
+                "Just pulled Card #7. The art is actually insane.",
+                "Anyone else notice the stock market crashing right now? Panic sell!",
+                "Who's the GOAT? My money is on the current champion."
+            ],
+            marketReactions: [
+                "Card #REPLACE_BOOST is trending?! I sold mine yesterday! 😭",
+                "Finally, Card #REPLACE_BOOST is getting the respect it deserves.",
+                "Card #REPLACE_CRASH is a scam. Stay away from it.",
+                "Buy the dip on Card #REPLACE_CRASH. Mark my words."
+            ]
+        };
 
         const arenas = [
             { name: "Local Gym", income: 25, cost: 0, bg: "url('background.jpg') center/cover no-repeat fixed" },
@@ -321,12 +344,34 @@
             setInterval(() => { tick(); }, 30000); 
             setInterval(() => { fastTick(); }, 1000); 
             setInterval(() => { if(autoMode) runAutoMatches(); }, 5000);
+            setInterval(generateChat, 15000); // Generate new AI Chat every 15 seconds
+        }
+
+        function generateChat() {
+            let type = Math.random();
+            let text = "";
+            let user = "";
+
+            if (type < 0.33) {
+                let rival = aiRivals[Math.floor(Math.random() * aiRivals.length)];
+                text = chatLogic.rivalBeef[Math.floor(Math.random() * chatLogic.rivalBeef.length)];
+                user = rival.handle;
+            } else if (type < 0.66) {
+                text = chatLogic.fanTheories[Math.floor(Math.random() * chatLogic.fanTheories.length)];
+                user = "@SmarkFan_" + Math.floor(Math.random()*999);
+            } else {
+                text = chatLogic.marketReactions[Math.floor(Math.random() * chatLogic.marketReactions.length)]
+                       .replace("REPLACE_BOOST", market.boosted)
+                       .replace("REPLACE_CRASH", market.crashed);
+                user = "@EWF_StockBot";
+            }
+            postTweet(text, user);
         }
 
         function postTweet(text, user) {
             let userColors = ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#9b59b6'];
             let color = userColors[Math.floor(Math.random() * userColors.length)];
-            tweets.unshift(`<div class="tweet"><b style="color:${color};">@${user}:</b> <span style="color:#ccc;">${text}</span></div>`);
+            tweets.unshift(`<div class="tweet"><b style="color:${color};">${user}:</b> <span style="color:#ccc;">${text}</span></div>`);
             if(tweets.length > 5) tweets.pop();
             document.getElementById('social-content').innerHTML = tweets.join('');
         }
