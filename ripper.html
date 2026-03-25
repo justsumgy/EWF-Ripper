@@ -43,10 +43,11 @@
         
         #dashboard { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 20px; max-width: 1200px; margin: 20px auto; }
         
-        #stats-panel { flex: 1; min-width: 250px; text-align: left; display: flex; flex-direction: column; justify-content: center; }
+        #stats-panel { flex: 1; min-width: 250px; text-align: left; display: flex; flex-direction: column; justify-content: center; position: relative; }
         #cash-display { color: var(--green); font-size: 32px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
         #income-display { color: #aaa; font-size: 13px; margin-top: 5px; font-weight: 700; letter-spacing: 1px; }
         #rank-display { color: var(--gold); margin-top: 10px; font-size: 14px; font-weight: 900; }
+        #progress-text { position: absolute; right: 20px; top: 110px; font-size: 10px; font-weight: 900; color: cyan; letter-spacing: 1px; }
         #progress-container { width: 100%; height: 8px; background: #222; border-radius: 4px; margin-top: 12px; overflow: hidden; box-shadow: inset 0 0 5px black; }
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), #fff, var(--gold)); background-size: 200% 100%; transition: width 0.5s ease-out; }
 
@@ -79,6 +80,7 @@
         .btn-faction { border-bottom: 3px solid cyan; } .btn-faction:hover:not(:disabled) { background: rgba(0, 255, 255, 0.2); border-color: cyan; }
         .btn-bounty { border-bottom: 3px solid #f39c12; } .btn-bounty:hover:not(:disabled) { background: rgba(243, 156, 18, 0.2); border-color: #f39c12; }
         .btn-about { border-bottom: 3px solid #fff; } .btn-about:hover:not(:disabled) { background: rgba(255, 255, 255, 0.2); }
+        .btn-checklist { border-bottom: 3px solid #39ff14; } .btn-checklist:hover:not(:disabled) { background: rgba(57, 255, 20, 0.2); border-color: #39ff14; }
 
         .toggle-btn { margin-top: 15px; padding: 10px 15px; font-size: 12px; font-weight: 900; border-radius: 8px; cursor: pointer; color: white; transition: 0.3s; display: none; width: 100%; border: 1px solid; text-transform: uppercase; letter-spacing: 1px; }
         .toggle-off { background: rgba(0,0,0,0.6); color: #888; border-color: #444; }
@@ -167,12 +169,20 @@
         .is-holo { border-color: cyan !important; box-shadow: 0 0 15px rgba(0,255,255,0.4); }
         .saved-card:hover .shine-layer, .saved-card:hover .sparkle-layer { opacity: 1; }
 
-        /* HOLO VARIANTS */
+        /* HOLO VARIANTS (Including New Interactivity) */
         .holo-standard { position: absolute; inset: 0; border-radius: 10px; background-image: linear-gradient(110deg, transparent 15%, rgba(255,0,255,0.4) 30%, rgba(0,255,255,0.4) 50%, rgba(255,255,0,0.4) 70%, transparent 85%); background-size: 200% 200%; mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
         .holo-cracked-ice { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(0,255,255,0.5) 45%, rgba(255,255,255,0.9) 50%, rgba(0,255,255,0.5) 55%, rgba(255,255,255,0) 100%), repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px); background-size: 300% 300%; mix-blend-mode: overlay; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
         .holo-gold-vinyl { position: absolute; inset: 0; border-radius: 10px; background: repeating-radial-gradient(circle at center, transparent, transparent 4px, rgba(212,175,55,0.4) 4px, rgba(212,175,55,0.4) 8px), linear-gradient(45deg, rgba(255,215,0,0.2), rgba(255,215,0,0.8), rgba(255,215,0,0.2)); mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
         .holo-cosmic { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle, rgba(255,0,255,0.5) 0%, rgba(0,255,255,0.5) 50%, rgba(0,0,0,0) 100%), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-size: 150% 150%, auto; mix-blend-mode: screen; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
-        .is-holo .holo-standard, .is-holo .holo-cracked-ice, .is-holo .holo-gold-vinyl, .is-holo .holo-cosmic { opacity: 0.9 !important; animation: ambient-shimmer 4s ease-in-out infinite; }
+        
+        /* NEW ULTRA-RARES (Reactive to mouse position --lx, --ly) */
+        .holo-obsidian { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,0,0,0.9)), repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,0,255,0.3) 15px, rgba(0,255,255,0.3) 30px); mix-blend-mode: hard-light; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; box-shadow: inset 0 0 20px rgba(0,0,0,1); }
+        .holo-plasma { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(57,255,20,0.8), transparent 40%), radial-gradient(circle at calc(100% - var(--lx, 50%)) calc(100% - var(--ly, 50%)), rgba(255,20,147,0.8), transparent 40%); mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+        .holo-prismatic { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.8) 25%, transparent 30%), repeating-radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); mix-blend-mode: color-dodge; background-size: 200% 200%; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+        .holo-ghost { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(255,255,255,1) 0%, rgba(200,200,200,0.5) 30%, transparent 60%); mix-blend-mode: screen; backdrop-filter: grayscale(100%) contrast(150%); z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+
+        .is-holo .holo-standard, .is-holo .holo-cracked-ice, .is-holo .holo-gold-vinyl, .is-holo .holo-cosmic, .is-holo .holo-obsidian, .is-holo .holo-plasma, .is-holo .holo-prismatic, .is-holo .holo-ghost { opacity: 0.9 !important; }
+        .is-holo .holo-standard, .is-holo .holo-cracked-ice, .is-holo .holo-gold-vinyl, .is-holo .holo-cosmic { animation: ambient-shimmer 4s ease-in-out infinite; }
         @keyframes ambient-shimmer { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         /* SERIAL NUMBERS */
@@ -235,6 +245,7 @@
     
     <div id="battle-overlay" onclick="if(!factionSimulating && !gauntlet.active && !tvWarMode) this.style.display='none';"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
 
+    <div id="checklist-modal" class="modal" style="width: 550px;"><h2>📋 COLLECTOR CHECKLIST</h2><div id="checklist-list"></div><button class="close-btn" onclick="document.getElementById('checklist-modal').style.display='none'">CLOSE</button></div>
     <div id="arena-modal" class="modal"><h2>🏟️ VENUE INFRASTRUCTURE</h2><div id="arena-list"></div><button class="close-btn" onclick="document.getElementById('arena-modal').style.display='none'">CLOSE</button></div>
     <div id="bounty-modal" class="modal"><h2>📋 PROMOTER BOUNTY BOARD</h2><div id="bounty-list"></div><button class="close-btn" onclick="document.getElementById('bounty-modal').style.display='none'">CLOSE</button></div>
     <div id="gear-modal" class="modal"><h2>🎒 EQUIP GEAR</h2><p style="color:#aaa; font-size:12px; text-align:center;">Select an item to use on this wrestler.</p><div id="gear-list"></div><button class="close-btn" onclick="document.getElementById('gear-modal').style.display='none'">CANCEL</button></div>
@@ -297,6 +308,7 @@
             <div id="cash-display">CONTRACT FUNDS: $0</div>
             <div id="income-display">PASSIVE INCOME: $25 / tick</div>
             <div id="rank-display">RANK: ROOKIE PROMOTER</div>
+            <div id="progress-text">COLLECTION: 0 / 38</div>
             <div id="progress-container"><div id="progress-fill"></div></div>
             
             <div id="sentiment-wrap">
@@ -323,6 +335,7 @@
             <button class="main-btn rip-super" id="rip-super-btn" onclick="ripPack(500, 0.25)">SUPER HOLO ($500)</button>
             <button class="main-btn btn-box" id="rip-box-btn" onclick="ripBox(2000, 0.15)">EWF BOX ($2000)</button>
             <button class="main-btn rip-gear" id="rip-gear-btn" onclick="ripGearPack()">GEAR PACK ($250)</button>
+            <button class="main-btn btn-checklist" onclick="openChecklist()">📋 CHECKLIST</button>
             <button class="main-btn btn-vault" onclick="openVault()">💼 VAULT</button>
             <button class="main-btn btn-arena" onclick="openArena()">🏟️ ARENA</button>
             <button class="main-btn btn-shredder" onclick="openShredder()">☢️ SHREDDER</button>
@@ -530,6 +543,34 @@
                 if(c.serial === undefined) { c.serial = null; mod = true; }
             });
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col));
+        }
+
+        // --- NEW FEATURE: CHECKLIST ---
+        function openChecklist() {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let uniqueIds = new Set();
+            col.forEach(c => {
+                if(!c.botched) {
+                    let numMatch = c.img.match(/\d+/);
+                    if(numMatch) uniqueIds.add(parseInt(numMatch[0]));
+                }
+            });
+
+            let html = `<div style="text-align:center; color:var(--gold); font-size:20px; font-weight:900; margin-bottom:15px; letter-spacing:1px;">UNIQUE CARDS: <span style="color:cyan;">${uniqueIds.size} / 38</span></div>`;
+            html += `<div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center; max-height:400px; overflow-y:auto; padding-right:5px;">`;
+            
+            for(let i=1; i<=38; i++) {
+                let hasCard = uniqueIds.has(i);
+                let bg = hasCard ? `url('${folderPath}/card (${i}).jpg') center/cover` : '#222';
+                let border = hasCard ? '2px solid var(--green)' : '2px solid #444';
+                let opacity = hasCard ? '1' : '0.4';
+                let icon = hasCard ? '' : '?';
+                let shadow = hasCard ? 'box-shadow: 0 0 10px rgba(46,204,113,0.5);' : '';
+                html += `<div style="width:50px; height:75px; background:${bg}; border:${border}; opacity:${opacity}; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#777; font-size:24px; ${shadow}">${icon}</div>`;
+            }
+            html += `</div>`;
+            document.getElementById('checklist-list').innerHTML = html;
+            document.getElementById('checklist-modal').style.display = 'block';
         }
 
         function triggerLockerRoomEvent() {
@@ -884,7 +925,7 @@
             saveGame(); updateUI(); openVault();
         }
 
-        // EXISTING FUNCTIONS (Modified seamlessly to accept new features)
+        // EXISTING FUNCTIONS
         function triggerInvasion() { 
             let rival = aiRivals[Math.floor(Math.random() * aiRivals.length)];
             invasion = { active: true, timeLeft: 300, rivalName: rival.name }; 
@@ -998,7 +1039,6 @@
         function toggleFactionWar() { if(userCash < 500) return; factionMode = !factionMode; factionTeam = []; document.getElementById('faction-msg').style.display = factionMode ? 'block' : 'none'; document.getElementById('faction-btn').innerHTML = factionMode ? "CANCEL WAR" : "3v3 WAR ($500)"; displayCollection(); updateUI(); }
         function confirmFactionWar() { if(confirm("Start Faction War with these 3 wrestlers for $500?")) { userCash -= 500; saveGame(); factionMode = false; document.getElementById('faction-msg').style.display = 'none'; document.getElementById('faction-btn').innerHTML = "3v3 WAR ($500)"; factionSimulating = true; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; bText.innerHTML = "FACTION WAR SIMULATING..."; bText.style.color = "var(--gold)"; 
         
-        // SYNERGY CHECK
         let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
         let hasSynergy = new Set(factionTeam.map(i => col[i].grade)).size < factionTeam.length;
         if(hasSynergy) setTimeout(()=> { bText.innerHTML = "TAG TEAM SYNERGY ACTIVATED!"; bText.style.color = "cyan"; }, 1000);
@@ -1057,13 +1097,18 @@
             document.getElementById('faction-btn').disabled = (userCash < 500) || col.length < 3 || gauntlet.active || tvWarMode;
             
             let r = "ROOKIE PROMOTER"; let next = 10; let base = 0; let isLegendary = false;
-            // Increased limits to make level up harder
-            if (col.length >= 30) { r = "LEGENDARY COLLECTOR"; next = 38; base = 30; isLegendary = true; } 
-            else if (col.length >= 20) { r = "ELITE EXECUTIVE"; next = 30; base = 20; } 
-            else if (col.length >= 10) { r = "PRO MANAGER"; next = 20; base = 10; }
+            let uniqueCount = new Set(col.filter(c => !c.botched).map(c => parseInt(c.img.match(/\d+/)[0]))).size;
+
+            if (uniqueCount >= 30) { r = "LEGENDARY COLLECTOR"; next = 38; base = 30; isLegendary = true; } 
+            else if (uniqueCount >= 20) { r = "ELITE EXECUTIVE"; next = 30; base = 20; } 
+            else if (uniqueCount >= 10) { r = "PRO MANAGER"; next = 20; base = 10; }
             
             let rankText = `RANK: ${r}`; if(prestigeLevel > 0) rankText += ` <span style="color:cyan; font-weight:900;">[PRESTIGE ${prestigeLevel}]</span>`;
-            document.getElementById('rank-display').innerHTML = rankText; document.getElementById('progress-fill').style.width = Math.min(((col.length - base) / (next - base)) * 100, 100) + "%";
+            document.getElementById('rank-display').innerHTML = rankText; 
+            
+            document.getElementById('progress-text').innerHTML = `COLLECTION: ${uniqueCount} / 38`;
+            document.getElementById('progress-fill').style.width = Math.min((uniqueCount / 38) * 100, 100) + "%";
+            
             const hofCount = col.filter(c => c.wins >= 200).length; document.getElementById('rebirth-btn').style.display = (isLegendary && hofCount >= 5) ? 'block' : 'none';
         }
 
@@ -1072,7 +1117,7 @@
             localStorage.setItem('EWF_Sentiment', sentiment);
         }
 
-        // Updated pack pulling system - 3 cards standard
+        // Updated pack pulling system
         function ripPack(cost, baseHoloChance) {
             if (userCash < cost) return; userCash -= cost; saveGame(); updateUI();
             let holoChance = baseHoloChance + shredBonus; pendingPack = [];
@@ -1091,17 +1136,21 @@
 
                 if(isHolo) {
                     let holoRoll = Math.random();
-                    if(holoRoll > 0.95) holoType = 'cosmic'; // 5% of holos
-                    else if(holoRoll > 0.80) holoType = 'gold-vinyl'; // 15% of holos
-                    else if(holoRoll > 0.50) holoType = 'cracked-ice'; // 30% of holos
-                    else holoType = 'standard'; // 50% of holos
+                    if(holoRoll > 0.99) holoType = 'ghost';           // 1%
+                    else if(holoRoll > 0.96) holoType = 'prismatic';  // 3%
+                    else if(holoRoll > 0.90) holoType = 'plasma';     // 6%
+                    else if(holoRoll > 0.80) holoType = 'obsidian';   // 10%
+                    else if(holoRoll > 0.65) holoType = 'cosmic';     // 15%
+                    else if(holoRoll > 0.45) holoType = 'gold-vinyl'; // 20%
+                    else if(holoRoll > 0.25) holoType = 'cracked-ice';// 20%
+                    else holoType = 'standard';                       // 25%
 
-                    // SERIAL NUMBER LOGIC (Very rare)
+                    // SERIAL NUMBER LOGIC
                     let serialRoll = Math.random();
-                    if(serialRoll > 0.995) serial = { current: 1, max: 1, color: 'gold' }; // 0.5% of holos
-                    else if(serialRoll > 0.97) serial = { current: Math.floor(Math.random()*10)+1, max: 10, color: 'gold' }; // 2.5% of holos
-                    else if(serialRoll > 0.90) serial = { current: Math.floor(Math.random()*50)+1, max: 50, color: 'silver' }; // 7% of holos
-                    else if(serialRoll > 0.75) serial = { current: Math.floor(Math.random()*99)+1, max: 99, color: 'silver' }; // 15% of holos
+                    if(serialRoll > 0.995) serial = { current: 1, max: 1, color: 'gold' }; 
+                    else if(serialRoll > 0.97) serial = { current: Math.floor(Math.random()*10)+1, max: 10, color: 'gold' }; 
+                    else if(serialRoll > 0.90) serial = { current: Math.floor(Math.random()*50)+1, max: 50, color: 'silver' }; 
+                    else if(serialRoll > 0.75) serial = { current: Math.floor(Math.random()*99)+1, max: 99, color: 'silver' }; 
                 }
 
                 pendingPack.push({ img: `card (${num}).jpg`, holo: isHolo, holoType: holoType, serial: serial, grade: grade });
@@ -1109,7 +1158,7 @@
             const area = document.getElementById('pack-area'); area.innerHTML = `<div id="sealed-pack" onclick="openSealedPack()"><h2 style="color:black; font-size: 28px; transform: rotate(-10deg); font-weight:900; letter-spacing:1px;">RIP PACK!</h2></div>`;
         }
 
-        // NEW FEATURE: Premium EWF Box
+        // Premium Box
         function ripBox(cost, baseHoloChance) {
             if (userCash < cost) return; userCash -= cost; saveGame(); updateUI();
             let holoChance = baseHoloChance + shredBonus; pendingPack = [];
@@ -1122,7 +1171,7 @@
                 let serial = null;
 
                 if (i === 4) {
-                    // 5th card is guaranteed RARE (Holo + High Grade)
+                    // 5th card is guaranteed RARE
                     isHolo = true;
                     grade = Math.random() > 0.5 ? 9 : 10;
                 } else {
@@ -1134,10 +1183,14 @@
 
                 if(isHolo) {
                     let holoRoll = Math.random();
-                    if(holoRoll > 0.95) holoType = 'cosmic';
-                    else if(holoRoll > 0.80) holoType = 'gold-vinyl';
-                    else if(holoRoll > 0.50) holoType = 'cracked-ice';
-                    else holoType = 'standard';
+                    if(holoRoll > 0.99) holoType = 'ghost';           // 1%
+                    else if(holoRoll > 0.96) holoType = 'prismatic';  // 3%
+                    else if(holoRoll > 0.90) holoType = 'plasma';     // 6%
+                    else if(holoRoll > 0.80) holoType = 'obsidian';   // 10%
+                    else if(holoRoll > 0.65) holoType = 'cosmic';     // 15%
+                    else if(holoRoll > 0.45) holoType = 'gold-vinyl'; // 20%
+                    else if(holoRoll > 0.25) holoType = 'cracked-ice';// 20%
+                    else holoType = 'standard';                       // 25%
 
                     let serialRoll = Math.random();
                     if(serialRoll > 0.995) serial = { current: 1, max: 1, color: 'gold' };
@@ -1167,9 +1220,8 @@
                 setTimeout(() => {
                     const cardDiv = document.createElement('div'); cardDiv.className = 'pack-card slide-in';
                     
-                    // Construct inner HTML for pack reveal
                     let inner = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${cardData.img}'); ${cardData.holo ? 'border-color:cyan; box-shadow: 0 0 15px rgba(0,255,255,0.4);' : ''}">`;
-                    if(cardData.holoType) inner += `<div class="holo-${cardData.holoType}" style="opacity:0.9; animation:ambient-shimmer 4s ease-in-out infinite;"></div>`;
+                    if(cardData.holoType) inner += `<div class="holo-${cardData.holoType}"></div>`;
                     if(cardData.serial) inner += `<div class="serial-badge serial-${cardData.serial.color}">${cardData.serial.current}/${cardData.serial.max}</div>`;
                     inner += `</div></div>`;
                     cardDiv.innerHTML = inner;
@@ -1184,7 +1236,7 @@
                                     if(cardData.serial && cardData.serial.max === 1) postTweet(`OMFG THEY JUST PULLED A 1/1 GOLD!!! THIS IS NOT A DRILL! 🤯💎`, `HobbyGod`);
                                     else if(cardData.serial) postTweet(`Numbered card hit! Out of /${cardData.serial.max}! Huge pull!`, `CardShark`);
                                     else if(cardData.grade === 10) postTweet(`Someone just pulled a GEM MINT 10! Unbelievable luck! ✨`, `PackRipperZ`);
-                                    else if(cardData.holoType && cardData.holoType !== 'standard') postTweet(`Nice ${cardData.holoType.replace('-',' ')} parallel right there. Clean corners.`, `CardGrader`);
+                                    else if(cardData.holoType && cardData.holoType !== 'standard') postTweet(`Sick ${cardData.holoType.replace('-',' ')} parallel right there. Insane shimmer.`, `CardGrader`);
                                     saveCard(cardData); 
                                 }, 1200); 
                             } else { this.classList.add('flipped'); saveCard(cardData); }
@@ -1196,7 +1248,6 @@
 
         function saveCard(cardData) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; 
-            // Serialized cards NEVER stack
             let existing = col.find(c => c.img === cardData.img && !c.botched && c.grade === cardData.grade && c.holo === cardData.holo && c.holoType === cardData.holoType && JSON.stringify(c.serial) === JSON.stringify(cardData.serial));
             
             if (!existing || cardData.serial) { 
@@ -1270,6 +1321,10 @@
             if(card.holoType === 'cracked-ice') total *= 2;
             if(card.holoType === 'gold-vinyl') total *= 5;
             if(card.holoType === 'cosmic') total *= 10;
+            if(card.holoType === 'obsidian') total *= 20;
+            if(card.holoType === 'plasma') total *= 35;
+            if(card.holoType === 'prismatic') total *= 50;
+            if(card.holoType === 'ghost') total *= 100;
             
             // Value for Serial Numbers
             if(card.serial) {
