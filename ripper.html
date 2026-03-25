@@ -19,6 +19,13 @@
         #invasion-banner { position: fixed; top: 0; left: 0; width: 100%; background: #8b0000; border-bottom: 3px solid #ff0000; color: white; font-size: 20px; font-weight: 900; padding: 12px; z-index: 10000; display: none; cursor: pointer; animation: flash-red 1s infinite alternate; text-shadow: 0 0 10px black; text-transform: uppercase; }
         @keyframes flash-red { from { background: #8b0000; box-shadow: 0 0 20px red; } to { background: #ff0000; box-shadow: 0 0 50px red; } }
 
+        /* TV WAR BANNER */
+        #tv-war-banner { position: fixed; top: 0; left: 0; width: 100%; background: #00008b; border-bottom: 3px solid #0000ff; color: white; font-size: 20px; font-weight: 900; padding: 12px; z-index: 10000; display: none; cursor: pointer; animation: flash-blue 1s infinite alternate; text-shadow: 0 0 10px black; text-transform: uppercase; }
+        @keyframes flash-blue { from { background: #00008b; box-shadow: 0 0 20px blue; } to { background: #0000ff; box-shadow: 0 0 50px blue; } }
+        
+        /* SPONSOR TRACKER */
+        #sponsor-tracker { position:fixed; top:120px; right:20px; background:rgba(0,0,0,0.8); border:1px solid #f39c12; padding:10px; color:white; z-index:9000; display:none; border-radius:8px; font-size:12px; text-align:left; line-height:1.5; box-shadow:0 0 15px rgba(243,156,18,0.3); }
+
         h1 { color: var(--gold); text-shadow: 0 0 15px var(--gold-glow); font-size: 2.8em; margin: 25px 0 5px 0; font-weight: 900; letter-spacing: -1px; }
         
         .glass-panel { background: var(--dark-glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1); padding: 20px; }
@@ -175,6 +182,10 @@
         .rumble { animation: rumble 0.1s linear infinite; }
         @keyframes rumble { 0% { transform: translate(3px,3px); } 50% { transform: translate(-3px,-3px); } 100% { transform: translate(0,0); } }
 
+        /* CLONING & SELECTION VISUALS */
+        .tv-selected { border-color: cyan !important; box-shadow: 0 0 20px rgba(0,255,255,0.8) !important; transform: scale(1.05); }
+        .is-botched { filter: grayscale(1) sepia(1) hue-rotate(-50deg) contrast(1.5); border-color: #555 !important; }
+
     </style>
 </head>
 <body onload="initGame()">
@@ -182,6 +193,8 @@
     <div id="ticker-wrap"><div id="ticker-text">LOADING EWF STOCK MARKET DATA...</div></div>
     
     <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
+    <div id="tv-war-banner" onclick="startTVWar()">📺 FRIDAY NIGHT RATINGS WAR! CLICK TO MAIN EVENT!</div>
+    <div id="sponsor-tracker"></div>
 
     <div id="prestige-border"></div>
     <div id="early-access">V6.0 EARLY ACCESS</div>
@@ -189,7 +202,7 @@
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
     <audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
-    <div id="battle-overlay" onclick="if(!factionSimulating && !gauntlet.active) this.style.display='none';"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
+    <div id="battle-overlay" onclick="if(!factionSimulating && !gauntlet.active && !tvWarMode) this.style.display='none';"><div id="battle-card"></div><div id="battle-text">FIGHTING...</div></div>
 
     <div id="arena-modal" class="modal"><h2>🏟️ VENUE INFRASTRUCTURE</h2><div id="arena-list"></div><button class="close-btn" onclick="document.getElementById('arena-modal').style.display='none'">CLOSE</button></div>
     <div id="bounty-modal" class="modal"><h2>📋 PROMOTER BOUNTY BOARD</h2><div id="bounty-list"></div><button class="close-btn" onclick="document.getElementById('bounty-modal').style.display='none'">CLOSE</button></div>
@@ -198,6 +211,7 @@
     <div id="vault-modal" class="modal"><h2>💼 MONEY IN THE BANK</h2><p style="color:#aaa; font-size:12px; text-align:center;">Briefcases randomly drop when you win matches. Wait 10 mins or pay a Bribe!</p><div id="vault-list"></div><button class="close-btn" onclick="document.getElementById('vault-modal').style.display='none'">CLOSE</button></div>
     <div id="gauntlet-modal" class="modal" style="width: 600px;"><div id="gauntlet-content"></div><button class="close-btn" id="gauntlet-close-btn" onclick="document.getElementById('gauntlet-modal').style.display='none'">SURRENDER RUN</button></div>
     <div id="invasion-modal" class="modal"><h2 style="color:var(--red); border-bottom-color:rgba(231,76,60,0.3);">🚨 DEFEND YOUR TURF 🚨</h2><p style="color:#ddd; text-align:center; font-size:13px;">Select your best available wrestler to fight <span id="invasion-rival-name" style="color:var(--gold); font-weight:bold;">the Rival Boss</span>. Win for massive loot. Lose to be vandalized.</p><div id="invasion-roster" style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:20px; max-height:300px; overflow-y:auto; padding-right:5px;"></div><button class="close-btn" onclick="document.getElementById('invasion-modal').style.display='none'">FLEE (LOSE 15% CASH)</button></div>
+    <div id="cloning-modal" class="modal"><h2>🧬 THE BLACK MARKET LAB</h2><p style="color:#aaa; font-size:12px; text-align:center;">Target a Gem 10 or Radioactive card. 60% chance to duplicate. 40% chance it creates an unsellable botched mutant.</p><div id="cloning-list" style="margin-top:15px;"></div><button class="close-btn" onclick="document.getElementById('cloning-modal').style.display='none'">LEAVE LAB</button></div>
 
     <div id="about-modal" class="modal">
         <h2>❓ PROMOTER'S MANUAL (v6.0)</h2>
@@ -257,16 +271,23 @@
             <button class="main-btn btn-faction" id="faction-btn" onclick="toggleFactionWar()">3v3 WAR ($500)</button>
             <button class="main-btn btn-bounty" onclick="openBounties()">📋 BOUNTIES</button>
             <button class="main-btn btn-about" onclick="document.getElementById('about-modal').style.display='block'">❓ HOW TO PLAY</button>
+            <button class="main-btn" style="border-bottom: 3px solid var(--purple);" onclick="openCloning()">🧬 CLONING</button>
         </div>
     </div>
     
     <h2 id="faction-msg" style="color: var(--green); display: none; text-shadow: 0 0 15px rgba(46,204,113,0.5); font-weight:900;">SELECT 3 WRESTLERS FOR COMBAT!</h2>
+    <h2 id="tv-war-msg" style="color: var(--blue); display: none; text-shadow: 0 0 15px rgba(52,152,219,0.5); font-weight:900;">SELECT 3 WRESTLERS FOR THE TV MAIN EVENT!</h2>
     
     <div id="pack-area"></div>
     
     <div id="auction-block">
         <h2 style="color:var(--gold); margin-top:0; font-weight:900; letter-spacing:1px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:15px; text-align:center;">🔨 DARK WEB AUCTION HOUSE 🔨</h2>
         <div id="auction-content"></div>
+    </div>
+
+    <div id="merch-stand" class="glass-panel" style="max-width: 400px; margin: 0 auto 20px auto; text-align: center; display:none; border-color:#f1c40f;">
+        <h3 style="margin-top:0; color:#f1c40f; letter-spacing:2px;">👕 FACE OF THE COMPANY</h3>
+        <p id="merch-sales" style="font-weight:900; font-size:18px;"></p>
     </div>
 
     <div class="showcase-area">
@@ -312,6 +333,10 @@
         // NEW SYSTEMS VARIABLES
         let sentiment = parseInt(localStorage.getItem('EWF_Sentiment')) || 50;
         let fanDemand = null;
+        let faceCardImg = localStorage.getItem('EWF_FaceImg') || null;
+        let sponsor = JSON.parse(localStorage.getItem('EWF_Sponsor')) || { active: false, progress: 0, target: 3, timeLeft: 0 };
+        let tvWarTimer = parseInt(localStorage.getItem('EWF_TVWarTimer')) || 600;
+        let tvWarMode = false; let tvWarTeam = [];
 
         const aiRivals = [
             { name: "Billionaire Ted", style: "whale", handle: "@TedMoney" },
@@ -361,14 +386,13 @@
         function initGame() {
             if(prestigeLevel > 0) document.body.classList.add('prestige-active');
             if(autoBookerOwned) document.getElementById('auto-btn').style.display = 'inline-block';
-            migrateData(); updateBackground(); updateMarketUI(); updateBossUI(); updateUI(); displayCollection(); displayRecord();
+            migrateData(); updateBackground(); updateMarketUI(); updateBossUI(); updateUI(); renderMerchStand(); displayCollection(); displayRecord();
             setInterval(() => { tick(); }, 30000); 
             setInterval(() => { fastTick(); }, 1000); 
             setInterval(() => { if(autoMode) runAutoMatches(); }, 5000);
-            setInterval(generateChat, 15000); // Generate new AI Chat every 15 seconds
+            setInterval(generateChat, 15000); 
         }
 
-        // --- NEW SENTIMENT & CHAT LOGIC ---
         function generateChat() {
             let type = Math.random();
             let text = "";
@@ -426,7 +450,7 @@
                 localStorage.removeItem('EWF_Gear'); localStorage.removeItem('EWF_Wins'); localStorage.removeItem('EWF_Losses');
                 localStorage.removeItem('EWF_Bounties'); localStorage.removeItem('EWF_Vault'); localStorage.removeItem('EWF_BossHP'); localStorage.removeItem('EWF_BossMaxHP');
                 localStorage.removeItem('EWF_AutoBooker'); localStorage.removeItem('EWF_Auction'); localStorage.removeItem('EWF_Invasion');
-                localStorage.removeItem('EWF_Sentiment');
+                localStorage.removeItem('EWF_Sentiment'); localStorage.removeItem('EWF_Sponsor'); localStorage.removeItem('EWF_FaceImg');
                 alert(`🔥 REBIRTH COMPLETE! Welcome to PRESTIGE ${prestigeLevel}! 🔥`); location.reload();
             }
         }
@@ -437,21 +461,28 @@
                 if(c.stamina === undefined) { c.stamina = 5; c.injured = false; c.streak = 0; mod = true; } 
                 if(c.baseWin === undefined) { c.baseWin = 0.5; c.trainingUntil = 0; c.buff = null; mod = true; } 
                 if(c.radioactive === undefined) { c.radioactive = false; c.mythic = false; mod = true; }
+                if(c.botched === undefined) { c.botched = false; mod = true; }
             });
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col));
         }
 
         function tick() {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; const hofCount = col.filter(c => c.wins >= 200).length; const mythicCount = col.filter(c => c.mythic).length;
-            
-            // SENTIMENT CASH MULTIPLIER (0.5x at 0% to 2.0x at 100%)
             let sentMulti = 0.5 + (sentiment / 50);
+            
             userCash += Math.floor(((arenas[currentArena].income + (hofCount * 25) + (mythicCount * 500)) * multi) * sentMulti); 
             
-            // SENTIMENT DECAY
+            // Merch Stand Income
+            if(faceCardImg) {
+                let faceCard = col.find(c => c.img === faceCardImg);
+                if(faceCard && !faceCard.injured && !faceCard.botched) {
+                    userCash += Math.floor(getCardValue(faceCard) * 0.05 * sentMulti);
+                }
+            }
+            
             sentiment = Math.max(10, sentiment - 1);
 
-            let mod = false; col.forEach(c => { if(!c.injured && !c.radioactive && c.stamina < 5) { c.stamina++; mod = true; } });
+            let mod = false; col.forEach(c => { if(!c.injured && !c.radioactive && !c.botched && c.stamina < 5) { c.stamina++; mod = true; } });
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col));
             
             if(Date.now() - market.lastUpdate > 300000) {
@@ -461,10 +492,11 @@
                 postTweet(`Market Update! Stock in Card #${market.boosted} is going to the moon! 🚀`, `WallStreetSmark`);
             }
             
-            if(!invasion.active && Math.random() < 0.05) { triggerInvasion(); }
-            if(!auction.active && Math.random() < 0.1) { triggerAIAuction(); }
+            if(!invasion.active && Math.random() < 0.05) triggerInvasion();
+            if(!auction.active && Math.random() < 0.1) triggerAIAuction();
+            if(!sponsor.active && Math.random() < 0.1) triggerSponsor();
 
-            saveGame(); updateUI(); if(mod) displayCollection();
+            saveGame(); updateUI(); renderMerchStand(); if(mod) displayCollection();
         }
 
         function fastTick() {
@@ -486,28 +518,44 @@
                 if(auction.timeLeft <= 0) { endAuction(); }
                 else { renderAuction(); localStorage.setItem('EWF_Auction', JSON.stringify(auction)); }
             } else { document.getElementById('auction-block').style.display = 'none'; }
+
+            if(sponsor.active) {
+                sponsor.timeLeft--;
+                if(sponsor.timeLeft <= 0) failSponsor();
+                else renderSponsor();
+            }
+
+            if(tvWarTimer > 0) {
+                tvWarTimer--;
+                localStorage.setItem('EWF_TVWarTimer', tvWarTimer);
+            } else if(!tvWarMode && document.getElementById('tv-war-msg').style.display === 'none') {
+                document.getElementById('tv-war-banner').style.display = 'block';
+            }
         }
 
         function toggleAuto() { autoMode = !autoMode; const btn = document.getElementById('auto-btn'); if(autoMode) { btn.className = 'toggle-btn toggle-on'; btn.innerHTML = 'AUTO-BOOK: ON'; postTweet(`The GM just turned on the Auto-Booker! Non-stop action! 🔥`, `IndieFan`); } else { btn.className = 'toggle-btn toggle-off'; btn.innerHTML = 'AUTO-BOOK: OFF'; } }
 
         function runAutoMatches() {
-            if(factionMode || gauntlet.active) return;
+            if(factionMode || gauntlet.active || tvWarMode) return;
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let fought = false;
             for(let i=0; i<col.length; i++) {
                 let card = col[i];
-                if(!card.injured && card.trainingUntil < Date.now() && card.wins < 200) {
+                if(!card.injured && card.trainingUntil < Date.now() && card.wins < 200 && !card.botched) {
                     if(card.stamina === 5 || card.radioactive) {
                         if(!card.radioactive) card.stamina--; let win = Math.random() < card.baseWin;
                         let el = document.querySelectorAll('.card-container')[i];
                         if(el) { let pop = document.createElement('div'); pop.className = 'auto-pop'; pop.innerHTML = win ? '<span style="color:var(--green);">+WIN</span>' : '<span style="color:var(--red);">-LOSS</span>'; el.appendChild(pop); setTimeout(()=>pop.remove(), 1000); }
                         if(win) { 
                             card.wins++; totalWins++; card.streak = card.streak > 0 ? card.streak+1 : 1; hitBoss(1); 
-                            // AUTO-BOOK CROWDSOURCING CHECK
                             const cNum = parseInt(card.img.match(/\d+/)[0]);
                             if(fanDemand === cNum) { sentiment = Math.min(100, sentiment + 5); fanDemand = null; }
                             if(Math.random()<0.05){ vault.push({ id: Date.now(), unlockAt: Date.now() + 10*60*1000 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); } 
+                            progressSponsor();
                         } 
-                        else { totalLosses++; card.streak = card.streak < 0 ? card.streak-1 : -1; }
+                        else { 
+                            totalLosses++; card.streak = card.streak < 0 ? card.streak-1 : -1; 
+                            if(card.img === faceCardImg) { faceCardImg = null; localStorage.removeItem('EWF_FaceImg'); postTweet(`The Face of the Company just lost... Merch sales are plummeting. 📉`, `DirtSheet`); renderMerchStand(); }
+                        }
                         fought = true;
                     }
                 }
@@ -515,6 +563,147 @@
             if(fought) { localStorage.setItem('EWF_Wins', totalWins); localStorage.setItem('EWF_Losses', totalLosses); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); displayRecord(); }
         }
 
+        // --- MERCH STAND LOGIC ---
+        function setFace(img) {
+            faceCardImg = img;
+            localStorage.setItem('EWF_FaceImg', img);
+            postTweet(`We have a new Face of the Company! Sales are through the roof! 👕`, `MerchStand`);
+            updateUI(); renderMerchStand(); displayCollection();
+        }
+        function renderMerchStand() {
+            if(!faceCardImg) { document.getElementById('merch-stand').style.display = 'none'; return; }
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let faceCard = col.find(c => c.img === faceCardImg);
+            if(!faceCard || faceCard.injured || faceCard.botched) { faceCardImg = null; localStorage.removeItem('EWF_FaceImg'); document.getElementById('merch-stand').style.display = 'none'; return; }
+            
+            document.getElementById('merch-stand').style.display = 'block';
+            let sentMulti = 0.5 + (sentiment / 50);
+            let merchIncome = Math.floor(getCardValue(faceCard) * 0.05 * sentMulti);
+            document.getElementById('merch-sales').innerHTML = `GENERATING: <span style="color:var(--green);">+$${merchIncome} / tick</span>`;
+        }
+
+        // --- SPONSOR LOGIC ---
+        function triggerSponsor() {
+            sponsor = { active: true, progress: 0, target: Math.floor(Math.random()*3)+2, timeLeft: 300, reward: (Math.floor(Math.random()*5)+5)*1000 };
+            localStorage.setItem('EWF_Sponsor', JSON.stringify(sponsor));
+            document.getElementById('sponsor-tracker').style.display = 'block';
+            postTweet(`A huge corporate sponsor just offered a bounty! Check the tracker! 📝`, `BizInsider`);
+        }
+        function progressSponsor() {
+            if(!sponsor.active) return;
+            sponsor.progress++;
+            if(sponsor.progress >= sponsor.target) {
+                alert(`📝 SPONSOR CONTRACT COMPLETE! You earned $${sponsor.reward}!`);
+                userCash += sponsor.reward; sentiment = Math.min(100, sentiment + 10);
+                inventory.chair++; inventory.drink++; localStorage.setItem('EWF_Gear', JSON.stringify(inventory));
+                sponsor.active = false; document.getElementById('sponsor-tracker').style.display = 'none';
+            }
+            localStorage.setItem('EWF_Sponsor', JSON.stringify(sponsor));
+            renderSponsor();
+        }
+        function failSponsor() {
+            alert("📝 SPONSOR CONTRACT FAILED! The fans are disappointed.");
+            sentiment = Math.max(0, sentiment - 15); sponsor.active = false;
+            document.getElementById('sponsor-tracker').style.display = 'none';
+            localStorage.setItem('EWF_Sponsor', JSON.stringify(sponsor)); saveGame(); updateUI();
+        }
+        function renderSponsor() {
+            if(!sponsor.active) { document.getElementById('sponsor-tracker').style.display = 'none'; return; }
+            document.getElementById('sponsor-tracker').style.display = 'block';
+            let m = Math.floor(sponsor.timeLeft/60); let s = sponsor.timeLeft%60;
+            document.getElementById('sponsor-tracker').innerHTML = `<h4 style="margin:0; color:var(--gold);">📝 SPONSOR CONTRACT</h4>Win ${sponsor.target} Matches<br>Progress: <span style="color:cyan;">${sponsor.progress}/${sponsor.target}</span><br>Time: <span style="color:var(--red);">${m}:${s<10?'0':''}${s}</span>`;
+        }
+
+        // --- TV RATINGS WAR ---
+        function startTVWar() {
+            document.getElementById('tv-war-banner').style.display = 'none';
+            tvWarMode = true; tvWarTeam = [];
+            document.getElementById('tv-war-msg').style.display = 'block';
+            displayCollection();
+        }
+        function confirmTVWar() {
+            tvWarMode = false; document.getElementById('tv-war-msg').style.display = 'none';
+            const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
+            overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; 
+            bText.innerHTML = "CALCULATING RATINGS..."; bText.style.color = "var(--blue)";
+            setTimeout(() => {
+                bCard.classList.remove('rumble');
+                let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+                let myPower = 0;
+                tvWarTeam.forEach(idx => { myPower += getCardValue(col[idx]); if(!col[idx].radioactive) col[idx].stamina--; });
+                let rivalPower = Math.floor(Math.random() * myPower * 1.5) + (500 * multi);
+                
+                if(myPower > rivalPower) {
+                    bText.innerHTML = `RATINGS WAR WON!`; bText.style.color = "var(--green)"; triggerConfetti();
+                    let steal = Math.floor(userCash * 0.05); userCash += steal; sentiment = Math.min(100, sentiment + 15);
+                    setTimeout(()=>alert(`📺 You crushed the rival network! Stole $${steal} in ad revenue!`), 500);
+                    postTweet(`EWF Ripped absolutely dominated the ratings last night! 📈`, `TV_Exec`);
+                } else {
+                    bText.innerHTML = `RATINGS TANKED!`; bText.style.color = "var(--red)";
+                    let lost = Math.floor(userCash * 0.05); userCash -= lost; sentiment = Math.max(0, sentiment - 15);
+                    setTimeout(()=>alert(`📺 The rival network beat your show! You lost $${lost} in sponsors!`), 500);
+                    postTweet(`Why was the main event so boring? Changing the channel. 📉`, `CasualViewer`);
+                }
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                tvWarTimer = 600; localStorage.setItem('EWF_TVWarTimer', tvWarTimer); saveGame();
+                setTimeout(() => { overlay.style.display = 'none'; displayCollection(); updateUI(); }, 2500);
+            }, 2000);
+        }
+
+        // --- CLONING LOGIC ---
+        function openCloning() {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let html = "";
+            col.forEach((c, i) => {
+                if((c.grade === 10 || c.radioactive) && !c.botched) {
+                    html += `<div class="modal-item">
+                        <div>Card #${c.img.match(/\d+/)[0]} ${c.grade===10?'[GEM 10]':''} ${c.radioactive?'[RADIOACTIVE]':''}</div>
+                        <div><button class="modal-btn" style="background:rgba(155,89,182,0.2); color:var(--purple); border-color:var(--purple);" onclick="attemptClone(${i})">CLONE ($250k)</button></div>
+                    </div>`;
+                }
+            });
+            if(html === "") html = "<p style='color:#aaa; text-align:center;'>You need a GEM MINT 10 or RADIOACTIVE card to clone.</p>";
+            document.getElementById('cloning-list').innerHTML = html;
+            document.getElementById('cloning-modal').style.display = 'block';
+        }
+        function attemptClone(idx) {
+            if(userCash < 250000) return alert("You need $250,000 to clone!");
+            userCash -= 250000;
+            document.getElementById('cloning-modal').style.display = 'none';
+            document.body.classList.add('screen-shake');
+            setTimeout(() => document.body.classList.remove('screen-shake'), 500);
+            
+            let col = JSON.parse(localStorage.getItem('EWF_Collection'));
+            let target = col[idx];
+            
+            if(Math.random() < 0.6) {
+                alert("🧬 CLONING SUCCESSFUL! A perfect duplicate was created!");
+                let clone = JSON.parse(JSON.stringify(target));
+                clone.dupes = 0; clone.champion = false; clone.streak = 0; clone.wins = 0;
+                col.push(clone);
+                postTweet(`Are there TWO of them now?! What is going on?! 🧬`, `ConspiracyTheorist`);
+            } else {
+                alert("⚠️ CLONING BOTCHED! The experiment failed horribly.");
+                let botch = JSON.parse(JSON.stringify(target));
+                botch.botched = true; botch.grade = 1; botch.baseWin = 0.1; botch.dupes = 0; botch.champion = false; botch.streak = 0; botch.wins = 0; botch.radioactive = false; botch.holo = false; botch.mythic = false;
+                col.push(botch);
+                postTweet(`I just saw something horrifying backstage... make it stop. 🫣`, `TraumatizedFan`);
+            }
+            localStorage.setItem('EWF_Collection', JSON.stringify(col));
+            saveGame(); displayCollection(); updateUI();
+        }
+        function exileCard(idx) {
+            if(userCash < 50000) return alert("You need $50,000 to exile a botched card!");
+            if(confirm("Pay $50,000 to exile this abomination?")) {
+                userCash -= 50000;
+                let col = JSON.parse(localStorage.getItem('EWF_Collection'));
+                col.splice(idx, 1);
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                saveGame(); displayCollection(); updateUI();
+            }
+        }
+
+        // EXISTING FUNCTIONS (Modified seamlessly to accept new features)
         function triggerInvasion() { 
             let rival = aiRivals[Math.floor(Math.random() * aiRivals.length)];
             invasion = { active: true, timeLeft: 300, rivalName: rival.name }; 
@@ -528,7 +717,7 @@
         function openInvasionModal() {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let html = "";
             document.getElementById('invasion-rival-name').innerText = invasion.rivalName;
-            col.forEach((c, i) => { if(!c.injured && c.trainingUntil < Date.now()) { html += `<div style="width:75px; height:105px; background:url('${folderPath}/${c.img}') center/cover; border:2px solid rgba(255,255,255,0.2); border-radius:6px; cursor:pointer; transition:0.2s;" onmouseover="this.style.borderColor='var(--gold)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)';" onclick="fightInvasion(${i})"></div>`; } });
+            col.forEach((c, i) => { if(!c.injured && !c.botched && c.trainingUntil < Date.now()) { html += `<div style="width:75px; height:105px; background:url('${folderPath}/${c.img}') center/cover; border:2px solid rgba(255,255,255,0.2); border-radius:6px; cursor:pointer; transition:0.2s;" onmouseover="this.style.borderColor='var(--gold)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)';" onclick="fightInvasion(${i})"></div>`; } });
             if(html === "") html = "<p style='color:var(--red); width:100%; text-align:center;'>You have no healthy wrestlers to defend!</p>";
             document.getElementById('invasion-roster').innerHTML = html; document.getElementById('invasion-modal').style.display = 'block';
         }
@@ -543,7 +732,11 @@
                 bCard.classList.remove('rumble'); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx];
                 let chance = card.baseWin - 0.2; let win = Math.random() < chance;
                 if(win) { bText.innerHTML = "INVASION REPELLED!"; bText.style.color = "var(--green)"; triggerConfetti(); sentiment = Math.min(100, sentiment + 10); setTimeout(()=>resolveInvasion(true, false), 2000); }
-                else { bText.innerHTML = "YOUR CHAMPION FELL!"; bText.style.color = "var(--red)"; sentiment = Math.max(0, sentiment - 15); setTimeout(()=>resolveInvasion(false, false), 2000); }
+                else { 
+                    bText.innerHTML = "YOUR CHAMPION FELL!"; bText.style.color = "var(--red)"; sentiment = Math.max(0, sentiment - 15); 
+                    if(card.img === faceCardImg) { faceCardImg = null; localStorage.removeItem('EWF_FaceImg'); postTweet(`The Face of the Company just lost... Merch sales are plummeting. 📉`, `DirtSheet`); renderMerchStand(); }
+                    setTimeout(()=>resolveInvasion(false, false), 2000); 
+                }
                 setTimeout(()=>{ overlay.style.display = 'none'; }, 2000);
             }, 2000);
         }
@@ -559,7 +752,7 @@
 
         function triggerAIAuction() {
             let num = Math.floor(Math.random() * totalCards) + 1; let val = 5000 * multi;
-            let card = { img: `card (${num}).jpg`, wins: 0, holo: true, grade: 10, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.6, trainingUntil: 0, buff: null, mythic: false, radioactive: Math.random()>0.8 };
+            let card = { img: `card (${num}).jpg`, wins: 0, holo: true, grade: 10, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.6, trainingUntil: 0, buff: null, mythic: false, radioactive: Math.random()>0.8, botched: false };
             auction = { active: true, timeLeft: 60, card: card, currentBid: Math.floor(val/2), highestBidder: 'NONE', isPlayerSelling: false, trueValue: val };
             localStorage.setItem('EWF_Auction', JSON.stringify(auction)); renderAuction();
             postTweet(`A rare card just hit the Dark Web Auction block... 🔨`, `CardShark`);
@@ -611,18 +804,25 @@
 
         function updateMarketUI() { document.getElementById('ticker-text').innerHTML = `📈 EWF STOCK MARKET: Card #${market.boosted} is TRENDING! (+300% Value) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📉 CRASH: Card #${market.crashed} caught in a major scandal! (-50% Value) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ⏳ NEXT MARKET UPDATE IN <5 MINS`; }
         function updateBossUI() { document.getElementById('boss-hp-text').innerHTML = `${bossHP} / ${bossMaxHP} HP`; document.getElementById('boss-hp-bar').style.width = Math.max((bossHP / bossMaxHP) * 100, 0) + "%"; }
-        function hitBoss(dmg) { if(bossHP <= 0) return; bossHP -= dmg; if(bossHP <= 0) { alert("👹 WORLD BOSS DEFEATED! You obtained the 1-of-1 Mythic Diamond Card! ($500 Passive Income)"); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let num = Math.floor(Math.random() * totalCards) + 1; col.push({ img: `card (${num}).jpg`, wins: 0, holo: true, grade: 10, dupes: 0, champion: true, stamina: 5, injured: false, streak: 0, baseWin: 0.9, trainingUntil: 0, buff: null, mythic: true, radioactive: true }); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); bossMaxHP += 500; bossHP = bossMaxHP; localStorage.setItem('EWF_BossMaxHP', bossMaxHP); postTweet(`THE RAID BOSS HAS BEEN DEFEATED!!! HISTORY HAS BEEN MADE! 🏆💎`, `EWF_Official`); } localStorage.setItem('EWF_BossHP', bossHP); updateBossUI(); }
+        function hitBoss(dmg) { if(bossHP <= 0) return; bossHP -= dmg; if(bossHP <= 0) { alert("👹 WORLD BOSS DEFEATED! You obtained the 1-of-1 Mythic Diamond Card! ($500 Passive Income)"); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let num = Math.floor(Math.random() * totalCards) + 1; col.push({ img: `card (${num}).jpg`, wins: 0, holo: true, grade: 10, dupes: 0, champion: true, stamina: 5, injured: false, streak: 0, baseWin: 0.9, trainingUntil: 0, buff: null, mythic: true, radioactive: true, botched: false }); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); bossMaxHP += 500; bossHP = bossMaxHP; localStorage.setItem('EWF_BossMaxHP', bossMaxHP); postTweet(`THE RAID BOSS HAS BEEN DEFEATED!!! HISTORY HAS BEEN MADE! 🏆💎`, `EWF_Official`); } localStorage.setItem('EWF_BossHP', bossHP); updateBossUI(); }
 
         function spliceCard(idx) { if(userCash < 10000 || inventory.drink < 1 || inventory.chair < 1) return alert("Requires $10,000 + 1 Drink + 1 Chair!"); if(confirm("Splice this card? It will become Radioactive (80% Base Win, No Injuries, No Stamina Drain)!")) { userCash -= 10000; inventory.drink--; inventory.chair--; let col = JSON.parse(localStorage.getItem('EWF_Collection')); col[idx].radioactive = true; col[idx].baseWin = 0.8; col[idx].injured = false; col[idx].stamina = 5; localStorage.setItem('EWF_Collection', JSON.stringify(col)); localStorage.setItem('EWF_Gear', JSON.stringify(inventory)); saveGame(); displayCollection(); updateUI(); postTweet(`Did someone just sneak into the mutation lab?! ☣️`, `BackstageRumors`); } }
 
         function openArena() { let html = ""; arenas.forEach((a, i) => { let status = `<button class="modal-btn" style="background:transparent; border-color:var(--blue); color:var(--blue);" onclick="buyArena(${i})" onmouseover="this.style.background='var(--blue)'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='var(--blue)';">BUY $${a.cost}</button>`; if(a.special === 'auto') { if(autoBookerOwned) status = `<span style="color:var(--green); font-weight:900;">OWNED</span>`; } else { if(i === currentArena) status = `<span style="color:var(--green); font-weight:900;">ACTIVE</span>`; else if(i < currentArena) status = `<span style="color:#aaa; font-weight:900;">OWNED</span>`; else if(userCash < a.cost) status = `<button class="modal-btn" disabled>TOO POOR</button>`; } html += `<div class="modal-item"><div><b style="color:white; font-size:14px;">${a.name}</b><br><span style="color:#aaa; font-size:12px;">${a.income > 0 ? '+$'+(a.income*multi)+'/tick' : 'General Manager Upgrade'}</span></div><div>${status}</div></div>`; }); document.getElementById('arena-list').innerHTML = html; document.getElementById('arena-modal').style.display = 'block'; }
         function buyArena(i) { if(userCash >= arenas[i].cost) { userCash -= arenas[i].cost; if(arenas[i].special === 'auto') { autoBookerOwned = true; localStorage.setItem('EWF_AutoBooker', 'true'); document.getElementById('auto-btn').style.display = 'inline-block'; } else { currentArena = i; localStorage.setItem('EWF_Arena', currentArena); updateBackground(); postTweet(`The promotion just upgraded to ${arenas[i].name}! We are moving up! 🏟️`, `TicketScalper`); } saveGame(); updateUI(); openArena(); } }
 
-        function openShredder() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let commonDupes = 0; col.forEach(c => { if(!c.holo && c.grade < 9 && c.dupes > 0) commonDupes += c.dupes; }); document.getElementById('shredder-stats').innerHTML = `Common Dupes Available: <span style="color:var(--red);">${commonDupes}</span><br>Current Holo Bonus: <span style="color:var(--green);">+${(shredBonus*100).toFixed(1)}%</span>`; document.getElementById('shredder-modal').style.display = 'block'; }
-        function shredCards() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let commonDupes = 0; col.forEach(c => { if(!c.holo && c.grade < 9 && c.dupes > 0) commonDupes += c.dupes; }); if(commonDupes < 5) { alert("You need at least 5 Common Dupes to shred!"); return; } let burned = 0; for(let i=0; i<col.length; i++) { if(!col[i].holo && col[i].grade < 9 && col[i].dupes > 0) { while(col[i].dupes > 0 && burned < 5) { col[i].dupes--; burned++; } } if(burned >= 5) break; } shredBonus += 0.005; localStorage.setItem('EWF_ShredBonus', shredBonus); localStorage.setItem('EWF_Collection', JSON.stringify(col)); document.body.classList.add('screen-shake'); setTimeout(() => document.body.classList.remove('screen-shake'), 300); openShredder(); displayCollection(); postTweet(`Just saw someone throwing perfectly good cards into an industrial shredder... wtf? ☢️`, `CardCollector`); }
+        function openShredder() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let commonDupes = 0; col.forEach(c => { if(!c.holo && c.grade < 9 && c.dupes > 0 && !c.botched) commonDupes += c.dupes; }); document.getElementById('shredder-stats').innerHTML = `Common Dupes Available: <span style="color:var(--red);">${commonDupes}</span><br>Current Holo Bonus: <span style="color:var(--green);">+${(shredBonus*100).toFixed(1)}%</span>`; document.getElementById('shredder-modal').style.display = 'block'; }
+        function shredCards() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let commonDupes = 0; col.forEach(c => { if(!c.holo && c.grade < 9 && c.dupes > 0 && !c.botched) commonDupes += c.dupes; }); if(commonDupes < 5) { alert("You need at least 5 Common Dupes to shred!"); return; } let burned = 0; for(let i=0; i<col.length; i++) { if(!col[i].holo && col[i].grade < 9 && col[i].dupes > 0 && !col[i].botched) { while(col[i].dupes > 0 && burned < 5) { col[i].dupes--; burned++; } } if(burned >= 5) break; } shredBonus += 0.005; localStorage.setItem('EWF_ShredBonus', shredBonus); localStorage.setItem('EWF_Collection', JSON.stringify(col)); document.body.classList.add('screen-shake'); setTimeout(() => document.body.classList.remove('screen-shake'), 300); openShredder(); displayCollection(); postTweet(`Just saw someone throwing perfectly good cards into an industrial shredder... wtf? ☢️`, `CardCollector`); }
 
         function toggleFactionWar() { if(userCash < 500) return; factionMode = !factionMode; factionTeam = []; document.getElementById('faction-msg').style.display = factionMode ? 'block' : 'none'; document.getElementById('faction-btn').innerHTML = factionMode ? "CANCEL WAR" : "3v3 WAR ($500)"; displayCollection(); updateUI(); }
-        function confirmFactionWar() { if(confirm("Start Faction War with these 3 wrestlers for $500?")) { userCash -= 500; saveGame(); factionMode = false; document.getElementById('faction-msg').style.display = 'none'; document.getElementById('faction-btn').innerHTML = "3v3 WAR ($500)"; factionSimulating = true; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; bText.innerHTML = "FACTION WAR SIMULATING..."; bText.style.color = "var(--gold)"; setTimeout(() => { bCard.classList.remove('rumble'); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let teamWins = 0; factionTeam.forEach(idx => { if(!col[idx].radioactive) col[idx].stamina--; let winChance = col[idx].baseWin; if(col[idx].streak >= 3) winChance += 0.1; if(Math.random() < winChance) teamWins++; }); if(teamWins >= 2) { const payout = 5000 * multi; bText.innerHTML = `FACTION WINS ${teamWins}-` + (3-teamWins) + `! ($${payout})`; bText.style.color = "var(--green)"; userCash += payout; hitBoss(teamWins); sentiment = Math.min(100, sentiment + 5); saveGame(); triggerConfetti(); postTweet(`Huge win in the 3v3 Faction War tonight! Unstoppable! 🛡️`, `SmarkFan`); } else { bText.innerHTML = `FACTION DEFEATED ${teamWins}-` + (3-teamWins); bText.style.color = "var(--red)"; sentiment = Math.max(0, sentiment - 10); postTweet(`That Faction War was a complete disaster...`, `Disappointed`); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); setTimeout(() => { overlay.style.display = 'none'; factionSimulating = false; displayCollection(); updateUI(); }, 3000); }, 2000); } else { toggleFactionWar(); } }
+        function confirmFactionWar() { if(confirm("Start Faction War with these 3 wrestlers for $500?")) { userCash -= 500; saveGame(); factionMode = false; document.getElementById('faction-msg').style.display = 'none'; document.getElementById('faction-btn').innerHTML = "3v3 WAR ($500)"; factionSimulating = true; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; bText.innerHTML = "FACTION WAR SIMULATING..."; bText.style.color = "var(--gold)"; 
+        
+        // SYNERGY CHECK
+        let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+        let hasSynergy = new Set(factionTeam.map(i => col[i].grade)).size < factionTeam.length;
+        if(hasSynergy) setTimeout(()=> { bText.innerHTML = "TAG TEAM SYNERGY ACTIVATED!"; bText.style.color = "cyan"; }, 1000);
+
+        setTimeout(() => { bCard.classList.remove('rumble'); let teamWins = 0; factionTeam.forEach(idx => { if(!col[idx].radioactive) col[idx].stamina--; let winChance = col[idx].baseWin; if(col[idx].streak >= 3) winChance += 0.1; if(hasSynergy) winChance += 0.2; if(Math.random() < winChance) teamWins++; }); if(teamWins >= 2) { const payout = 5000 * multi; bText.innerHTML = `FACTION WINS ${teamWins}-` + (3-teamWins) + `! ($${payout})`; bText.style.color = "var(--green)"; userCash += payout; hitBoss(teamWins); sentiment = Math.min(100, sentiment + 5); saveGame(); triggerConfetti(); postTweet(`Huge win in the 3v3 Faction War tonight! Unstoppable! 🛡️`, `SmarkFan`); } else { bText.innerHTML = `FACTION DEFEATED ${teamWins}-` + (3-teamWins); bText.style.color = "var(--red)"; sentiment = Math.max(0, sentiment - 10); postTweet(`That Faction War was a complete disaster...`, `Disappointed`); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); setTimeout(() => { overlay.style.display = 'none'; factionSimulating = false; displayCollection(); updateUI(); }, 3000); }, 2000); } else { toggleFactionWar(); } }
 
         function startGauntlet() { if(userCash < 2500) return alert("Need $2500 to enter!"); if(!confirm("Enter Ironman Gauntlet for $2500?")) return; userCash -= 2500; saveGame(); updateUI(); gauntlet = { active: true, team: [], wins: 0, losses: 0 }; document.getElementById('gauntlet-close-btn').style.display = 'block'; renderGauntletDraft(); }
         function renderGauntletDraft() { if(gauntlet.team.length >= 3) { renderGauntletBattle(); return; } let html = `<h2 style="color:var(--gold); border-bottom:none;">DRAFT PHASE: PICK CARD ${gauntlet.team.length+1}/3</h2><div style="display:flex; justify-content:center; gap:15px; margin-top:20px;">`; for(let i=0; i<3; i++) { let num = Math.floor(Math.random() * totalCards) + 1; html += `<div class="pack-card" onclick="draftCard(${num})"><div class="card-inner flipped"><div class="front" style="background-image:url('${folderPath}/card (${num}).jpg'); box-shadow:0 10px 20px rgba(0,0,0,0.8); border:2px solid var(--gold);"></div></div></div>`; } html += `</div>`; document.getElementById('gauntlet-content').innerHTML = html; document.getElementById('gauntlet-modal').style.display = 'block'; }
@@ -660,17 +860,15 @@
             const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`;
             
-            // UI INCOME WITH MULTIPLIER
             let sentMulti = 0.5 + (sentiment / 50);
             const mythicCount = col.filter(c => c.mythic).length; 
             const baseIncome = (arenas[currentArena].income + (col.filter(c => c.wins >= 200).length * 25) + (mythicCount * 500)) * multi;
             document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${Math.floor(baseIncome * sentMulti)} / 30s`;
             
-            // SENTIMENT UI
             document.getElementById('sentiment-val').innerText = `${sentiment}% (${sentMulti.toFixed(1)}x)`;
             document.getElementById('sentiment-fill').style.width = sentiment + "%";
 
-            document.getElementById('rip-std-btn').disabled = (userCash < 100) || factionMode || gauntlet.active; document.getElementById('rip-super-btn').disabled = (userCash < 500) || factionMode || gauntlet.active; document.getElementById('rip-gear-btn').disabled = (userCash < 250) || factionMode || gauntlet.active; document.getElementById('faction-btn').disabled = (userCash < 500) || col.length < 3 || gauntlet.active;
+            document.getElementById('rip-std-btn').disabled = (userCash < 100) || factionMode || gauntlet.active || tvWarMode; document.getElementById('rip-super-btn').disabled = (userCash < 500) || factionMode || gauntlet.active || tvWarMode; document.getElementById('rip-gear-btn').disabled = (userCash < 250) || factionMode || gauntlet.active || tvWarMode; document.getElementById('faction-btn').disabled = (userCash < 500) || col.length < 3 || gauntlet.active || tvWarMode;
             
             let r = "ROOKIE PROMOTER"; let next = 6; let base = 0; let isLegendary = false;
             if (col.length >= 19) { r = "LEGENDARY COLLECTOR"; next = 23; base = 19; isLegendary = true; } else if (col.length >= 13) { r = "ELITE EXECUTIVE"; next = 19; base = 13; } else if (col.length >= 6) { r = "PRO MANAGER"; next = 13; base = 6; }
@@ -720,8 +918,8 @@
         }
 
         function saveCard(img, holo, grade) {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let existing = col.find(c => c.img === img);
-            if (!existing) { col.push({ img, wins: 0, holo, grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, buff: null, radioactive: false, mythic: false }); } else { existing.dupes = (existing.dupes || 0) + 1; }
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let existing = col.find(c => c.img === img && !c.botched);
+            if (!existing) { col.push({ img, wins: 0, holo, grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, buff: null, radioactive: false, mythic: false, botched: false }); } else { existing.dupes = (existing.dupes || 0) + 1; }
             localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI();
         }
 
@@ -729,7 +927,7 @@
 
         function runBattle(idx, isPPV = false) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let card = col[idx];
-            if(card.injured || card.trainingUntil > Date.now() || factionMode || gauntlet.active) return;
+            if(card.injured || card.trainingUntil > Date.now() || factionMode || gauntlet.active || tvWarMode || card.botched) return;
             if(invasion.active) { if(confirm("🚨 RIVAL INVASION ACTIVE! 🚨\n\nDo you want to send this wrestler to defend your territory?")) { fightInvasion(idx); return; } }
             if(card.stamina <= 0) { if(!card.radioactive && Math.random() < 0.5) { card.injured = true; sentiment = Math.max(0, sentiment - 5); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); alert("🚑 INJURY! Pay $500 to heal."); postTweet(`Horrible injury in the ring tonight... hope they recover quickly. 🚑`, `RingsideDoc`); return; } } 
             else { if(!card.radioactive) card.stamina--; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); }
@@ -750,8 +948,8 @@
                         bText.innerHTML = "WINNER!"; bText.style.color = "var(--green)"; triggerConfetti(); 
                         card.wins++; totalWins++; card.streak = (card.streak > 0) ? card.streak + 1 : 1;
                         sentiment = Math.min(100, sentiment + 2);
+                        progressSponsor();
                         
-                        // CROWDSOURCING SUCCESS
                         const cNum = parseInt(card.img.match(/\d+/)[0]);
                         if(fanDemand === cNum) { sentiment = Math.min(100, sentiment + 15); userCash += 500; fanDemand = null; postTweet("THE GM GAVE US WHAT WE WANTED! EPIC WIN!", "@SmarkFan_99"); }
 
@@ -762,6 +960,7 @@
                     } else { 
                         bText.innerHTML = "DEFEAT"; bText.style.color = "var(--red)"; totalLosses++; card.streak = (card.streak < 0) ? card.streak - 1 : -1; 
                         sentiment = Math.max(0, sentiment - 3);
+                        if(card.img === faceCardImg) { faceCardImg = null; localStorage.removeItem('EWF_FaceImg'); postTweet(`The Face of the Company just lost... Merch sales are plummeting. 📉`, `DirtSheet`); renderMerchStand(); }
                     }
                     localStorage.setItem('EWF_Wins', totalWins); localStorage.setItem('EWF_Losses', totalLosses); localStorage.setItem('EWF_Collection', JSON.stringify(col));
                     setTimeout(() => { overlay.style.display = 'none'; displayCollection(); displayRecord(); updateUI(); }, 2000);
@@ -770,6 +969,7 @@
         }
 
         function getCardValue(card) { 
+            if(card.botched) return 0;
             let baseVal = 20; if (card.grade === 10) baseVal = 500; else if (card.grade === 9) baseVal = 100; else if (card.grade === 8) baseVal = 40; 
             let total = card.holo ? baseVal * 4 : baseVal; if (card.champion) total *= 5; if (card.streak >= 3) total *= 1.5; if (card.streak <= -3) total *= 0.5; 
             const numMatch = card.img.match(/\d+/); if(numMatch) { const num = parseInt(numMatch[0]); if(num === market.boosted) total *= 3; if(num === market.crashed) total *= 0.5; }
@@ -784,33 +984,57 @@
         function ppvMatch(idx) { if(userCash < 1000) return; if(confirm("Book a $1000 Title Match?")) { userCash -= 1000; saveGame(); updateUI(); runBattle(idx, true); } }
 
         function setupInspector(card) {
-            const update = (e) => { const rect = card.getBoundingClientRect(); const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left; const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top; const rX = ((rect.height / 2) - y) / 10; const rY = (x - (rect.width / 2)) / 10; if(!factionMode) { card.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) scale(1.05)`; } card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`); };
+            const update = (e) => { const rect = card.getBoundingClientRect(); const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left; const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top; const rX = ((rect.height / 2) - y) / 10; const rY = (x - (rect.width / 2)) / 10; if(!factionMode && !tvWarMode) { card.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) scale(1.05)`; } card.style.setProperty('--lx', `${x}px`); card.style.setProperty('--ly', `${y}px`); };
             card.addEventListener('mousemove', update); card.addEventListener('mouseleave', () => { card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)"; });
         }
 
-        function handleCardClick(idx) { if(!factionMode) return; let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; if(col[idx].injured || col[idx].wins >= 200) { alert("Cannot select injured or retired wrestlers!"); return; } const teamIdx = factionTeam.indexOf(idx); if(teamIdx > -1) { factionTeam.splice(teamIdx, 1); } else if(factionTeam.length < 3) { factionTeam.push(idx); } displayCollection(); if(factionTeam.length === 3) setTimeout(() => confirmFactionWar(), 300); }
+        function handleCardClick(idx) { 
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; 
+            if(col[idx].injured || col[idx].wins >= 200 || col[idx].botched) return alert("Cannot select this wrestler!"); 
+            
+            if(tvWarMode) {
+                const teamIdx = tvWarTeam.indexOf(idx); 
+                if(teamIdx > -1) { tvWarTeam.splice(teamIdx, 1); } else if(tvWarTeam.length < 3) { tvWarTeam.push(idx); } 
+                displayCollection(); 
+                if(tvWarTeam.length === 3) setTimeout(() => confirmTVWar(), 300);
+                return;
+            }
+
+            if(!factionMode) return; 
+            const teamIdx = factionTeam.indexOf(idx); 
+            if(teamIdx > -1) { factionTeam.splice(teamIdx, 1); } else if(factionTeam.length < 3) { factionTeam.push(idx); } 
+            displayCollection(); 
+            if(factionTeam.length === 3) setTimeout(() => confirmFactionWar(), 300); 
+        }
 
         function displayCollection() {
             const grid = document.getElementById('collection-grid'); const hofGrid = document.getElementById('hof-grid'); const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             grid.innerHTML = ''; hofGrid.innerHTML = ''; const now = Date.now();
             col.forEach((card, index) => {
                 const container = document.createElement('div'); container.className = 'card-container'; const cardDiv = document.createElement('div'); 
-                let classes = `saved-card ${card.holo ? 'is-holo' : ''} ${card.radioactive ? 'is-radioactive' : ''} ${card.mythic ? 'is-mythic' : ''}`; 
-                if(factionMode && factionTeam.includes(index)) { classes += ' faction-selected'; cardDiv.style.borderColor = 'var(--green)'; cardDiv.style.boxShadow = '0 0 20px rgba(46,204,113,0.8)'; cardDiv.style.transform = 'scale(1.05)'; } cardDiv.className = classes;
+                
+                let classes = `saved-card ${card.holo ? 'is-holo' : ''} ${card.radioactive ? 'is-radioactive' : ''} ${card.mythic ? 'is-mythic' : ''} ${card.botched ? 'is-botched' : ''}`; 
+                if(factionMode && factionTeam.includes(index)) { classes += ' faction-selected'; cardDiv.style.borderColor = 'var(--green)'; cardDiv.style.boxShadow = '0 0 20px rgba(46,204,113,0.8)'; cardDiv.style.transform = 'scale(1.05)'; } 
+                if(tvWarMode && tvWarTeam.includes(index)) { classes += ' tv-selected'; }
+                cardDiv.className = classes;
+                
                 const isHof = card.wins >= 200; let streakHtml = ''; if(card.streak >= 3) streakHtml = '<div class="streak-badge">🔥</div>'; if(card.streak <= -3) streakHtml = '<div class="streak-badge">❄️</div>'; let buffHtml = ''; if(card.buff === 'chair') buffHtml = '<div class="buff-icon">🪑</div>'; const staminaPrc = (card.stamina / 5) * 100; let stamColor = "var(--green)"; if(card.stamina <= 2) stamColor = "#f39c12"; if(card.stamina === 0) stamColor = "var(--red)"; let isTraining = card.trainingUntil > now;
                 let radioBadge = card.radioactive ? '<div style="position:absolute; top:-10px; left:-10px; font-size:25px; z-index:30; filter:drop-shadow(0 0 10px #39ff14);">☣️</div>' : '';
                 let mythicBadge = card.mythic ? '<div style="position:absolute; bottom:-15px; left:50%; transform:translateX(-50%); font-size:35px; z-index:30; filter:drop-shadow(0 0 10px #e0b0ff);">💎</div>' : '';
+                if(card.img === faceCardImg) radioBadge += '<div style="position:absolute; top:-10px; right:-10px; font-size:25px; z-index:30; filter:drop-shadow(0 0 10px #f1c40f);">👕</div>';
 
                 cardDiv.innerHTML = `
-                    <div class="grade-label ${card.grade === 10 ? 'gem-mint' : ''}"><div class="grade-title">${card.champion ? '🏆 EWF AUTHENTIC 🏆' : 'EWF AUTHENTIC'}</div><div class="grade-score">${card.grade === 10 ? 'GEM MINT 10' : `MINT ${card.grade}`}</div></div>
+                    <div class="grade-label ${card.grade === 10 ? 'gem-mint' : ''}"><div class="grade-title">${card.botched ? 'MUTANT EXPERIMENT' : card.champion ? '🏆 EWF AUTHENTIC 🏆' : 'EWF AUTHENTIC'}</div><div class="grade-score">${card.grade === 10 ? 'GEM MINT 10' : `MINT ${card.grade}`}</div></div>
                     <div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; z-index: 10;"></div>
-                    <div class="shine-layer"></div><div class="sparkle-layer"></div><div class="holo-foil"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}`;
+                    <div class="shine-layer"></div><div class="sparkle-layer"></div><div class="holo-foil"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive && !card.botched ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}`;
                 
-                setupInspector(cardDiv); if(factionMode) { cardDiv.onclick = () => handleCardClick(index); } else if(!isHof && !card.injured && !isTraining) { cardDiv.ondblclick = () => runBattle(index, false); } container.appendChild(cardDiv);
+                setupInspector(cardDiv); if(factionMode || tvWarMode) { cardDiv.onclick = () => handleCardClick(index); } else if(!isHof && !card.injured && !isTraining && !card.botched) { cardDiv.ondblclick = () => runBattle(index, false); } container.appendChild(cardDiv);
                 
-                if(!isHof && !isTraining && !factionMode) {
+                if(!isHof && !isTraining && !factionMode && !tvWarMode) {
                     const controls = document.createElement('div'); controls.className = 'gm-controls';
-                    if(card.injured) { controls.innerHTML = `<button class="gm-btn btn-heal" onclick="healCard(${index})">HEAL ($500)</button>`; } else { 
+                    if(card.botched) {
+                        controls.innerHTML = `<button class="gm-btn" style="background:var(--red); color:white; border-color:white;" onclick="exileCard(${index})">☠️ EXILE ($50k)</button>`;
+                    } else if(card.injured) { controls.innerHTML = `<button class="gm-btn btn-heal" onclick="healCard(${index})">HEAL ($500)</button>`; } else { 
                         controls.innerHTML = `<div style="display:flex; gap:4px;"><button class="gm-btn btn-sell" style="flex:1;" onclick="sellCard(${index})">SELL ($${getCardValue(card)})</button><button class="gm-btn btn-auction" style="flex:1;" onclick="playerSellAuction(${index})">AUCTION</button></div>`;
                         controls.innerHTML += `<button class="gm-btn btn-gear" onclick="openGearMenu(${index})">🎒 GEAR</button>`; 
                         if(card.baseWin < 0.6) controls.innerHTML += `<button class="gm-btn btn-train" onclick="trainCard(${index})">TRAIN 5m ($1000)</button>`; 
@@ -818,6 +1042,7 @@
                         if(card.dupes >= 2 && card.grade < 10) controls.innerHTML += `<button class="gm-btn btn-forge" onclick="forgeCard(${index})">FORGE 10</button>`; 
                         if(!card.radioactive) controls.innerHTML += `<button class="gm-btn btn-splice" onclick="spliceCard(${index})">🧪 SPLICE ($10k+Gear)</button>`;
                         if(invasion.active) controls.innerHTML += `<button class="gm-btn" style="background:var(--red); color:white; border-color:white; box-shadow:0 0 10px rgba(231,76,60,0.8); animation:pulse 1s infinite;" onclick="fightInvasion(${index})">⚔️ DEFEND INVASION</button>`;
+                        if(card.img !== faceCardImg) controls.innerHTML += `<button class="gm-btn" style="border-color:#f1c40f; color:#f1c40f;" onclick="setFace('${card.img}')">👕 SET AS FACE</button>`;
                     }
                     container.appendChild(controls); grid.appendChild(container);
                 } else if(isHof) { hofGrid.appendChild(container); } else { grid.appendChild(container); } 
