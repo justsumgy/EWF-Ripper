@@ -10,8 +10,12 @@
             --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --purple: #9b59b6;
         }
 
-        body { background: url('background.jpg') center/cover no-repeat fixed; background-color: #111; color: white; font-family: 'Montserrat', sans-serif; text-align: center; padding: 0; margin: 0; overflow-x: hidden; user-select: none; transition: background 1s ease-in-out, box-shadow 0.5s; }
+        body { background: url('background.jpg') center/cover no-repeat fixed; background-color: #111; color: white; font-family: 'Montserrat', sans-serif; text-align: center; padding: 0; margin: 0; overflow-x: hidden; user-select: none; transition: background 1s ease-in-out, box-shadow 0.5s, filter 1s; }
         
+        /* GIMMICK NIGHT EFFECTS */
+        body.gimmick-hardcore { filter: sepia(0.8) hue-rotate(-50deg) saturate(2) brightness(0.8); box-shadow: inset 0 0 150px rgba(255,0,0,0.5); }
+        body.gimmick-legends { filter: sepia(0.5) hue-rotate(10deg) saturate(1.5) brightness(1.1); box-shadow: inset 0 0 150px rgba(212,175,55,0.4); }
+
         #ticker-wrap { background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--gold); padding: 8px; overflow: hidden; white-space: nowrap; font-size: 13px; color: #ddd; position: relative; z-index: 1000; letter-spacing: 2px; text-transform: uppercase; }
         #ticker-text { display: inline-block; animation: scroll-ticker 40s linear infinite; font-weight: 700; }
         @keyframes scroll-ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
@@ -23,6 +27,9 @@
         #tv-war-banner { position: fixed; top: 0; left: 0; width: 100%; background: #00008b; border-bottom: 3px solid #0000ff; color: white; font-size: 20px; font-weight: 900; padding: 12px; z-index: 10000; display: none; cursor: pointer; animation: flash-blue 1s infinite alternate; text-shadow: 0 0 10px black; text-transform: uppercase; }
         @keyframes flash-blue { from { background: #00008b; box-shadow: 0 0 20px blue; } to { background: #0000ff; box-shadow: 0 0 50px blue; } }
         
+        #gimmick-banner { position: fixed; top: 0; left: 0; width: 100%; background: #b8860b; border-bottom: 3px solid #ffd700; color: black; font-size: 20px; font-weight: 900; padding: 12px; z-index: 10000; display: none; text-shadow: 0 0 10px white; text-transform: uppercase; animation: flash-gold 2s infinite alternate; cursor: default; }
+        @keyframes flash-gold { from { box-shadow: 0 0 20px gold; } to { box-shadow: 0 0 50px gold; } }
+
         /* SPONSOR TRACKER */
         #sponsor-tracker { position:fixed; top:120px; right:20px; background:rgba(0,0,0,0.8); border:1px solid #f39c12; padding:10px; color:white; z-index:9000; display:none; border-radius:8px; font-size:12px; text-align:left; line-height:1.5; box-shadow:0 0 15px rgba(243,156,18,0.3); }
 
@@ -136,7 +143,7 @@
         .pack-card.flipped .card-inner { transform: rotateY(180deg); }
         .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2); }
         .back { background: url('wrapper.jpg') center/cover; background-color: #222; }
-        .front { transform: rotateY(180deg); background-size: cover; background-position: center; }
+        .front { transform: rotateY(180deg); background-size: cover; background-position: center; overflow: hidden; }
 
         .grade-label { position: absolute; top: 0; left: 0; width: 100%; background: #c00; border-bottom: 2px solid #000; color: white; text-align: center; border-top-left-radius: 10px; border-top-right-radius: 10px; z-index: 20; pointer-events: none; }
         .grade-title { font-size: 8px; font-weight: 900; letter-spacing: 1px; padding-top: 4px; }
@@ -144,12 +151,22 @@
         .gem-mint { background: linear-gradient(45deg, #D4AF37, #FFDF00, #D4AF37); color: black; }
         
         .shine-layer { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(255,255,255,0.8) 0%, transparent 60%); z-index: 15; pointer-events: none; opacity: 0; mix-blend-mode: overlay; transition: opacity 0.3s; }
-        .holo-foil { position: absolute; inset: 0; border-radius: 10px; background-image: linear-gradient(110deg, transparent 15%, rgba(255,0,255,0.4) 30%, rgba(0,255,255,0.4) 50%, rgba(255,255,0,0.4) 70%, transparent 85%); background-size: 200% 200%; mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
         .sparkle-layer { position: absolute; inset: 0; border-radius: 10px; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-repeat: repeat; mix-blend-mode: color-dodge; z-index: 13; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
         .is-holo { border-color: cyan !important; box-shadow: 0 0 15px rgba(0,255,255,0.4); }
-        .is-holo .holo-foil { opacity: 0.9 !important; animation: ambient-shimmer 4s ease-in-out infinite; } 
-        @keyframes ambient-shimmer { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .saved-card:hover .shine-layer, .saved-card:hover .sparkle-layer { opacity: 1; }
+
+        /* HOLO VARIANTS */
+        .holo-standard { position: absolute; inset: 0; border-radius: 10px; background-image: linear-gradient(110deg, transparent 15%, rgba(255,0,255,0.4) 30%, rgba(0,255,255,0.4) 50%, rgba(255,255,0,0.4) 70%, transparent 85%); background-size: 200% 200%; mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+        .holo-cracked-ice { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(0,255,255,0.5) 45%, rgba(255,255,255,0.9) 50%, rgba(0,255,255,0.5) 55%, rgba(255,255,255,0) 100%), repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px); background-size: 300% 300%; mix-blend-mode: overlay; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+        .holo-gold-vinyl { position: absolute; inset: 0; border-radius: 10px; background: repeating-radial-gradient(circle at center, transparent, transparent 4px, rgba(212,175,55,0.4) 4px, rgba(212,175,55,0.4) 8px), linear-gradient(45deg, rgba(255,215,0,0.2), rgba(255,215,0,0.8), rgba(255,215,0,0.2)); mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+        .holo-cosmic { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle, rgba(255,0,255,0.5) 0%, rgba(0,255,255,0.5) 50%, rgba(0,0,0,0) 100%), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-size: 150% 150%, auto; mix-blend-mode: screen; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+        .is-holo .holo-standard, .is-holo .holo-cracked-ice, .is-holo .holo-gold-vinyl, .is-holo .holo-cosmic { opacity: 0.9 !important; animation: ambient-shimmer 4s ease-in-out infinite; }
+        @keyframes ambient-shimmer { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* SERIAL NUMBERS */
+        .serial-badge { position: absolute; bottom: 8px; right: 8px; font-weight: 900; font-size: 12px; z-index: 25; padding: 2px 4px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; letter-spacing: -1px; mix-blend-mode: hard-light; }
+        .serial-silver { background: linear-gradient(to right, #e0e0e0, #ffffff, #e0e0e0); -webkit-background-clip: text; color: transparent; text-shadow: 1px 1px 1px rgba(0,0,0,0.9); border: 1px solid rgba(255,255,255,0.3); background-color: rgba(0,0,0,0.5); }
+        .serial-gold { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7); -webkit-background-clip: text; color: transparent; text-shadow: 1px 1px 1px rgba(0,0,0,0.9); border: 1px solid rgba(212,175,55,0.5); background-color: rgba(0,0,0,0.8); font-size: 14px; }
 
         .is-radioactive { border-color: #39ff14 !important; animation: toxic-pulse 2s infinite alternate; }
         @keyframes toxic-pulse { from { box-shadow: 0 0 10px rgba(57,255,20,0.5), inset 0 0 10px rgba(57,255,20,0.3); } to { box-shadow: 0 0 25px rgba(57,255,20,0.8), inset 0 0 20px rgba(57,255,20,0.5); } }
@@ -164,7 +181,8 @@
         
         .injured-overlay { position: absolute; inset: 0; background: rgba(231,76,60,0.7); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; pointer-events: none; }
         .training-overlay { position: absolute; inset: 0; background: rgba(52,152,219,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; }
-        
+        .scout-overlay { position: absolute; inset: 0; background: rgba(155,89,182,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; }
+
         .auto-pop { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; font-weight: 900; z-index: 40; pointer-events: none; animation: popUp 1s forwards; text-shadow: 0 4px 10px rgba(0,0,0,0.8); }
         @keyframes popUp { 0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); } 100% { opacity: 0; transform: translate(-50%, -150%) scale(1.2); } }
 
@@ -194,6 +212,7 @@
     
     <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
     <div id="tv-war-banner" onclick="startTVWar()">📺 FRIDAY NIGHT RATINGS WAR! CLICK TO MAIN EVENT!</div>
+    <div id="gimmick-banner"></div>
     <div id="sponsor-tracker"></div>
 
     <div id="prestige-border"></div>
@@ -212,6 +231,14 @@
     <div id="gauntlet-modal" class="modal" style="width: 600px;"><div id="gauntlet-content"></div><button class="close-btn" id="gauntlet-close-btn" onclick="document.getElementById('gauntlet-modal').style.display='none'">SURRENDER RUN</button></div>
     <div id="invasion-modal" class="modal"><h2 style="color:var(--red); border-bottom-color:rgba(231,76,60,0.3);">🚨 DEFEND YOUR TURF 🚨</h2><p style="color:#ddd; text-align:center; font-size:13px;">Select your best available wrestler to fight <span id="invasion-rival-name" style="color:var(--gold); font-weight:bold;">the Rival Boss</span>. Win for massive loot. Lose to be vandalized.</p><div id="invasion-roster" style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:20px; max-height:300px; overflow-y:auto; padding-right:5px;"></div><button class="close-btn" onclick="document.getElementById('invasion-modal').style.display='none'">FLEE (LOSE 15% CASH)</button></div>
     <div id="cloning-modal" class="modal"><h2>🧬 THE BLACK MARKET LAB</h2><p style="color:#aaa; font-size:12px; text-align:center;">Target a Gem 10 or Radioactive card. 60% chance to duplicate. 40% chance it creates an unsellable botched mutant.</p><div id="cloning-list" style="margin-top:15px;"></div><button class="close-btn" onclick="document.getElementById('cloning-modal').style.display='none'">LEAVE LAB</button></div>
+
+    <div id="gimmick-modal" class="modal"><h2>🎟️ BOOK A SPECIAL EVENT</h2><p style="color:#aaa; font-size:12px; text-align:center;">Spice up the show for 10 minutes. Costs $5,000.</p>
+        <div class="modal-item"><div>🩸 <b>Hardcore Night</b><br><span style="font-size:10px; color:#aaa;">+15% Win Rate, Triple Stamina Drain</span></div><div><button class="modal-btn" style="background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red);" onclick="bookGimmick('hardcore')">BOOK ($5k)</button></div></div>
+        <div class="modal-item"><div>🏆 <b>Legends Night</b><br><span style="font-size:10px; color:#aaa;">Retired HOF Cards can fight again!</span></div><div><button class="modal-btn" style="background:rgba(212,175,55,0.2); color:var(--gold); border-color:var(--gold);" onclick="bookGimmick('legends')">BOOK ($5k)</button></div></div>
+        <button class="close-btn" onclick="document.getElementById('gimmick-modal').style.display='none'">CANCEL</button>
+    </div>
+    
+    <div id="event-modal" class="modal"><h2 style="color:cyan; border-bottom-color:cyan;">🗣️ LOCKER ROOM DRAMA</h2><div id="event-text" style="color:white; margin:20px 0; font-size:14px; text-align:center; line-height:1.5;"></div><div id="event-options" style="display:flex; flex-direction:column; gap:10px;"></div></div>
 
     <div id="about-modal" class="modal">
         <h2>❓ PROMOTER'S MANUAL (v6.0)</h2>
@@ -261,8 +288,8 @@
         </div>
 
         <div id="action-panel">
-            <button class="main-btn rip-std" id="rip-std-btn" onclick="ripPack(100, 0.15)">STANDARD PACK ($100)</button>
-            <button class="main-btn rip-super" id="rip-super-btn" onclick="ripPack(500, 0.65)">SUPER HOLO ($500)</button>
+            <button class="main-btn rip-std" id="rip-std-btn" onclick="ripPack(100, 0.05)">STANDARD PACK ($100)</button>
+            <button class="main-btn rip-super" id="rip-super-btn" onclick="ripPack(500, 0.25)">SUPER HOLO ($500)</button>
             <button class="main-btn rip-gear" id="rip-gear-btn" onclick="ripGearPack()">GEAR PACK ($250)</button>
             <button class="main-btn btn-vault" onclick="openVault()">💼 VAULT</button>
             <button class="main-btn btn-arena" onclick="openArena()">🏟️ ARENA</button>
@@ -270,6 +297,7 @@
             <button class="main-btn btn-gauntlet" onclick="startGauntlet()">☠️ GAUNTLET ($2500)</button>
             <button class="main-btn btn-faction" id="faction-btn" onclick="toggleFactionWar()">3v3 WAR ($500)</button>
             <button class="main-btn btn-bounty" onclick="openBounties()">📋 BOUNTIES</button>
+            <button class="main-btn" style="border-bottom: 3px solid #b8860b;" onclick="document.getElementById('gimmick-modal').style.display='block'">🎟️ GIMMICKS</button>
             <button class="main-btn btn-about" onclick="document.getElementById('about-modal').style.display='block'">❓ HOW TO PLAY</button>
             <button class="main-btn" style="border-bottom: 3px solid var(--purple);" onclick="openCloning()">🧬 CLONING</button>
         </div>
@@ -337,6 +365,7 @@
         let sponsor = JSON.parse(localStorage.getItem('EWF_Sponsor')) || { active: false, progress: 0, target: 3, timeLeft: 0 };
         let tvWarTimer = parseInt(localStorage.getItem('EWF_TVWarTimer')) || 600;
         let tvWarMode = false; let tvWarTeam = [];
+        let gimmickMode = JSON.parse(localStorage.getItem('EWF_Gimmick')) || { active: false, type: null, expires: 0 };
 
         const aiRivals = [
             { name: "Billionaire Ted", style: "whale", handle: "@TedMoney" },
@@ -391,6 +420,7 @@
             setInterval(() => { fastTick(); }, 1000); 
             setInterval(() => { if(autoMode) runAutoMatches(); }, 5000);
             setInterval(generateChat, 15000); 
+            applyGimmickEffects();
         }
 
         function generateChat() {
@@ -441,7 +471,7 @@
             saveGame(); updateUI();
         }
 
-        function updateBackground() { document.body.style.background = arenas[currentArena].bg; document.body.style.backgroundSize = "cover"; document.body.style.backgroundAttachment = "fixed"; }
+        function updateBackground() { document.body.style.background = arenas[currentArena].bg; document.body.style.backgroundSize = "cover"; document.body.style.backgroundAttachment = "fixed"; applyGimmickEffects(); }
 
         function doRebirth() {
             if(confirm("⚠️ ARE YOU SURE? ⚠️\n\nThis will wipe your ENTIRE roster, cash, arena, gear, and stats!\n\nIn exchange, you will permanently gain +1x Global Cash Multiplier and unlock the exclusive Prestige Border.")) {
@@ -462,8 +492,40 @@
                 if(c.baseWin === undefined) { c.baseWin = 0.5; c.trainingUntil = 0; c.buff = null; mod = true; } 
                 if(c.radioactive === undefined) { c.radioactive = false; c.mythic = false; mod = true; }
                 if(c.botched === undefined) { c.botched = false; mod = true; }
+                if(c.scoutingUntil === undefined) { c.scoutingUntil = 0; mod = true; }
+                if(c.holoType === undefined) { c.holoType = c.holo ? 'standard' : null; mod = true; }
+                if(c.serial === undefined) { c.serial = null; mod = true; }
             });
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col));
+        }
+
+        function triggerLockerRoomEvent() {
+            const events = [
+                { text: "Card #7 was caught fighting backstage. Fine them $5,000 to assert dominance, or let it slide?", 
+                  opt1: { label: "FINE $5K", action: () => { userCash += 5000; sentiment = Math.max(0, sentiment - 15); postTweet(`GM is ruthless. Fining the talent for showing some passion. 😠`, `DirtSheet`); } },
+                  opt2: { label: "LET IT SLIDE", action: () => { sentiment = Math.min(100, sentiment + 10); postTweet(`Love a GM that lets the boys be boys! 🍻`, `OldSchoolFan`); } }
+                },
+                { text: "A top star wants a medical bonus to heal a nagging injury. Pay $2,000 out of pocket?", 
+                  opt1: { label: "PAY $2K", action: () => { if(userCash<2000)return alert("Not enough cash."); userCash -= 2000; sentiment = Math.min(100, sentiment + 20); } },
+                  opt2: { label: "REFUSE", action: () => { sentiment = Math.max(0, sentiment - 20); postTweet(`Can't believe the GM won't even pay for medical. Scumbag. 🗑️`, `AngryMark`); } }
+                }
+            ];
+            let ev = events[Math.floor(Math.random() * events.length)];
+            document.getElementById('event-text').innerHTML = ev.text;
+            document.getElementById('event-options').innerHTML = `
+                <button class="modal-btn" style="background:rgba(46,204,113,0.2); color:var(--green); border-color:var(--green);" onclick="resolveEvent(0, ${events.indexOf(ev)})">${ev.opt1.label}</button>
+                <button class="modal-btn" style="background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red);" onclick="resolveEvent(1, ${events.indexOf(ev)})">${ev.opt2.label}</button>
+            `;
+            document.getElementById('event-modal').style.display = 'block';
+        }
+        
+        function resolveEvent(choice, evIdx) {
+            document.getElementById('event-modal').style.display = 'none';
+            if(choice === 0 && evIdx === 0) { userCash += 5000; sentiment = Math.max(0, sentiment - 15); postTweet(`GM is ruthless. Fining the talent. 😠`, `DirtSheet`); }
+            if(choice === 1 && evIdx === 0) { sentiment = Math.min(100, sentiment + 10); }
+            if(choice === 0 && evIdx === 1) { if(userCash>=2000) { userCash -= 2000; sentiment = Math.min(100, sentiment + 20); } }
+            if(choice === 1 && evIdx === 1) { sentiment = Math.max(0, sentiment - 20); }
+            saveGame(); updateUI();
         }
 
         function tick() {
@@ -495,6 +557,7 @@
             if(!invasion.active && Math.random() < 0.05) triggerInvasion();
             if(!auction.active && Math.random() < 0.1) triggerAIAuction();
             if(!sponsor.active && Math.random() < 0.1) triggerSponsor();
+            if(Math.random() < 0.05) triggerLockerRoomEvent();
 
             saveGame(); updateUI(); renderMerchStand(); if(mod) displayCollection();
         }
@@ -502,7 +565,15 @@
         function fastTick() {
             const now = Date.now(); let needsRender = false;
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            col.forEach((c) => { if(c.trainingUntil > 0 && now >= c.trainingUntil) { c.trainingUntil = 0; c.baseWin = 0.6; needsRender = true; postTweet(`Just saw a wrestler leave the gym. Looking jacked! 💪`, `GymRat99`); } });
+            col.forEach((c) => { 
+                if(c.trainingUntil > 0 && now >= c.trainingUntil) { c.trainingUntil = 0; c.baseWin = 0.6; needsRender = true; postTweet(`Just saw a wrestler leave the gym. Looking jacked! 💪`, `GymRat99`); } 
+                if(c.scoutingUntil > 0 && now >= c.scoutingUntil) {
+                    c.scoutingUntil = 0; needsRender = true;
+                    if(Math.random() > 0.5) { c.baseWin = Math.min(0.9, c.baseWin + 0.05); alert("🚌 A wrestler returned from the Indies with a permanent +5% Win Rate boost!"); }
+                    else { inventory.chair++; inventory.drink++; localStorage.setItem('EWF_Gear', JSON.stringify(inventory)); alert("🚌 A wrestler returned from the Indies with some Gear they found on the road!"); }
+                    postTweet(`Card #${c.img.match(/\d+/)[0]} is back from the indies. Ready for the big leagues again!`, `IndieMark`);
+                }
+            });
             if(needsRender) { localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); }
             document.querySelectorAll('.train-timer-text').forEach(el => { const t = parseInt(el.getAttribute('data-time')); if(t > now) { const secs = Math.floor((t - now) / 1000); const m = Math.floor(secs / 60); const s = secs % 60; el.innerHTML = `${m}:${s < 10 ? '0' : ''}${s}`; } });
             
@@ -531,6 +602,34 @@
             } else if(!tvWarMode && document.getElementById('tv-war-msg').style.display === 'none') {
                 document.getElementById('tv-war-banner').style.display = 'block';
             }
+            
+            if(gimmickMode.active) {
+                if(now >= gimmickMode.expires) {
+                    gimmickMode.active = false; gimmickMode.type = null; localStorage.setItem('EWF_Gimmick', JSON.stringify(gimmickMode));
+                    document.getElementById('gimmick-banner').style.display = 'none'; applyGimmickEffects(); displayCollection();
+                    alert("🎟️ The Special Event has ended. Normal rules apply.");
+                } else {
+                    document.getElementById('gimmick-banner').style.display = 'block';
+                    let secs = Math.floor((gimmickMode.expires - now) / 1000); let m = Math.floor(secs / 60); let s = secs % 60;
+                    document.getElementById('gimmick-banner').innerHTML = `🎟️ ${gimmickMode.type.toUpperCase()} NIGHT ACTIVE! (${m}:${s<10?'0':''}${s})`;
+                }
+            }
+        }
+        
+        function bookGimmick(type) {
+            if(userCash < 5000) return alert("You need $5,000 to book a special event.");
+            if(gimmickMode.active) return alert("An event is already active!");
+            userCash -= 5000;
+            gimmickMode = { active: true, type: type, expires: Date.now() + (10 * 60 * 1000) };
+            localStorage.setItem('EWF_Gimmick', JSON.stringify(gimmickMode));
+            document.getElementById('gimmick-modal').style.display = 'none';
+            saveGame(); updateUI(); applyGimmickEffects(); displayCollection();
+            postTweet(`The GM just booked a ${type} night! This is gonna be wild! 🎟️`, `LiveCrowd`);
+        }
+        
+        function applyGimmickEffects() {
+            document.body.className = '';
+            if(gimmickMode.active) document.body.classList.add(`gimmick-${gimmickMode.type}`);
         }
 
         function toggleAuto() { autoMode = !autoMode; const btn = document.getElementById('auto-btn'); if(autoMode) { btn.className = 'toggle-btn toggle-on'; btn.innerHTML = 'AUTO-BOOK: ON'; postTweet(`The GM just turned on the Auto-Booker! Non-stop action! 🔥`, `IndieFan`); } else { btn.className = 'toggle-btn toggle-off'; btn.innerHTML = 'AUTO-BOOK: OFF'; } }
@@ -540,24 +639,32 @@
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let fought = false;
             for(let i=0; i<col.length; i++) {
                 let card = col[i];
-                if(!card.injured && card.trainingUntil < Date.now() && card.wins < 200 && !card.botched) {
-                    if(card.stamina === 5 || card.radioactive) {
-                        if(!card.radioactive) card.stamina--; let win = Math.random() < card.baseWin;
-                        let el = document.querySelectorAll('.card-container')[i];
-                        if(el) { let pop = document.createElement('div'); pop.className = 'auto-pop'; pop.innerHTML = win ? '<span style="color:var(--green);">+WIN</span>' : '<span style="color:var(--red);">-LOSS</span>'; el.appendChild(pop); setTimeout(()=>pop.remove(), 1000); }
-                        if(win) { 
-                            card.wins++; totalWins++; card.streak = card.streak > 0 ? card.streak+1 : 1; hitBoss(1); 
-                            const cNum = parseInt(card.img.match(/\d+/)[0]);
-                            if(fanDemand === cNum) { sentiment = Math.min(100, sentiment + 5); fanDemand = null; }
-                            if(Math.random()<0.05){ vault.push({ id: Date.now(), unlockAt: Date.now() + 10*60*1000 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); } 
-                            progressSponsor();
-                        } 
-                        else { 
-                            totalLosses++; card.streak = card.streak < 0 ? card.streak-1 : -1; 
-                            if(card.img === faceCardImg) { faceCardImg = null; localStorage.removeItem('EWF_FaceImg'); postTweet(`The Face of the Company just lost... Merch sales are plummeting. 📉`, `DirtSheet`); renderMerchStand(); }
-                        }
-                        fought = true;
+                let canFight = !card.injured && card.trainingUntil < Date.now() && card.scoutingUntil < Date.now() && !card.botched;
+                if(!canFight) continue;
+                if(card.wins >= 200 && !(gimmickMode.active && gimmickMode.type === 'legends')) continue;
+
+                if(card.stamina === 5 || card.radioactive) {
+                    let stamDrain = (gimmickMode.active && gimmickMode.type === 'hardcore' && !card.radioactive) ? 3 : 1;
+                    if(!card.radioactive) card.stamina = Math.max(0, card.stamina - stamDrain); 
+                    
+                    let winChance = card.baseWin;
+                    if(gimmickMode.active && gimmickMode.type === 'hardcore') winChance += 0.15;
+                    let win = Math.random() < winChance;
+                    
+                    let el = document.querySelectorAll('.card-container')[i];
+                    if(el) { let pop = document.createElement('div'); pop.className = 'auto-pop'; pop.innerHTML = win ? '<span style="color:var(--green);">+WIN</span>' : '<span style="color:var(--red);">-LOSS</span>'; el.appendChild(pop); setTimeout(()=>pop.remove(), 1000); }
+                    if(win) { 
+                        card.wins++; totalWins++; card.streak = card.streak > 0 ? card.streak+1 : 1; hitBoss(1); 
+                        const cNum = parseInt(card.img.match(/\d+/)[0]);
+                        if(fanDemand === cNum) { sentiment = Math.min(100, sentiment + 5); fanDemand = null; }
+                        if(Math.random()<0.05){ vault.push({ id: Date.now(), unlockAt: Date.now() + 10*60*1000 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); } 
+                        progressSponsor();
+                    } 
+                    else { 
+                        totalLosses++; card.streak = card.streak < 0 ? card.streak-1 : -1; 
+                        if(card.img === faceCardImg) { faceCardImg = null; localStorage.removeItem('EWF_FaceImg'); postTweet(`The Face of the Company just lost... Merch sales are plummeting. 📉`, `DirtSheet`); renderMerchStand(); }
                     }
+                    fought = true;
                 }
             }
             if(fought) { localStorage.setItem('EWF_Wins', totalWins); localStorage.setItem('EWF_Losses', totalLosses); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); displayRecord(); }
@@ -927,8 +1034,34 @@
             if (userCash < cost) return; userCash -= cost; saveGame(); updateUI();
             let holoChance = baseHoloChance + shredBonus; pendingPack = [];
             for (let i = 0; i < 5; i++) {
-                const num = Math.floor(Math.random() * totalCards) + 1; const isHolo = Math.random() < holoChance; let grade = 7; const roll = Math.random();
-                if(roll > 0.95) grade = 10; else if(roll > 0.80) grade = 9; else if(roll > 0.40) grade = 8; pendingPack.push({ img: `card (${num}).jpg`, holo: isHolo, grade: grade });
+                const num = Math.floor(Math.random() * totalCards) + 1; 
+                let grade = 7; const roll = Math.random();
+                
+                // BRUTAL PULL RATES FOR GRADES
+                if(roll > 0.99) grade = 10; // 1%
+                else if(roll > 0.92) grade = 9; // 7%
+                else if(roll > 0.70) grade = 8; // 22%
+                
+                let isHolo = Math.random() < holoChance;
+                let holoType = null;
+                let serial = null;
+
+                if(isHolo) {
+                    let holoRoll = Math.random();
+                    if(holoRoll > 0.95) holoType = 'cosmic'; // 5% of holos
+                    else if(holoRoll > 0.80) holoType = 'gold-vinyl'; // 15% of holos
+                    else if(holoRoll > 0.50) holoType = 'cracked-ice'; // 30% of holos
+                    else holoType = 'standard'; // 50% of holos
+
+                    // SERIAL NUMBER LOGIC (Very rare)
+                    let serialRoll = Math.random();
+                    if(serialRoll > 0.995) serial = { current: 1, max: 1, color: 'gold' }; // 0.5% of holos
+                    else if(serialRoll > 0.97) serial = { current: Math.floor(Math.random()*10)+1, max: 10, color: 'gold' }; // 2.5% of holos
+                    else if(serialRoll > 0.90) serial = { current: Math.floor(Math.random()*50)+1, max: 50, color: 'silver' }; // 7% of holos
+                    else if(serialRoll > 0.75) serial = { current: Math.floor(Math.random()*99)+1, max: 99, color: 'silver' }; // 15% of holos
+                }
+
+                pendingPack.push({ img: `card (${num}).jpg`, holo: isHolo, holoType: holoType, serial: serial, grade: grade });
             }
             const area = document.getElementById('pack-area'); area.innerHTML = `<div id="sealed-pack" onclick="openSealedPack()"><h2 style="color:black; font-size: 28px; transform: rotate(-10deg); font-weight:900; letter-spacing:1px;">RIP PACK!</h2></div>`;
         }
@@ -939,28 +1072,42 @@
             pendingPack.forEach((cardData, i) => {
                 setTimeout(() => {
                     const cardDiv = document.createElement('div'); cardDiv.className = 'pack-card slide-in';
-                    cardDiv.innerHTML = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${cardData.img}'); ${cardData.holo ? 'border-color:cyan; box-shadow: 0 0 15px rgba(0,255,255,0.4);' : ''}"></div></div>`;
+                    
+                    // Construct inner HTML for pack reveal
+                    let inner = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${cardData.img}'); ${cardData.holo ? 'border-color:cyan; box-shadow: 0 0 15px rgba(0,255,255,0.4);' : ''}">`;
+                    if(cardData.holoType) inner += `<div class="holo-${cardData.holoType}" style="opacity:0.9; animation:ambient-shimmer 4s ease-in-out infinite;"></div>`;
+                    if(cardData.serial) inner += `<div class="serial-badge serial-${cardData.serial.color}">${cardData.serial.current}/${cardData.serial.max}</div>`;
+                    inner += `</div></div>`;
+                    cardDiv.innerHTML = inner;
+
                     cardDiv.onclick = function() { 
                         if(!this.classList.contains('flipped')) { 
-                            if(cardData.holo || cardData.grade === 10) {
+                            if(cardData.holo || cardData.grade === 10 || cardData.serial) {
                                 this.classList.add('super-shake'); document.body.classList.add('screen-shake');
                                 setTimeout(() => { 
                                     this.classList.remove('super-shake'); document.body.classList.remove('screen-shake'); this.classList.add('flipped'); triggerConfetti(); 
                                     if(cardData.holo) { updateBounty('holos', 1); sentiment = Math.min(100, sentiment + 2); }
-                                    if(cardData.grade === 10) postTweet(`Someone just pulled a GEM MINT 10! Unbelievable luck! ✨`, `PackRipperZ`);
-                                    else if(cardData.holo) postTweet(`Nice Holo pull right there. Clean corners.`, `CardGrader`);
-                                    saveCard(cardData.img, cardData.holo, cardData.grade); 
+                                    if(cardData.serial && cardData.serial.max === 1) postTweet(`OMFG THEY JUST PULLED A 1/1 GOLD!!! THIS IS NOT A DRILL! 🤯💎`, `HobbyGod`);
+                                    else if(cardData.serial) postTweet(`Numbered card hit! Out of /${cardData.serial.max}! Huge pull!`, `CardShark`);
+                                    else if(cardData.grade === 10) postTweet(`Someone just pulled a GEM MINT 10! Unbelievable luck! ✨`, `PackRipperZ`);
+                                    else if(cardData.holoType && cardData.holoType !== 'standard') postTweet(`Nice ${cardData.holoType.replace('-',' ')} parallel right there. Clean corners.`, `CardGrader`);
+                                    saveCard(cardData); 
                                 }, 1200); 
-                            } else { this.classList.add('flipped'); saveCard(cardData.img, cardData.holo, cardData.grade); }
+                            } else { this.classList.add('flipped'); saveCard(cardData); }
                         } 
                     }; area.appendChild(cardDiv);
                 }, i * 150);
             });
         }
 
-        function saveCard(img, holo, grade) {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let existing = col.find(c => c.img === img && !c.botched);
-            if (!existing) { col.push({ img, wins: 0, holo, grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, buff: null, radioactive: false, mythic: false, botched: false }); } else { existing.dupes = (existing.dupes || 0) + 1; }
+        function saveCard(cardData) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; 
+            // Serialized cards NEVER stack
+            let existing = col.find(c => c.img === cardData.img && !c.botched && c.grade === cardData.grade && c.holo === cardData.holo && c.holoType === cardData.holoType && JSON.stringify(c.serial) === JSON.stringify(cardData.serial));
+            
+            if (!existing || cardData.serial) { 
+                col.push({ img: cardData.img, wins: 0, holo: cardData.holo, holoType: cardData.holoType, serial: cardData.serial, grade: cardData.grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, scoutingUntil: 0, buff: null, radioactive: false, mythic: false, botched: false }); 
+            } else { existing.dupes = (existing.dupes || 0) + 1; }
             localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI();
         }
 
@@ -968,14 +1115,21 @@
 
         function runBattle(idx, isPPV = false) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let card = col[idx];
-            if(card.injured || card.trainingUntil > Date.now() || factionMode || gauntlet.active || tvWarMode || card.botched) return;
+            if(card.injured || card.trainingUntil > Date.now() || card.scoutingUntil > Date.now() || factionMode || gauntlet.active || tvWarMode || card.botched) return;
+            if(card.wins >= 200 && !(gimmickMode.active && gimmickMode.type === 'legends')) return alert("This Hall of Famer is retired! Wait for a Legends Night to use them.");
+            
             if(invasion.active) { if(confirm("🚨 RIVAL INVASION ACTIVE! 🚨\n\nDo you want to send this wrestler to defend your territory?")) { fightInvasion(idx); return; } }
             if(card.stamina <= 0) { if(!card.radioactive && Math.random() < 0.5) { card.injured = true; sentiment = Math.max(0, sentiment - 5); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); alert("🚑 INJURY! Pay $500 to heal."); postTweet(`Horrible injury in the ring tonight... hope they recover quickly. 🚑`, `RingsideDoc`); return; } } 
-            else { if(!card.radioactive) card.stamina--; localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); }
+            else { 
+                let stamDrain = (gimmickMode.active && gimmickMode.type === 'hardcore' && !card.radioactive) ? 3 : 1;
+                if(!card.radioactive) card.stamina = Math.max(0, card.stamina - stamDrain); 
+                localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); 
+            }
 
             const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text');
             overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${card.img}')`; bCard.className = 'rumble'; 
             let moves = generateCommentary({ isPPV: isPPV, buff: card.buff, stamina: card.stamina, radioactive: card.radioactive, streak: card.streak });
+            if(gimmickMode.active && gimmickMode.type === 'hardcore') moves.unshift("NO DISQUALIFICATIONS TONIGHT!");
             let step = 0; bText.innerHTML = moves[0]; bText.style.color = "white";
 
             let fightInt = setInterval(() => {
@@ -983,7 +1137,11 @@
                 if(step < moves.length) { bText.innerHTML = moves[step]; document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),100); } 
                 else {
                     clearInterval(fightInt); bCard.classList.remove('rumble'); col = JSON.parse(localStorage.getItem('EWF_Collection')); card = col[idx]; 
-                    let chance = card.baseWin; if(card.buff === 'chair') { chance += 0.25; card.buff = null; } 
+                    
+                    let chance = card.baseWin; 
+                    if(card.buff === 'chair') { chance += 0.25; card.buff = null; } 
+                    if(gimmickMode.active && gimmickMode.type === 'hardcore') chance += 0.15;
+                    
                     const win = Math.random() < chance;
                     if (win) { 
                         bText.innerHTML = "WINNER!"; bText.style.color = "var(--green)"; triggerConfetti(); 
@@ -1012,11 +1170,36 @@
         function getCardValue(card) { 
             if(card.botched) return 0;
             let baseVal = 20; if (card.grade === 10) baseVal = 500; else if (card.grade === 9) baseVal = 100; else if (card.grade === 8) baseVal = 40; 
-            let total = card.holo ? baseVal * 4 : baseVal; if (card.champion) total *= 5; if (card.streak >= 3) total *= 1.5; if (card.streak <= -3) total *= 0.5; 
+            let total = card.holo ? baseVal * 4 : baseVal; 
+            
+            // Value multipliers for Holo Types
+            if(card.holoType === 'cracked-ice') total *= 2;
+            if(card.holoType === 'gold-vinyl') total *= 5;
+            if(card.holoType === 'cosmic') total *= 10;
+            
+            // Value for Serial Numbers
+            if(card.serial) {
+                if(card.serial.max === 1) total *= 100;
+                else if(card.serial.max <= 10) total *= 20;
+                else if(card.serial.max <= 50) total *= 10;
+                else total *= 5;
+            }
+
+            if (card.champion) total *= 5; if (card.streak >= 3) total *= 1.5; if (card.streak <= -3) total *= 0.5; 
             const numMatch = card.img.match(/\d+/); if(numMatch) { const num = parseInt(numMatch[0]); if(num === market.boosted) total *= 3; if(num === market.crashed) total *= 0.5; }
             if(card.mythic) total *= 10; 
             let sentMulti = 0.5 + (sentiment / 50);
             return Math.floor((total * multi) * sentMulti); 
+        }
+
+        function sendToIndies(idx) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection'));
+            if(confirm("Send this wrestler to the Indies for 10 minutes? They can't fight, but might return with boosted stats or gear!")) {
+                col[idx].scoutingUntil = Date.now() + (10 * 60 * 1000);
+                localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                displayCollection(); updateUI();
+                postTweet(`Card #${col[idx].img.match(/\d+/)[0]} just accepted bookings on the Indie Circuit. Wishing them luck! 🚌`, `IndieFan`);
+            }
         }
 
         function sellCard(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); const val = getCardValue(col[idx]); if(confirm(`Sell for $${val}?`)) { if(col[idx].dupes > 0) col[idx].dupes--; else col.splice(idx, 1); userCash += val; sentiment = Math.max(0, sentiment - 1); localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); updateUI(); displayCollection(); } }
@@ -1031,7 +1214,7 @@
 
         function handleCardClick(idx) { 
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; 
-            if(col[idx].injured || col[idx].wins >= 200 || col[idx].botched) return alert("Cannot select this wrestler!"); 
+            if(col[idx].injured || col[idx].wins >= 200 || col[idx].botched || col[idx].scoutingUntil > Date.now()) return alert("Cannot select this wrestler!"); 
             
             if(tvWarMode) {
                 const teamIdx = tvWarTeam.indexOf(idx); 
@@ -1059,28 +1242,40 @@
                 if(tvWarMode && tvWarTeam.includes(index)) { classes += ' tv-selected'; }
                 cardDiv.className = classes;
                 
-                const isHof = card.wins >= 200; let streakHtml = ''; if(card.streak >= 3) streakHtml = '<div class="streak-badge">🔥</div>'; if(card.streak <= -3) streakHtml = '<div class="streak-badge">❄️</div>'; let buffHtml = ''; if(card.buff === 'chair') buffHtml = '<div class="buff-icon">🪑</div>'; const staminaPrc = (card.stamina / 5) * 100; let stamColor = "var(--green)"; if(card.stamina <= 2) stamColor = "#f39c12"; if(card.stamina === 0) stamColor = "var(--red)"; let isTraining = card.trainingUntil > now;
+                const isHof = card.wins >= 200; let streakHtml = ''; if(card.streak >= 3) streakHtml = '<div class="streak-badge">🔥</div>'; if(card.streak <= -3) streakHtml = '<div class="streak-badge">❄️</div>'; let buffHtml = ''; if(card.buff === 'chair') buffHtml = '<div class="buff-icon">🪑</div>'; const staminaPrc = (card.stamina / 5) * 100; let stamColor = "var(--green)"; if(card.stamina <= 2) stamColor = "#f39c12"; if(card.stamina === 0) stamColor = "var(--red)"; let isTraining = card.trainingUntil > now; let isScouting = card.scoutingUntil > now;
                 let radioBadge = card.radioactive ? '<div style="position:absolute; top:-10px; left:-10px; font-size:25px; z-index:30; filter:drop-shadow(0 0 10px #39ff14);">☣️</div>' : '';
                 let mythicBadge = card.mythic ? '<div style="position:absolute; bottom:-15px; left:50%; transform:translateX(-50%); font-size:35px; z-index:30; filter:drop-shadow(0 0 10px #e0b0ff);">💎</div>' : '';
                 if(card.img === faceCardImg) radioBadge += '<div style="position:absolute; top:-10px; right:-10px; font-size:25px; z-index:30; filter:drop-shadow(0 0 10px #f1c40f);">👕</div>';
 
+                let holoLayer = '';
+                if(card.holoType && card.holoType !== 'standard') {
+                    holoLayer = `<div class="holo-${card.holoType}"></div>`;
+                } else if (card.holo) {
+                    holoLayer = `<div class="holo-standard"></div>`;
+                }
+
+                let serialBadge = '';
+                if(card.serial) {
+                    serialBadge = `<div class="serial-badge serial-${card.serial.color}">${card.serial.current}/${card.serial.max}</div>`;
+                }
+
                 cardDiv.innerHTML = `
                     <div class="grade-label ${card.grade === 10 ? 'gem-mint' : ''}"><div class="grade-title">${card.botched ? 'MUTANT EXPERIMENT' : card.champion ? '🏆 EWF AUTHENTIC 🏆' : 'EWF AUTHENTIC'}</div><div class="grade-score">${card.grade === 10 ? 'GEM MINT 10' : `MINT ${card.grade}`}</div></div>
-                    <div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; z-index: 10;"></div>
-                    <div class="shine-layer"></div><div class="sparkle-layer"></div><div class="holo-foil"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive && !card.botched ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}`;
+                    <div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; z-index: 10; overflow: hidden;">${holoLayer}${serialBadge}</div>
+                    <div class="shine-layer"></div><div class="sparkle-layer"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive && !card.botched ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${isScouting ? `<div class="scout-overlay">🚌 ON TOUR<br><span class="train-timer-text" data-time="${card.scoutingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}`;
                 
-                setupInspector(cardDiv); if(factionMode || tvWarMode) { cardDiv.onclick = () => handleCardClick(index); } else if(!isHof && !card.injured && !isTraining && !card.botched) { cardDiv.ondblclick = () => runBattle(index, false); } container.appendChild(cardDiv);
+                setupInspector(cardDiv); if(factionMode || tvWarMode) { cardDiv.onclick = () => handleCardClick(index); } else if(!isHof && !card.injured && !isTraining && !isScouting && !card.botched) { cardDiv.ondblclick = () => runBattle(index, false); } container.appendChild(cardDiv);
                 
-                if(!isHof && !isTraining && !factionMode && !tvWarMode) {
+                if(!isHof && !isTraining && !isScouting && !factionMode && !tvWarMode) {
                     const controls = document.createElement('div'); controls.className = 'gm-controls';
                     if(card.botched) {
                         controls.innerHTML = `<button class="gm-btn" style="background:var(--red); color:white; border-color:white;" onclick="exileCard(${index})">☠️ EXILE ($50k)</button>`;
                     } else if(card.injured) { controls.innerHTML = `<button class="gm-btn btn-heal" onclick="healCard(${index})">HEAL ($500)</button>`; } else { 
                         controls.innerHTML = `<div style="display:flex; gap:4px;"><button class="gm-btn btn-sell" style="flex:1;" onclick="sellCard(${index})">SELL ($${getCardValue(card)})</button><button class="gm-btn btn-auction" style="flex:1;" onclick="playerSellAuction(${index})">AUCTION</button></div>`;
-                        controls.innerHTML += `<button class="gm-btn btn-gear" onclick="openGearMenu(${index})">🎒 GEAR</button>`; 
+                        controls.innerHTML += `<div style="display:flex; gap:4px;"><button class="gm-btn btn-gear" style="flex:1;" onclick="openGearMenu(${index})">🎒 GEAR</button><button class="gm-btn" style="flex:1; border-color:var(--purple); color:var(--purple);" onclick="sendToIndies(${index})">🚌 INDIES</button></div>`; 
                         if(card.baseWin < 0.6) controls.innerHTML += `<button class="gm-btn btn-train" onclick="trainCard(${index})">TRAIN 5m ($1000)</button>`; 
                         if(!card.champion && userCash >= 1000) controls.innerHTML += `<button class="gm-btn btn-ppv" onclick="ppvMatch(${index})">PPV TITLE ($1000)</button>`; 
-                        if(card.dupes >= 2 && card.grade < 10) controls.innerHTML += `<button class="gm-btn btn-forge" onclick="forgeCard(${index})">FORGE 10</button>`; 
+                        if(card.dupes >= 2 && card.grade < 10 && !card.serial) controls.innerHTML += `<button class="gm-btn btn-forge" onclick="forgeCard(${index})">FORGE 10</button>`; 
                         if(!card.radioactive) controls.innerHTML += `<button class="gm-btn btn-splice" onclick="spliceCard(${index})">🧪 SPLICE ($10k+Gear)</button>`;
                         if(invasion.active) controls.innerHTML += `<button class="gm-btn" style="background:var(--red); color:white; border-color:white; box-shadow:0 0 10px rgba(231,76,60,0.8); animation:pulse 1s infinite;" onclick="fightInvasion(${index})">⚔️ DEFEND INVASION</button>`;
                         if(card.img !== faceCardImg) controls.innerHTML += `<button class="gm-btn" style="border-color:#f1c40f; color:#f1c40f;" onclick="setFace('${card.img}')">👕 SET AS FACE</button>`;
