@@ -703,6 +703,47 @@
             }
         }
 
+        // --- VAULT LOGIC ---
+        function openVault() {
+            let html = "";
+            let now = Date.now();
+            if(vault.length === 0) {
+                html = "<p style='color:#aaa; text-align:center; width:100%;'>Your vault is empty. Win matches to find briefcases!</p>";
+            } else {
+                vault.forEach((b, i) => {
+                    let ready = now >= b.unlockAt;
+                    if(ready) {
+                        html += `<div class="modal-item"><div>💼 Diamond Briefcase</div><div><button class="modal-btn" style="background:rgba(46,204,113,0.2); color:var(--green); border-color:var(--green);" onclick="unlockBriefcase(${i})">OPEN</button></div></div>`;
+                    } else {
+                        let secs = Math.floor((b.unlockAt - now) / 1000);
+                        let m = Math.floor(secs / 60); let s = secs % 60;
+                        html += `<div class="modal-item"><div>🔒 Locked Briefcase<br><span style="font-size:10px; color:#aaa;">Ready in: ${m}:${s<10?'0':''}${s}</span></div><div><button class="modal-btn" style="background:rgba(212,175,55,0.2); color:var(--gold); border-color:var(--gold);" onclick="bribeBriefcase(${i})">BRIBE ($500)</button></div></div>`;
+                    }
+                });
+            }
+            document.getElementById('vault-list').innerHTML = html;
+            document.getElementById('vault-modal').style.display = 'block';
+        }
+
+        function unlockBriefcase(i) {
+            vault.splice(i, 1);
+            localStorage.setItem('EWF_Vault', JSON.stringify(vault));
+            let reward = (Math.floor(Math.random() * 5000) + 1000) * multi;
+            userCash += reward;
+            sentiment = Math.min(100, sentiment + 2);
+            saveGame(); updateUI(); openVault();
+            alert(`💼 You opened the briefcase and found $${reward}!`);
+            postTweet(`Somebody just cashed in a briefcase! 💼💸`, `MoneyInTheBank`);
+        }
+
+        function bribeBriefcase(i) {
+            if(userCash < 500) return alert("Not enough cash to bribe the guard!");
+            userCash -= 500;
+            vault[i].unlockAt = 0; 
+            localStorage.setItem('EWF_Vault', JSON.stringify(vault));
+            saveGame(); updateUI(); openVault();
+        }
+
         // EXISTING FUNCTIONS (Modified seamlessly to accept new features)
         function triggerInvasion() { 
             let rival = aiRivals[Math.floor(Math.random() * aiRivals.length)];
