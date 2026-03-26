@@ -193,7 +193,7 @@
     <div id="hof-section"><h1 style="color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); font-size: 2.5em; margin-bottom: 5px; font-weight:900;">🏛️ EWF HALL OF FAME 🏛️</h1><p style="color: #aaa; font-size: 13px; margin-top: 0; font-weight:700; letter-spacing:1px;">LEGENDS WITH 200+ WINS</p><div id="hof-grid"></div></div>
 
     <script>
-        const totalCards = 38; const folderPath = "rare ewf cards";
+        const totalCards = 57; const folderPath = "rare ewf cards";
         function getCardDropNum() { let num; let valid = false; while(!valid) { num = Math.floor(Math.random() * totalCards) + 1; if (num === 32) { if (Math.random() < 0.01) valid = true; } else if (num === 30 || num === 36) { if (Math.random() < 0.05) valid = true; } else { valid = true; } } return num; }
         
         let userCash = parseInt(localStorage.getItem('EWF_Cash')); if (isNaN(userCash) || userCash <= 0) userCash = 50;
