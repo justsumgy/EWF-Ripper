@@ -148,7 +148,18 @@
     <div id="invasion-modal" class="modal"><h2 style="color:var(--red); border-bottom-color:rgba(231,76,60,0.3);">🚨 DEFEND YOUR TURF 🚨</h2><p style="color:#ddd; text-align:center; font-size:13px;">Select your best available wrestler to fight <span id="invasion-rival-name" style="color:var(--gold); font-weight:bold;">the Rival Boss</span>.</p><div id="invasion-roster" style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:20px; max-height:300px; overflow-y:auto; padding-right:5px;"></div><button class="close-btn" onclick="document.getElementById('invasion-modal').style.display='none'">FLEE (LOSE 15% CASH)</button></div>
     <div id="cloning-modal" class="modal"><h2>🧬 THE BLACK MARKET LAB</h2><div id="cloning-list" style="margin-top:15px;"></div><button class="close-btn" onclick="document.getElementById('cloning-modal').style.display='none'">LEAVE LAB</button></div>
     <div id="gimmick-modal" class="modal"><h2>🎟️ BOOK A SPECIAL EVENT</h2><div class="modal-item"><div>🩸 <b>Hardcore Night</b><br><span style="font-size:10px; color:#aaa;">+15% Win Rate, Triple Stamina Drain</span></div><div><button class="modal-btn" style="background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red);" onclick="bookGimmick('hardcore')">BOOK ($50)</button></div></div><div class="modal-item"><div>🏆 <b>Legends Night</b><br><span style="font-size:10px; color:#aaa;">Retired HOF Cards can fight again!</span></div><div><button class="modal-btn" style="background:rgba(212,175,55,0.2); color:var(--gold); border-color:var(--gold);" onclick="bookGimmick('legends')">BOOK ($50)</button></div></div><button class="close-btn" onclick="document.getElementById('gimmick-modal').style.display='none'">CANCEL</button></div>
-
+<div id="profile-modal" class="modal" style="width:700px; text-align:center;">
+        <h2 style="color:#e0b0ff; border-bottom-color:#e0b0ff;">👔 GENERAL MANAGER PROFILE</h2>
+        <div style="display:flex; justify-content:space-around; background:rgba(0,0,0,0.5); padding:15px; border-radius:8px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.1);">
+            <div><div style="font-size:10px; color:#aaa; letter-spacing:1px;">CAREER RECORD</div><div style="font-size:24px; font-weight:900;"><span style="color:var(--green);" id="prof-w">0</span> - <span style="color:var(--red);" id="prof-l">0</span></div></div>
+            <div><div style="font-size:10px; color:#aaa; letter-spacing:1px;">WIN RATE</div><div style="font-size:24px; font-weight:900; color:cyan;" id="prof-wr">0%</div></div>
+            <div><div style="font-size:10px; color:#aaa; letter-spacing:1px;">LIFETIME EARNINGS</div><div style="font-size:24px; font-weight:900; color:var(--gold);" id="prof-cash">$0</div></div>
+        </div>
+        <h3 style="color:var(--gold); margin-bottom:10px; letter-spacing:2px;">🏆 THE TROPHY ROOM 🏆</h3>
+        <div style="font-size:12px; color:#aaa; margin-bottom:15px;">Your Top 3 Most Valuable Assets</div>
+        <div id="trophy-grid" style="display:flex; justify-content:center; gap:20px; min-height:200px;"></div>
+        <button class="close-btn" onclick="document.getElementById('profile-modal').style.display='none'">CLOSE PROFILE</button>
+    </div>
     <h1>EWF RIPPED</h1>
     <div id="boss-container" class="glass-panel"><h3>👹 WORLD HEAVYWEIGHT BOSS</h3><div id="boss-hp-bar-bg"><div id="boss-hp-bar"></div><div id="boss-hp-text">1000 / 1000 HP</div></div></div>
     
