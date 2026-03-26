@@ -503,6 +503,19 @@ body.uv-mode { background-color: #050014 !important; background-image: none !imp
 
         function trainCard(idx) { if(userCash < 100) return; if(confirm("Send to Camp for $100? Locked for 5m, permanent +10% Win Rate.")) { userCash -= 100; saveGame(); updateUI(); let col = JSON.parse(localStorage.getItem('EWF_Collection')); col[idx].trainingUntil = Date.now() + (5 * 60 * 1000); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); } }
         function hardReset() { if(confirm("Wipe all cards, stats, and start fresh?")) { localStorage.clear(); location.reload(); } }
+        // --- V9.0 UV MODE LOGIC ---
+let isUVMode = false;
+function toggleUV() { 
+    isUVMode = !isUVMode; 
+    document.body.classList.toggle('uv-mode'); 
+    document.getElementById('uv-toggle').style.background = isUVMode ? "var(--purple)" : "rgba(0,0,0,0.8)"; 
+    // Remove background image so UV colors pop
+    if(isUVMode) {
+        document.body.style.backgroundImage = "none";
+    } else {
+        document.body.style.backgroundImage = "url('background.jpg')"; 
+    }
+}
         function toggleMusic() { const m = document.getElementById("bgMusic"); const btn = document.getElementById("music-toggle"); if (isMusicPlaying) { m.pause(); btn.innerHTML = "🔇 Mute"; isMusicPlaying = false; } else { m.volume = 0.2; m.play().catch(e => {}); btn.innerHTML = "🔊 Music On"; isMusicPlaying = true; } }
         function triggerConfetti() { const colors = ['#e74c3c', '#2ecc71', '#f1c40f', '#3498db']; for(let i=0; i<60; i++) { const c = document.createElement('div'); c.className = 'confetti'; c.style.cssText = `left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`; document.body.appendChild(c); let cy = 0, op = 1; const drift = setInterval(() => { cy += Math.random() * 5 + 2; op -= 0.01; c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = op; if (op <= 0) { clearInterval(drift); c.remove(); } }, 20); } }
 
