@@ -113,6 +113,16 @@
         #battle-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; } #battle-card { width: 300px; height: 420px; border: 2px solid var(--gold); border-radius: 16px; background-size: cover; background-position: center; z-index: 1001; box-shadow: 0 0 50px rgba(212,175,55,0.4); pointer-events: none; } #battle-text { font-size: 4em; color: white; font-weight: 900; text-shadow: 0 5px 20px rgba(0,0,0,0.8); margin-top: 30px; z-index: 1001; text-align: center; pointer-events: none; text-transform: uppercase; letter-spacing: 2px; } #d20-display { font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); animation: spinDie 0.5s ease-out; display: none; } @keyframes spinDie { 0% { transform: rotate(0deg) scale(0.5); opacity: 0; } 100% { transform: rotate(720deg) scale(1); opacity: 1; } }
         .slide-in { animation: slideIn 0.4s ease-out forwards; } @keyframes slideIn { from { transform: translateY(-50px) scale(0.8); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } } .super-shake { animation: superShake 1.2s cubic-bezier(.36,.07,.19,.97) both !important; } @keyframes superShake { 0% { transform: translate(2px, 1px) rotate(0deg); filter: brightness(1); box-shadow: 0 0 0px white; } 20% { transform: translate(-3px, 0px) rotate(2deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); filter: brightness(2); box-shadow: 0 0 40px white; } 80% { transform: translate(-1px, -1px) rotate(2deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); filter: brightness(1); box-shadow: 0 0 0px white; } } .screen-shake { animation: screenShake 0.15s linear; } @keyframes screenShake { 0% { transform: translate(10px,10px) rotate(1deg); } 25% { transform: translate(-10px,-5px) rotate(-1deg); } 50% { transform: translate(5px,-10px) rotate(1deg); } 75% { transform: translate(-5px,10px) rotate(-1deg); } 100% { transform: translate(0,0); } } .confetti { position: fixed; width: 8px; height: 16px; z-index: 20000; pointer-events: none; border-radius: 2px; } .rumble { animation: rumble 0.1s linear infinite; } @keyframes rumble { 0% { transform: translate(3px,3px); } 50% { transform: translate(-3px,-3px); } 100% { transform: translate(0,0); } }
         .tv-selected { border-color: cyan !important; box-shadow: 0 0 20px rgba(0,255,255,0.8) !important; transform: scale(1.05); } .is-botched { filter: grayscale(1) sepia(1) hue-rotate(-50deg) contrast(1.5); border-color: #555 !important; }
+    /* --- FOIL PACK TEAR ANIMATION --- */
+.pack-tear-anim { 
+    animation: packTear 0.8s forwards cubic-bezier(0.1, 0.8, 0.2, 1); 
+    pointer-events: none; 
+} 
+@keyframes packTear { 
+    0% { transform: scale(1.05) translateY(-5px); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); opacity: 1; } 
+    50% { clip-path: polygon(0 0, 50% 10%, 100% 0, 100% 100%, 50% 90%, 0 100%); transform: scale(1.1); filter: brightness(1.5); } 
+    100% { clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 50% 50%, 0 100%); transform: scale(1.2) translateY(50px); opacity: 0; } 
+}
     </style>
 </head>
 <body onload="initGame()">
@@ -532,39 +542,47 @@
             const area = document.getElementById('pack-area'); area.innerHTML = `<div id="sealed-box" onclick="openSealedPack()"><div class="box-lid"></div><h2 style="margin:0; text-shadow:0 0 10px black, 0 0 20px var(--gold);">EWF ELITE BOX</h2><div style="font-size:12px; margin-top:5px; font-weight:bold; letter-spacing:1px; color:#fff;">5 CARDS (1 GUARANTEED RARE)</div><div class="box-flare"></div></div>`;
         }
 
-        function openSealedPack() {
-            const cheer = document.getElementById("cheerSound"); cheer.volume = 0.5; cheer.currentTime = 0; cheer.play().catch(e=>{}); const area = document.getElementById('pack-area'); area.innerHTML = '';
-            pendingPack.forEach((cardData, i) => {
-                setTimeout(() => {
-                    const cardDiv = document.createElement('div'); cardDiv.className = 'pack-card slide-in';
-                    let inner = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${cardData.img}'); ${cardData.holo ? 'border-color:cyan; box-shadow: 0 0 15px rgba(0,255,255,0.4);' : ''}">`;
-                    if(cardData.holoType) inner += `<div class="holo-${cardData.holoType}"></div>`;
-                    if(cardData.serial) inner += `<div class="serial-badge serial-${cardData.serial.color}">${cardData.serial.current}/${cardData.serial.max}</div>`;
-                    if(cardData.relic) inner += `<div class="relic-window"><div class="relic-${cardData.relic}" style="width:100%; height:100%;"></div></div>`;
-                    inner += `</div></div>`; cardDiv.innerHTML = inner;
-
-                    cardDiv.onclick = function() { 
-                        if(!this.classList.contains('flipped')) { 
-                            if(cardData.holoType === 'ghost' || cardData.mythic || (cardData.serial && cardData.serial.max === 1)) {
-                                document.getElementById('walkout-overlay').style.display = 'flex';
-                                document.getElementById('walkout-card-container').innerHTML = `<div class="walkout-card" style="width:300px; height:420px; background-image:url('${folderPath}/${cardData.img}'); background-size:cover; border:2px solid cyan; border-radius:10px; box-shadow: 0 0 50px rgba(0,255,255,0.8); position:relative;">${inner}</div>`;
-                                setTimeout(() => { document.getElementById('walkout-overlay').style.display = 'none'; this.classList.add('flipped'); triggerConfetti(); updateBounty('holos', 1); saveCard(cardData); }, 3500);
-                            } else if(cardData.holo || cardData.serial || cardData.relic) {
-                                this.classList.add('super-shake'); document.body.classList.add('screen-shake');
-                                setTimeout(() => { 
-                                    this.classList.remove('super-shake'); document.body.classList.remove('screen-shake'); this.classList.add('flipped'); triggerConfetti(); 
-                                    if(cardData.holo) { updateBounty('holos', 1); sentiment = Math.min(100, sentiment + 2); }
-                                    if(cardData.relic) postTweet(`OMG a Ring-Worn Relic hit! Look at that patch! 😱`, `CardGrader`);
-                                    else if(cardData.serial && cardData.serial.max === 1) postTweet(`OMFG THEY JUST PULLED A 1/1 GOLD!!! THIS IS NOT A DRILL! 🤯💎`, `HobbyGod`);
-                                    else if(cardData.serial) postTweet(`Numbered card hit! Out of /${cardData.serial.max}! Huge pull!`, `CardShark`);
-                                    saveCard(cardData); 
-                                }, 1200); 
-                            } else { this.classList.add('flipped'); saveCard(cardData); }
-                        } 
-                    }; area.appendChild(cardDiv);
-                }, i * 150);
-            });
+      // --- ANIMATED PACK RIPPING ---
+function openSealedPack(chance) { 
+    let pack = document.getElementById('sealed-pack'); 
+    if(!pack) return; 
+    
+    // 1. Trigger the foil tearing animation
+    pack.classList.add('pack-tear-anim'); 
+    
+    // 2. Wait 800 milliseconds for the animation to finish before revealing cards
+    setTimeout(() => { 
+        document.getElementById('pack-area').innerHTML = ''; 
+        
+        // Generate the 3 cards
+        for(let i=0; i<3; i++) { 
+            let isHolo = Math.random() < chance; 
+            let c = { 
+                img: `card (${getCardDropNum()}).jpg`, 
+                wins: 0, 
+                holo: isHolo, 
+                raw: true, 
+                grade: null, 
+                conditionCap: 10, 
+                stamina: 5,
+                injured: false,
+                botched: false,
+                baseWin: 0.5
+            }; 
+            saveCard(c); 
+        } 
+        
+        // Refresh the screen to show the new cards
+        if (typeof buildBinder === "function") {
+            buildBinder();
+        } else if (typeof renderCollection === "function") {
+            renderCollection();
+        } else {
+            location.reload(); // Fallback just in case!
         }
+        
+    }, 800); 
+}
 
         function saveCard(cardData) { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let existing = col.find(c => c.img === cardData.img && !c.botched && c.grade === cardData.grade && c.holo === cardData.holo && c.holoType === cardData.holoType && JSON.stringify(c.serial) === JSON.stringify(cardData.serial) && c.raw === cardData.raw && c.relic === cardData.relic && c.autograph === cardData.autograph); if (!existing || cardData.serial || cardData.raw || cardData.relic || cardData.autograph) { col.push({ img: cardData.img, wins: 0, holo: cardData.holo, holoType: cardData.holoType, serial: cardData.serial, raw: cardData.raw, gradingUntil: 0, grade: cardData.grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, scoutingUntil: 0, buff: null, alignment: cardData.alignment, radioactive: false, mythic: false, botched: false, conditionCap: cardData.conditionCap || 10, inShowcase: cardData.inShowcase || false, blackLabel: cardData.blackLabel || false, relic: cardData.relic || null, autograph: cardData.autograph || null, sleeve: cardData.sleeve || false, toploader: cardData.toploader || false, excursionUntil: cardData.excursionUntil || 0, excursionBadge: cardData.excursionBadge || null }); } else { existing.dupes = (existing.dupes || 0) + 1; } localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI(); }
         function displayRecord() { document.getElementById('win-count').innerHTML = `${totalWins} W`; document.getElementById('loss-count').innerHTML = `${totalLosses} L`; const totalMatches = totalWins + totalLosses; document.getElementById('win-rate').innerHTML = `WIN RATE: ${totalMatches === 0 ? 0 : Math.round((totalWins / totalMatches) * 100)}%`; }
