@@ -686,29 +686,39 @@
             document.getElementById('vip-showcase').style.display = showcaseGrid.innerHTML === '' ? 'none' : 'block';
         }
         // --- GM PROFILE LOGIC ---
+       // --- GM PROFILE LOGIC (SAFE MODE) ---
         function openProfile() { 
-            let totalW = parseInt(localStorage.getItem('EWF_Wins')) || 0;
-            let totalL = parseInt(localStorage.getItem('EWF_Losses')) || 0;
-            let lifeCash = parseInt(localStorage.getItem('EWF_Lifetime')) || userCash;
-            
-            document.getElementById('prof-w').innerText = totalW; 
-            document.getElementById('prof-l').innerText = totalL; 
-            document.getElementById('prof-wr').innerText = `${totalW+totalL===0 ? 0 : Math.round((totalW/(totalW+totalL))*100)}%`; 
-            document.getElementById('prof-cash').innerText = `$${lifeCash}`; 
-            
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; 
-            let sorted = [...col].sort((a,b)=>getCardValue(b)-getCardValue(a)).slice(0,3); 
-            let tg = document.getElementById('trophy-grid'); 
-            tg.innerHTML=''; 
-            
-            sorted.forEach((c, idx) => {
-                let cardEl = createCardElement(c, idx, Date.now(), true);
-                let controls = cardEl.querySelector('.gm-controls');
-                if(controls) controls.remove(); // Removes sell buttons from trophy room so it looks clean
-                tg.appendChild(cardEl);
-            });
-            
-            document.getElementById('profile-modal').style.display='block'; 
+            try {
+                let totalW = parseInt(localStorage.getItem('EWF_Wins')) || 0;
+                let totalL = parseInt(localStorage.getItem('EWF_Losses')) || 0;
+                let lifeCash = parseInt(localStorage.getItem('EWF_Lifetime')) || 0;
+                
+                document.getElementById('prof-w').innerText = totalW; 
+                document.getElementById('prof-l').innerText = totalL; 
+                document.getElementById('prof-wr').innerText = `${totalW+totalL===0 ? 0 : Math.round((totalW/(totalW+totalL))*100)}%`; 
+                document.getElementById('prof-cash').innerText = `$${lifeCash}`; 
+                
+                let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; 
+                let sorted = [...col].sort((a,b)=>getCardValue(b)-getCardValue(a)).slice(0,3); 
+                let tg = document.getElementById('trophy-grid'); 
+                tg.innerHTML=''; 
+                
+                sorted.forEach((c, idx) => {
+                    let cardEl = createCardElement(c, idx, Date.now(), true);
+                    // Check if your V8 code returns a DOM element or an HTML string
+                    if (typeof cardEl === 'string') {
+                        tg.innerHTML += cardEl;
+                    } else {
+                        let controls = cardEl.querySelector('.gm-controls');
+                        if(controls) controls.remove(); 
+                        tg.appendChild(cardEl);
+                    }
+                });
+                
+                document.getElementById('profile-modal').style.display='block'; 
+            } catch (error) {
+                alert("Game Error: " + error.message);
+            }
         }
     </script>
 </body>
