@@ -543,6 +543,7 @@
         }
 
       // --- ANIMATED PACK RIPPING ---
+// --- ANIMATED PACK RIPPING (FIXED SHOWCASE) ---
 function openSealedPack(chance) { 
     let pack = document.getElementById('sealed-pack'); 
     if(!pack) return; 
@@ -550,15 +551,17 @@ function openSealedPack(chance) {
     // 1. Trigger the foil tearing animation
     pack.classList.add('pack-tear-anim'); 
     
-    // 2. Wait 800 milliseconds for the animation to finish before revealing cards
+    // 2. Wait 800ms for animation, then reveal cards ON SCREEN
     setTimeout(() => { 
-        document.getElementById('pack-area').innerHTML = ''; 
+        let area = document.getElementById('pack-area');
+        area.innerHTML = ''; // Clear the ripped wrapper
         
-        // Generate the 3 cards
+        // Generate and display the 3 cards
         for(let i=0; i<3; i++) { 
             let isHolo = Math.random() < chance; 
+            let num = getCardDropNum();
             let c = { 
-                img: `card (${getCardDropNum()}).jpg`, 
+                img: `card (${num}).jpg`, 
                 wins: 0, 
                 holo: isHolo, 
                 raw: true, 
@@ -570,15 +573,19 @@ function openSealedPack(chance) {
                 baseWin: 0.5
             }; 
             saveCard(c); 
+            
+            // Make Holos glow cyan so you know you hit something good
+            let holoStyle = isHolo ? 'border: 3px solid cyan; box-shadow: 0 0 20px cyan;' : 'border: 2px solid white;';
+            
+            // Drop the cards onto the screen
+            area.innerHTML += `
+                <div style="width: 150px; height: 210px; margin: 10px; border-radius: 8px; background-image: url('rare ewf cards/${c.img}'); background-size: cover; background-position: center; display: inline-block; ${holoStyle}"></div>
+            `;
         } 
         
-        // Refresh the screen to show the new cards
-        if (typeof buildBinder === "function") {
-            buildBinder();
-        } else if (typeof renderCollection === "function") {
+        // Update the main collection grid silently
+        if (typeof renderCollection === "function") {
             renderCollection();
-        } else {
-            location.reload(); // Fallback just in case!
         }
         
     }, 800); 
