@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF RIPPED (TCG) v8.0 - FULL PHASE 3</title>
+    <title>EWF RIPPED (TCG) v8.1 - RARE AUTO EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -140,7 +140,7 @@
     <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
     <div id="tv-war-banner" onclick="startTVWar()">📺 FRIDAY NIGHT RATINGS WAR! CLICK TO MAIN EVENT!</div>
     <div id="gimmick-banner"></div><div id="sponsor-tracker"></div><div id="prestige-border"></div>
-    <div id="early-access">V8.0 FINAL RELEASE</div>
+    <div id="early-access">V8.1 FINAL RELEASE</div>
     <button id="music-toggle" onclick="toggleMusic()">Mute</button>
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio><audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
@@ -529,7 +529,8 @@
             for (let i = 0; i < 3; i++) {
                 const num = getCardDropNum(); let isHolo = Math.random() < holoChance; let holoType = null; let serial = null;
                 let ewfVariant = getEWFVariant();
-                let hasAuto = Math.random() < 0.15;
+                // RARE AUTO NERF: 0.5% chance per card
+                let hasAuto = Math.random() < 0.005;
                 if(isHolo) {
                     let holoRoll = Math.random(); if(holoRoll > 0.99) holoType = 'ghost'; else if(holoRoll > 0.96) holoType = 'prismatic'; else if(holoRoll > 0.90) holoType = 'plasma'; else if(holoRoll > 0.80) holoType = 'obsidian'; else if(holoRoll > 0.65) holoType = 'cosmic'; else if(holoRoll > 0.45) holoType = 'gold-vinyl'; else if(holoRoll > 0.25) holoType = 'cracked-ice'; else holoType = 'standard';
                     let serialRoll = Math.random(); if(serialRoll > 0.995) serial = { current: 1, max: 1, color: 'gold' }; else if(serialRoll > 0.97) serial = { current: Math.floor(Math.random()*10)+1, max: 10, color: 'gold' }; else if(serialRoll > 0.90) serial = { current: Math.floor(Math.random()*50)+1, max: 50, color: 'silver' }; else if(serialRoll > 0.75) serial = { current: Math.floor(Math.random()*99)+1, max: 99, color: 'silver' }; 
@@ -544,7 +545,8 @@
             for (let i = 0; i < 5; i++) {
                 const num = getCardDropNum(); let isHolo = false; let holoType = null; let serial = null; let relic = null;
                 let ewfVariant = getEWFVariant();
-                let hasAuto = Math.random() < 0.25;
+                // RARE AUTO NERF: 2% chance per card in Elite Box
+                let hasAuto = Math.random() < 0.02;
                 if (i === 4) { isHolo = true; if(Math.random() < 0.05) { let rRoll = Math.random(); relic = rRoll > 0.8 ? 'rope' : rRoll > 0.5 ? 'table' : 'canvas'; } } else { isHolo = Math.random() < holoChance; }
                 if(isHolo) {
                     let holoRoll = Math.random(); if(holoRoll > 0.99) holoType = 'ghost'; else if(holoRoll > 0.96) holoType = 'prismatic'; else if(holoRoll > 0.90) holoType = 'plasma'; else if(holoRoll > 0.80) holoType = 'obsidian'; else if(holoRoll > 0.65) holoType = 'cosmic'; else if(holoRoll > 0.45) holoType = 'gold-vinyl'; else if(holoRoll > 0.25) holoType = 'cracked-ice'; else holoType = 'standard';
@@ -577,7 +579,7 @@
 
                     cardDiv.onclick = function() { 
                         if(!this.classList.contains('flipped')) { 
-                            if(cardData.holoType === 'ghost' || cardData.mythic || (cardData.serial && cardData.serial.max === 1) || cardData.ewfVariant === 'card-nebula') {
+                            if(cardData.holoType === 'ghost' || cardData.mythic || (cardData.serial && cardData.serial.max === 1) || cardData.ewfVariant === 'card-nebula' || cardData.hasAuto) {
                                 document.getElementById('walkout-overlay').style.display = 'flex';
                                 document.getElementById('walkout-card-container').innerHTML = `<div class="walkout-card" style="width:300px; height:420px; background-image:url('${folderPath}/${cardData.img}'); background-size:cover; border:2px solid cyan; border-radius:10px; box-shadow: 0 0 50px rgba(0,255,255,0.8); position:relative;">${inner}</div>`;
                                 setTimeout(() => { document.getElementById('walkout-overlay').style.display = 'none'; this.classList.add('flipped'); triggerConfetti(); updateBounty('holos', 1); saveCard(cardData); }, 3500);
@@ -674,7 +676,7 @@
             } }, 500); 
         }
 
-        function getCardValue(card) { if(card.botched) return 0; let baseVal = 2; if(card.raw) baseVal = 2; else if (card.grade === 10) baseVal = 50; else if (card.grade === 9) baseVal = 10; else if (card.grade === 8) baseVal = 4; let total = card.holo ? baseVal * 4 : baseVal; if(card.holoType === 'cracked-ice') total *= 2; if(card.holoType === 'gold-vinyl') total *= 5; if(card.holoType === 'cosmic') total *= 10; if(card.holoType === 'obsidian') total *= 20; if(card.holoType === 'plasma') total *= 35; if(card.holoType === 'prismatic') total *= 50; if(card.holoType === 'ghost') total *= 100; if(card.serial) { if(card.serial.max === 1) total *= 100; else if(card.serial.max <= 10) total *= 20; else if(card.serial.max <= 50) total *= 10; else total *= 5; } if (card.champion) total *= 5; if (card.streak >= 3) total *= 1.5; if (card.streak <= -3) total *= 0.5; const numMatch = card.img.match(/\d+/); if(numMatch) { const num = parseInt(numMatch[0]); if(num === market.boosted) total *= 3; if(num === market.crashed) total *= 0.5; } if(card.mythic) total *= 10; if(card.blackLabel) total *= 10; if(card.relic) total *= 5; let sentMulti = 0.5 + (sentiment / 50); return Math.floor((total * multi) * sentMulti); }
+        function getCardValue(card) { if(card.botched) return 0; let baseVal = 2; if(card.raw) baseVal = 2; else if (card.grade === 10) baseVal = 50; else if (card.grade === 9) baseVal = 10; else if (card.grade === 8) baseVal = 4; let total = card.holo ? baseVal * 4 : baseVal; if(card.holoType === 'cracked-ice') total *= 2; if(card.holoType === 'gold-vinyl') total *= 5; if(card.holoType === 'cosmic') total *= 10; if(card.holoType === 'obsidian') total *= 20; if(card.holoType === 'plasma') total *= 35; if(card.holoType === 'prismatic') total *= 50; if(card.holoType === 'ghost') total *= 100; if(card.serial) { if(card.serial.max === 1) total *= 100; else if(card.serial.max <= 10) total *= 20; else if(card.serial.max <= 50) total *= 10; else total *= 5; } if (card.champion) total *= 5; if (card.streak >= 3) total *= 1.5; if (card.streak <= -3) total *= 0.5; const numMatch = card.img.match(/\d+/); if(numMatch) { const num = parseInt(numMatch[0]); if(num === market.boosted) total *= 3; if(num === market.crashed) total *= 0.5; } if(card.mythic) total *= 10; if(card.blackLabel) total *= 10; if(card.relic) total *= 5; if(card.hasAuto) total *= 25; let sentMulti = 0.5 + (sentiment / 50); return Math.floor((total * multi) * sentMulti); }
 
         function sendToIndies(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); if(confirm("Send this wrestler to the Indies for 10 minutes? They can't fight, but might return with boosted stats or gear!")) { col[idx].scoutingUntil = Date.now() + (10 * 60 * 1000); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI(); } }
         function sendToExcursion(idx) { if(userCash < 1000) return alert("You need $1000 to fund a foreign excursion!"); let col = JSON.parse(localStorage.getItem('EWF_Collection')); if(confirm("Send this wrestler to Japan/Mexico for 60 real-time minutes? They will return with a permanent Strong Style or Lucha Libre badge!")) { userCash -= 1000; col[idx].excursionUntil = Date.now() + (60 * 60 * 1000); localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); } }
