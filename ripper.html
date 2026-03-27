@@ -5,126 +5,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root { 
-        --gold: #D4AF37; 
-        --gold-glow: rgba(212, 175, 55, 0.5); 
-        --silver: #C0C0C0;
-        --silver-glow: rgba(192, 192, 192, 0.4);
-        --ruby-red: #e0115f;
-        --emerald-green: #50c878;
-        --sapphire-blue: #0f52ba;
-        --mojo-teal: #00ffcc;
-        --ice-white: #e0f7fa;
-        --nebula-pink: #ff00de;
-        --dark-glass: rgba(15, 15, 20, 0.85); 
-        --green: #2ecc71;
-        --auto-ink: #000080;
-    }
-        .scribble-auto { 
-    position: absolute; 
-    bottom: 50px; 
-    left: 50%; 
-    transform: translateX(-50%) rotate(-3deg); 
-    z-index: 10; 
-}
-.serial-number { 
-    position: absolute; 
-    top: 5px; 
-    right: 10px; 
-    z-index: 11; 
-}
-        :root {
-            /* --- TIER 1: STANDARD PARALLELS --- */
-.card-silver { border: 3px solid var(--silver) !important; box-shadow: 0 0 10px var(--silver-glow) !important; }
-.card-ruby { border: 3px solid var(--ruby-red) !important; box-shadow: 0 0 10px var(--ruby-red) !important; }
-.card-emerald { border: 3px solid var(--emerald-green) !important; box-shadow: 0 0 10px var(--emerald-green) !important; }
-
-/* --- TIER 2: RARE "HITS" --- */
-.card-gold { border: 3px solid var(--gold) !important; box-shadow: 0 0 20px var(--gold-glow) !important; }
-.card-sapphire { border: 3px solid var(--sapphire-blue) !important; box-shadow: inset 0 0 15px var(--sapphire-blue), 0 0 10px var(--sapphire-blue) !important; }
-.card-atomic { border: 3px solid var(--atomic-neon) !important; box-shadow: 0 0 15px var(--atomic-neon) !important; animation: blink 1.5s infinite alternate; }
-
-/* --- TIER 3: ULTRA RARE CASE HITS --- */
-.card-mojo { 
-    border: 3px solid var(--mojo-teal) !important; 
-    background: radial-gradient(circle, var(--mojo-teal) 1px, transparent 1px) !important;
-    background-size: 10px 10px !important;
-    box-shadow: 0 0 20px var(--mojo-teal) !important; 
-}
-
-.card-cracked-ice { 
-    border: 3px solid var(--ice-white) !important; 
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 25%, transparent 25%), linear-gradient(225deg, rgba(255,255,255,0.1) 25%, transparent 25%) !important;
-    background-size: 15px 15px !important;
-}
-
-.card-nebula { 
-    border: 3px solid #fff !important; 
-    background: linear-gradient(270deg, var(--nebula-pink), #00ffff, #7000ff) !important;
-    background-size: 400% 400% !important;
-    animation: nebulaShift 4s ease infinite; 
-}
-
-/* THE SCRIBBLE AUTO (Placed ON the card) */
-.scribble-auto {
-    font-family: 'Brush Script MT', cursive;
-    font-size: 24px;
-    color: var(--auto-ink);
-    letter-spacing: -4px;
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 4px;
-    padding: 2px 8px;
-    position: absolute; /* THIS KEEPS IT ON THE CARD */
-    bottom: 60px;       /* Adjust this to move it up or down */
-    left: 50%;
-    transform: translateX(-50%) rotate(-3deg);
-    z-index: 10;
-    pointer-events: none;
-    border: 1px solid rgba(0,0,0,0.1);
-}
-
-/* SERIAL NUMBER TAG */
-.serial-number {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    font-size: 10px;
-    background: rgba(0,0,0,0.8);
-    color: #fff;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-family: 'monospace';
-    z-index: 11;
-}
-/* ANIMATIONS */
-@keyframes nebulaShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-@keyframes blink { from { opacity: 1; } to { opacity: 0.7; } }
-    /* YOUR ORIGINALS */
-    --gold: #D4AF37; 
-    --gold-glow: rgba(212, 175, 55, 0.5); 
-    --dark-glass: rgba(15, 15, 20, 0.85); 
-    --green: #2ecc71; 
-    --red: #e74c3c; 
-    --blue: #3498db; 
-    --purple: #9b59b6; 
-    
-    /* NEW COLORS & PARALLELS */
-    --silver: #C0C0C0;
-    --silver-glow: rgba(192, 192, 192, 0.4);
-    --ruby-red: #e0115f;
-    --sapphire-blue: #0f52ba;
-    --emerald-green: #50c878;
-    --ice-white: #e0f7fa;
-    --atomic-neon: #39ff14;
-    --mojo-teal: #00ffcc;
-    --nebula-pink: #ff00de;
-    --auto-ink: #000080; /* Blue ink for signatures */
-}
+            --gold: #D4AF37; --gold-glow: rgba(212, 175, 55, 0.5); --dark-glass: rgba(15, 15, 20, 0.85); --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --purple: #9b59b6;
+            --silver: #C0C0C0; --ruby: #e0115f; --emerald: #50c878; --sapphire: #0f52ba; --mojo: #00ffcc; --atomic: #39ff14; --ice: #e0f7fa; --nebula: #ff00de; --auto-ink: #000080;
+        }
         * { box-sizing: border-box; } img { max-width: 100%; height: auto; }
         body { background: url('background.jpg') center/cover no-repeat fixed; background-color: #111; color: white; font-family: 'Montserrat', sans-serif; text-align: center; padding: 0; margin: 0; overflow-x: hidden; user-select: none; transition: background 1s ease-in-out, box-shadow 0.5s, filter 1s; }
         body.battle-locked { overflow: hidden !important; }
         body.gimmick-hardcore { filter: sepia(0.8) hue-rotate(-50deg) saturate(2) brightness(0.8); box-shadow: inset 0 0 150px rgba(255,0,0,0.5); }
         body.gimmick-legends { filter: sepia(0.5) hue-rotate(10deg) saturate(1.5) brightness(1.1); box-shadow: inset 0 0 150px rgba(212,175,55,0.4); }
         
+        /* NEW VARIANT CSS STYLES */
+        .card-silver { border: 3px solid var(--silver) !important; box-shadow: 0 0 10px rgba(192,192,192,0.5) !important; }
+        .card-gold { border: 3px solid var(--gold) !important; box-shadow: 0 0 20px var(--gold-glow) !important; }
+        .card-ruby { border: 3px solid var(--ruby) !important; box-shadow: 0 0 15px var(--ruby) !important; }
+        .card-sapphire { border: 3px solid var(--sapphire) !important; box-shadow: inset 0 0 15px var(--sapphire) !important; }
+        .card-mojo { border: 3px solid var(--mojo) !important; background: radial-gradient(circle, var(--mojo) 1px, transparent 1px) !important; background-size: 10px 10px !important; box-shadow: 0 0 20px var(--mojo) !important; }
+        .card-atomic { border: 3px solid var(--atomic) !important; box-shadow: 0 0 15px var(--atomic) !important; animation: atomicPulse 1.5s infinite alternate; }
+        .card-nebula { border: 3px solid #fff !important; background: linear-gradient(270deg, var(--nebula), #00ffff, #7000ff) !important; background-size: 400% 400% !important; animation: nebulaShift 4s ease infinite; }
+        
+        /* VARIANT LABELS (Small Print) */
+        .variant-label { position: absolute; bottom: 5px; left: 8px; font-size: 8px; font-weight: 900; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; z-index: 30; pointer-events: none; text-shadow: 1px 1px 2px black; }
+
+        /* SCRIBBLE SIGNATURE */
+        .scribble-auto { font-family: 'Brush Script MT', cursive; font-size: 24px; color: var(--auto-ink); letter-spacing: -4px; background: rgba(255, 255, 255, 0.7); border-radius: 4px; padding: 2px 8px; position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%) rotate(-3deg); z-index: 35; pointer-events: none; border: 1px solid rgba(0,0,0,0.1); box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+
+        /* TIGER & ZEBRA EFFECTS */
+        .holo-tiger { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.4) 15px, transparent 20px); mix-blend-mode: overlay; z-index: 14; }
+        .holo-zebra { position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.2) 5px, rgba(0,0,0,0.2) 5px, rgba(0,0,0,0.2) 10px); mix-blend-mode: difference; z-index: 14; }
+
+        @keyframes atomicPulse { from { filter: brightness(1); } to { filter: brightness(1.4); } }
+        @keyframes nebulaShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
         /* DYNAMIC SIRENS */
         body.boss-alert { box-shadow: inset 0 0 150px rgba(231,76,60,0.6); animation: pulse-red 2s infinite; }
         body.auction-alert { box-shadow: inset 0 0 150px rgba(57,255,20,0.3); animation: pulse-green 3s infinite; }
@@ -247,7 +158,7 @@
    
     <div id="trade-modal" class="modal" style="width: 500px; text-align:center;"><h2 style="color:cyan; border-bottom-color:cyan;">🤝 LOCAL TRADE OFFER</h2><p id="trade-text" style="color:#ddd; font-size:14px;"></p><div style="display:flex; justify-content:space-around; align-items:center; margin: 20px 0;"><div id="trade-offer-card" style="width:120px; height:160px; border:2px solid cyan; border-radius:10px; background-size:cover;"></div><div style="font-size:30px;">🔁</div><div id="trade-my-card" style="width:120px; height:160px; border:2px solid var(--red); border-radius:10px; background-size:cover;"></div></div><div style="display:flex; gap:10px;"><button class="modal-btn" style="flex:1; background:rgba(46,204,113,0.2); color:var(--green); border-color:var(--green); font-size:16px;" onclick="acceptTrade()">ACCEPT</button><button class="modal-btn" style="flex:1; background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red); font-size:16px;" onclick="document.getElementById('trade-modal').style.display='none'">DECLINE</button></div></div>
     <div id="season-modal" class="modal" style="width: 600px; text-align:center;"><h1 style="color:var(--gold); text-shadow:0 0 15px var(--gold); margin-top:0;">🏆 EWF MYGM AWARDS 🏆</h1><p style="color:#aaa; font-size:13px; margin-bottom:20px;">Another 30-tick season comes to a close! Here are the winners:</p><div id="season-content" style="display:flex; flex-direction:column; gap:15px; text-align:left;"></div><button class="close-btn" onclick="document.getElementById('season-modal').style.display='none'">START NEXT SEASON</button></div>
-    <div id="checklist-modal" class="modal" style="width: 550px;"><h2>📋 COLLECTOR CHECKLIST</h2><div id="checklist-list"></div><button class="close-btn" onclick="document.getElementById('checklist-modal').style.display='none'">CLOSE</button></div>
+    <div id="checklist-modal" class="modal" style="width: 550px;"><h2>📋 CHECKLIST</h2><div id="checklist-list"></div><button class="close-btn" onclick="document.getElementById('checklist-modal').style.display='none'">CLOSE</button></div>
     <div id="arena-modal" class="modal"><h2>🏟️ VENUE INFRASTRUCTURE</h2><div id="arena-list"></div><button class="close-btn" onclick="document.getElementById('arena-modal').style.display='none'">CLOSE</button></div>
     <div id="bounty-modal" class="modal"><h2>📋 PROMOTER BOUNTY BOARD</h2><div id="bounty-list"></div><button class="close-btn" onclick="document.getElementById('bounty-modal').style.display='none'">CLOSE</button></div>
     <div id="gear-modal" class="modal"><h2>🎒 EQUIP GEAR</h2><div id="gear-list"></div><button class="close-btn" onclick="document.getElementById('gear-modal').style.display='none'">CANCEL</button></div>
@@ -279,7 +190,7 @@
         </div>
         <div id="action-panel">
             <button class="main-btn rip-std" id="rip-std-btn" onclick="ripPack(5, 0.05)">STANDARD PACK ($4.99)</button>
-            <button class="main-btn rip-super" id="rip-super-btn" onclick="ripPack(25, 0.25)">SUPER HOLO ($24.99)</button>
+            <button class="main-btn rip-super" id="rip-super-btn" onclick="ripPack(24.99, 0.25)">SUPER HOLO ($24.99)</button>
             <button class="main-btn btn-box" id="rip-box-btn" onclick="ripBox(120, 0.15)">EWF BOX ($120)</button>
             <button class="main-btn rip-gear" id="rip-gear-btn" onclick="ripGearPack()">GEAR PACK ($10)</button>
             <button class="main-btn btn-checklist" onclick="openChecklist()">📋 CHECKLIST</button>
@@ -311,7 +222,6 @@
         function getCardDropNum() { let num; let valid = false; while(!valid) { num = Math.floor(Math.random() * totalCards) + 1; if (num === 32) { if (Math.random() < 0.01) valid = true; } else if (num === 30 || num === 36) { if (Math.random() < 0.05) valid = true; } else { valid = true; } } return num; }
         
         let userCash = parseInt(localStorage.getItem('EWF_Cash')); if (isNaN(userCash) || userCash <= 0) userCash = 50;
-        // ECONOMY CONVERSION SCRIPT (One-time run to convert arcade cash to realistic cash)
         if(!localStorage.getItem('EWF_Eco_V8')) { userCash = Math.max(50, Math.floor(userCash / 100)); localStorage.setItem('EWF_Cash', userCash); localStorage.setItem('EWF_Eco_V8', '1'); }
 
         let isMusicPlaying = false; let totalWins = parseInt(localStorage.getItem('EWF_Wins')) || 0; let totalLosses = parseInt(localStorage.getItem('EWF_Losses')) || 0;
@@ -336,13 +246,33 @@
         let currentArena = parseInt(localStorage.getItem('EWF_Arena')) || 0;
         let bounties = JSON.parse(localStorage.getItem('EWF_Bounties')) || { wins: { target: 10, current: 0, reward: 200, desc: "Win 10 Matches", claimed: false }, holos: { target: 3, current: 0, reward: 300, desc: "Pull 3 Holo Cards", claimed: false } };
 
+        /* RARITY ENGINE FUNCTIONS */
+        function getEWFVariant() {
+            let roll = Math.floor(Math.random() * 100) + 1;
+            if (roll === 100) return 'card-nebula';
+            if (roll > 98) return 'card-cracked-ice';
+            if (roll > 95) return 'card-mojo';
+            if (roll > 85) return 'card-gold';
+            if (roll > 75) return 'card-sapphire';
+            if (roll > 60) return 'card-ruby';
+            if (roll > 45) return 'card-emerald';
+            if (roll > 30) return 'card-silver';
+            return '';
+        }
+
+        function createScribble(name) {
+            if (!name) return "";
+            let first = name.charAt(0);
+            let last = name.charAt(name.length - 1);
+            return `<div class="scribble-auto">${first}mm${last}zz</div>`;
+        }
+
         function initGame() {
             if(prestigeLevel > 0) document.body.classList.add('prestige-active'); if(autoBookerOwned) document.getElementById('auto-btn').style.display = 'inline-block';
             migrateData(); updateBackground(); updateMarketUI(); updateBossUI(); updateUI(); renderMerchStand(); displayCollection(); displayRecord();
             setInterval(() => { tick(); }, 30000); setInterval(() => { fastTick(); }, 1000); setInterval(() => { if(autoMode) runAutoMatches(); }, 5000); applyGimmickEffects();
         }
 
-        
         function triggerSeasonAwards() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let html = ""; let totalWinnings = 0; if(col.length > 0) { let mvp = col.reduce((prev, current) => (prev.wins > current.wins) ? prev : current); html += `<div style="background:rgba(212,175,55,0.1); padding:15px; border-radius:8px; border:1px solid var(--gold);"><b>🏅 SEASON MVP: Card #${mvp.img.match(/\d+/)[0]} (${mvp.wins} Wins)</b><br><span style="color:var(--green); font-size:12px;">+$250 Bonus</span></div>`; totalWinnings += 250; } if(userCash > 500) { html += `<div style="background:rgba(46,204,113,0.1); padding:15px; border-radius:8px; border:1px solid var(--green);"><b>👔 PROMOTER OF THE SEASON</b><br><span style="color:var(--green); font-size:12px;">Revenue Goal Met! +$500 Bonus</span></div>`; totalWinnings += 500; } html += `<div style="text-align:center; font-size:20px; font-weight:900; color:var(--green); margin-top:10px;">TOTAL PAYOUT: $${totalWinnings}</div>`; userCash += totalWinnings; sentiment = Math.min(100, sentiment + 20); vault.push({ id: Date.now(), unlockAt: 0 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); saveGame(); updateUI(); document.getElementById('season-content').innerHTML = html; document.getElementById('season-modal').style.display = 'block'; }
         function sendToGrading(idx) { if(userCash < 25) return alert("You need $25 to grade a card."); let col = JSON.parse(localStorage.getItem('EWF_Collection')); if(confirm("Send this raw card to the Authenticator for $25? Takes 1 minute.")) { userCash -= 25; col[idx].gradingUntil = Date.now() + 60000; localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); } }
         function turnAlignment(idx) { if(userCash < 200) return alert("You need $200 to execute a turn."); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; if(confirm(`Pay $200 to execute a ${card.alignment === 'face' ? 'HEEL' : 'FACE'} turn?`)) { userCash -= 200; card.alignment = card.alignment === 'face' ? 'heel' : 'face'; localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); } }
@@ -354,7 +284,10 @@
             if(inventory.drink === undefined) { inventory.drink = 0; inventory.chair = 0; localStorage.setItem('EWF_Gear', JSON.stringify(inventory)); }
             col.forEach(c => { if(c.stamina === undefined) { c.stamina = 5; c.injured = false; c.streak = 0; mod = true; } if(c.baseWin === undefined) { c.baseWin = 0.5; c.trainingUntil = 0; c.buff = null; mod = true; } if(c.radioactive === undefined) { c.radioactive = false; c.mythic = false; mod = true; } if(c.botched === undefined) { c.botched = false; mod = true; } if(c.scoutingUntil === undefined) { c.scoutingUntil = 0; mod = true; } if(c.holoType === undefined) { c.holoType = c.holo ? 'standard' : null; mod = true; } if(c.serial === undefined) { c.serial = null; mod = true; } if(c.raw === undefined) { c.raw = false; c.gradingUntil = 0; c.alignment = Math.random()>0.5?'face':'heel'; mod=true; } 
             if(c.conditionCap === undefined) { c.conditionCap = 10; c.inShowcase = false; c.blackLabel = false; c.relic = null; mod=true; } 
-            if(c.excursionUntil === undefined) { c.excursionUntil = 0; c.excursionBadge = null; mod = true; } }); 
+            if(c.excursionUntil === undefined) { c.excursionUntil = 0; c.excursionBadge = null; mod = true; }
+            if(c.ewfVariant === undefined) { c.ewfVariant = ''; mod = true; }
+            if(c.hasAuto === undefined) { c.hasAuto = false; mod = true; }
+        }); 
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col)); 
         }
 
@@ -459,7 +392,7 @@
 
         function updateMarketUI() { document.getElementById('ticker-text').innerHTML = `📈 EWF STOCK MARKET: Card #${market.boosted} is TRENDING! (+300% Value) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📉 CRASH: Card #${market.crashed} caught in a major scandal! (-50% Value) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ⏳ NEXT MARKET UPDATE IN <5 MINS`; }
         function updateBossUI() { document.getElementById('boss-hp-text').innerHTML = `${bossHP} / ${bossMaxHP} HP`; document.getElementById('boss-hp-bar').style.width = Math.max((bossHP / bossMaxHP) * 100, 0) + "%"; }
-        function hitBoss(dmg) { if(bossHP <= 0) return; bossHP -= dmg; if(bossHP <= 0) { alert("👹 WORLD BOSS DEFEATED! You obtained the 1-of-1 Mythic Diamond Card! ($50 Passive Income)"); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let num = getCardDropNum(); col.push({ img: `card (${num}).jpg`, wins: 0, holo: true, grade: 10, raw: false, dupes: 0, champion: true, stamina: 5, injured: false, streak: 0, baseWin: 0.9, trainingUntil: 0, buff: null, mythic: true, radioactive: true, botched: false, alignment: 'heel', conditionCap: 10, inShowcase: false, blackLabel: false, relic: null, excursionUntil: 0, excursionBadge: null }); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); bossMaxHP += 500; bossHP = bossMaxHP; localStorage.setItem('EWF_BossMaxHP', bossMaxHP); } localStorage.setItem('EWF_BossHP', bossHP); updateBossUI(); }
+        function hitBoss(dmg) { if(bossHP <= 0) return; bossHP -= dmg; if(bossHP <= 0) { alert("👹 WORLD BOSS DEFEATED! You obtained the 1-of-1 Mythic Diamond Card! ($50 Passive Income)"); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let num = getCardDropNum(); col.push({ img: `card (${num}).jpg`, wins: 0, holo: true, ewfVariant: 'card-nebula', serial: {current:1, max:1, color:'gold'}, holoType: 'ghost', grade: 10, raw: false, dupes: 0, champion: true, stamina: 5, injured: false, streak: 0, baseWin: 0.9, trainingUntil: 0, buff: null, mythic: true, radioactive: true, botched: false, alignment: 'heel', conditionCap: 10, inShowcase: false, blackLabel: false, relic: null, excursionUntil: 0, excursionBadge: null }); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); bossMaxHP += 500; bossHP = bossMaxHP; localStorage.setItem('EWF_BossMaxHP', bossMaxHP); } localStorage.setItem('EWF_BossHP', bossHP); updateBossUI(); }
 
         function spliceCard(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); if(col[idx].raw) return alert("Cannot splice a raw card!"); if(userCash < 100 || inventory.drink < 1 || inventory.chair < 1) return alert("Requires $100 + 1 Drink + 1 Chair!"); if(confirm("Splice this card? It will become Radioactive (80% Base Win, No Injuries, No Stamina Drain)!")) { userCash -= 100; inventory.drink--; inventory.chair--; col[idx].radioactive = true; col[idx].baseWin = 0.8; col[idx].injured = false; col[idx].stamina = 5; localStorage.setItem('EWF_Collection', JSON.stringify(col)); localStorage.setItem('EWF_Gear', JSON.stringify(inventory)); saveGame(); displayCollection(); updateUI(); } }
 
@@ -472,7 +405,7 @@
         function digBargainBin() {
             if(userCash < 2) return alert("You need $2 to dig through the Bargain Bin!"); userCash -= 2; saveGame(); updateUI();
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let num = getCardDropNum(); let isGhost = Math.random() < 0.001;
-            let card = { img: `card (${num}).jpg`, wins: 0, holo: isGhost, holoType: isGhost ? 'ghost' : null, serial: null, raw: true, grade: null, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, scoutingUntil: 0, excursionUntil: 0, excursionBadge: null, buff: null, alignment: Math.random()>0.5?'face':'heel', radioactive: false, mythic: false, botched: false, conditionCap: isGhost ? 10 : 7, inShowcase: false, blackLabel: false, relic: null };
+            let card = { img: `card (${num}).jpg`, wins: 0, holo: isGhost, ewfVariant: isGhost?'card-nebula':'', holoType: isGhost ? 'ghost' : null, serial: null, raw: true, grade: null, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, scoutingUntil: 0, excursionUntil: 0, excursionBadge: null, buff: null, alignment: Math.random()>0.5?'face':'heel', radioactive: false, mythic: false, botched: false, conditionCap: isGhost ? 10 : 7, inShowcase: false, blackLabel: false, relic: null };
             col.push(card); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection();
             if(isGhost) { document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),500); alert("🚨 UNBELIEVABLE! You found a discarded GHOST RARE at the bottom of the bin!"); } 
             else { alert("🗑️ You paid $2 and dug through the trash. Found a beat-up raw common card."); }
@@ -575,7 +508,7 @@
         function triggerConfetti() { const colors = ['#e74c3c', '#2ecc71', '#f1c40f', '#3498db']; for(let i=0; i<60; i++) { const c = document.createElement('div'); c.className = 'confetti'; c.style.cssText = `left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`; document.body.appendChild(c); let cy = 0, op = 1; const drift = setInterval(() => { cy += Math.random() * 5 + 2; op -= 0.01; c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = op; if (op <= 0) { clearInterval(drift); c.remove(); } }, 20); } }
 
         function updateUI() {
-            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash}`; let sentMulti = 0.5 + (sentiment / 50); const mythicCount = col.filter(c => c.mythic).length; let showcaseBonus = col.filter(c => c.inShowcase).length * 5; const baseIncome = (arenas[currentArena].income + (col.filter(c => c.wins >= 200).length * 2) + (mythicCount * 20) + showcaseBonus) * multi; document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${Math.floor(baseIncome * sentMulti)} / 30s`; document.getElementById('sentiment-val').innerText = `${sentiment}% (${sentMulti.toFixed(1)}x)`; document.getElementById('sentiment-fill').style.width = sentiment + "%"; document.getElementById('season-display').innerText = `SEASON: TICK ${seasonTicks}/30`;
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash.toFixed(2)}`; let sentMulti = 0.5 + (sentiment / 50); const mythicCount = col.filter(c => c.mythic).length; let showcaseBonus = col.filter(c => c.inShowcase).length * 5; const baseIncome = (arenas[currentArena].income + (col.filter(c => c.wins >= 200).length * 2) + (mythicCount * 20) + showcaseBonus) * multi; document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${Math.floor(baseIncome * sentMulti)} / 30s`; document.getElementById('sentiment-val').innerText = `${sentiment}% (${sentMulti.toFixed(1)}x)`; document.getElementById('sentiment-fill').style.width = sentiment + "%"; document.getElementById('season-display').innerText = `SEASON: TICK ${seasonTicks}/30`;
             document.getElementById('rip-std-btn').disabled = (userCash < 4.99) || factionMode || gauntlet.active || tvWarMode || campaign.active; document.getElementById('rip-super-btn').disabled = (userCash < 24.99) || factionMode || gauntlet.active || tvWarMode || campaign.active; document.getElementById('rip-box-btn').disabled = (userCash < 120) || factionMode || gauntlet.active || tvWarMode || campaign.active; document.getElementById('rip-gear-btn').disabled = (userCash < 10) || factionMode || gauntlet.active || tvWarMode || campaign.active; document.getElementById('faction-btn').disabled = (userCash < 50) || col.length < 3 || gauntlet.active || tvWarMode || campaign.active;
             let r = "ROOKIE PROMOTER"; let next = 10; let base = 0; let isLegendary = false; let uniqueCount = new Set(col.filter(c => !c.botched).map(c => parseInt(c.img.match(/\d+/)[0]))).size;
             if (uniqueCount >= 30) { r = "LEGENDARY COLLECTOR"; next = 38; base = 30; isLegendary = true; } else if (uniqueCount >= 20) { r = "ELITE EXECUTIVE"; next = 30; base = 20; } else if (uniqueCount >= 10) { r = "PRO MANAGER"; next = 20; base = 10; }
@@ -588,11 +521,13 @@
             if (userCash < cost) return; userCash -= cost; saveGame(); updateUI(); let holoChance = baseHoloChance + shredBonus; pendingPack = [];
             for (let i = 0; i < 3; i++) {
                 const num = getCardDropNum(); let isHolo = Math.random() < holoChance; let holoType = null; let serial = null;
+                let ewfVariant = getEWFVariant();
+                let hasAuto = Math.random() < 0.15;
                 if(isHolo) {
                     let holoRoll = Math.random(); if(holoRoll > 0.99) holoType = 'ghost'; else if(holoRoll > 0.96) holoType = 'prismatic'; else if(holoRoll > 0.90) holoType = 'plasma'; else if(holoRoll > 0.80) holoType = 'obsidian'; else if(holoRoll > 0.65) holoType = 'cosmic'; else if(holoRoll > 0.45) holoType = 'gold-vinyl'; else if(holoRoll > 0.25) holoType = 'cracked-ice'; else holoType = 'standard';
                     let serialRoll = Math.random(); if(serialRoll > 0.995) serial = { current: 1, max: 1, color: 'gold' }; else if(serialRoll > 0.97) serial = { current: Math.floor(Math.random()*10)+1, max: 10, color: 'gold' }; else if(serialRoll > 0.90) serial = { current: Math.floor(Math.random()*50)+1, max: 50, color: 'silver' }; else if(serialRoll > 0.75) serial = { current: Math.floor(Math.random()*99)+1, max: 99, color: 'silver' }; 
                 }
-                pendingPack.push({ img: `card (${num}).jpg`, holo: isHolo, holoType: holoType, serial: serial, grade: null, raw: true, alignment: Math.random()>0.5?'face':'heel', conditionCap: 10, inShowcase: false, blackLabel: false, relic: null, excursionUntil: 0, excursionBadge: null });
+                pendingPack.push({ img: `card (${num}).jpg`, holo: isHolo, holoType: holoType, serial: serial, grade: null, raw: true, alignment: Math.random()>0.5?'face':'heel', conditionCap: 10, inShowcase: false, blackLabel: false, relic: null, excursionUntil: 0, excursionBadge: null, ewfVariant: ewfVariant, hasAuto: hasAuto });
             }
             const area = document.getElementById('pack-area'); area.innerHTML = `<div id="sealed-pack" onclick="openSealedPack()"><h2 style="color:black; font-size: 28px; transform: rotate(-10deg); font-weight:900; letter-spacing:1px;">RIP PACK!</h2></div>`;
         }
@@ -601,12 +536,14 @@
             if (userCash < cost) return; userCash -= cost; saveGame(); updateUI(); let holoChance = baseHoloChance + shredBonus; pendingPack = [];
             for (let i = 0; i < 5; i++) {
                 const num = getCardDropNum(); let isHolo = false; let holoType = null; let serial = null; let relic = null;
+                let ewfVariant = getEWFVariant();
+                let hasAuto = Math.random() < 0.25;
                 if (i === 4) { isHolo = true; if(Math.random() < 0.05) { let rRoll = Math.random(); relic = rRoll > 0.8 ? 'rope' : rRoll > 0.5 ? 'table' : 'canvas'; } } else { isHolo = Math.random() < holoChance; }
                 if(isHolo) {
                     let holoRoll = Math.random(); if(holoRoll > 0.99) holoType = 'ghost'; else if(holoRoll > 0.96) holoType = 'prismatic'; else if(holoRoll > 0.90) holoType = 'plasma'; else if(holoRoll > 0.80) holoType = 'obsidian'; else if(holoRoll > 0.65) holoType = 'cosmic'; else if(holoRoll > 0.45) holoType = 'gold-vinyl'; else if(holoRoll > 0.25) holoType = 'cracked-ice'; else holoType = 'standard';
                     let serialRoll = Math.random(); if(serialRoll > 0.995) serial = { current: 1, max: 1, color: 'gold' }; else if(serialRoll > 0.97) serial = { current: Math.floor(Math.random()*10)+1, max: 10, color: 'gold' }; else if(serialRoll > 0.90) serial = { current: Math.floor(Math.random()*50)+1, max: 50, color: 'silver' }; else if(serialRoll > 0.75) serial = { current: Math.floor(Math.random()*99)+1, max: 99, color: 'silver' };
                 }
-                pendingPack.push({ img: `card (${num}).jpg`, holo: isHolo, holoType: holoType, serial: serial, relic: relic, grade: null, raw: true, alignment: Math.random()>0.5?'face':'heel', conditionCap: 10, inShowcase: false, blackLabel: false, excursionUntil: 0, excursionBadge: null });
+                pendingPack.push({ img: `card (${num}).jpg`, holo: isHolo, holoType: holoType, serial: serial, relic: relic, grade: null, raw: true, alignment: Math.random()>0.5?'face':'heel', conditionCap: 10, inShowcase: false, blackLabel: false, excursionUntil: 0, excursionBadge: null, ewfVariant: ewfVariant, hasAuto: hasAuto });
             }
             const area = document.getElementById('pack-area'); area.innerHTML = `<div id="sealed-box" onclick="openSealedPack()"><div class="box-lid"></div><h2 style="margin:0; text-shadow:0 0 10px black, 0 0 20px var(--gold);">EWF ELITE BOX</h2><div style="font-size:12px; margin-top:5px; font-weight:bold; letter-spacing:1px; color:#fff;">5 CARDS (1 GUARANTEED RARE)</div><div class="box-flare"></div></div>`;
         }
@@ -616,19 +553,28 @@
             pendingPack.forEach((cardData, i) => {
                 setTimeout(() => {
                     const cardDiv = document.createElement('div'); cardDiv.className = 'pack-card slide-in';
+                    let extraHolo = '';
+                    if(cardData.holoType === 'standard' && Math.random() < 0.2) extraHolo = '<div class="holo-tiger"></div>';
+                    if(cardData.holoType === 'cracked-ice' && Math.random() < 0.2) extraHolo = '<div class="holo-zebra"></div>';
+                    
+                    let vLabel = cardData.ewfVariant ? `<div class="variant-label">${cardData.ewfVariant.split('-')[1]}</div>` : '';
+                    if(cardData.holoType) vLabel = `<div class="variant-label">${cardData.holoType}</div>`;
+
                     let inner = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${cardData.img}'); ${cardData.holo ? 'border-color:cyan; box-shadow: 0 0 15px rgba(0,255,255,0.4);' : ''}">`;
                     if(cardData.holoType) inner += `<div class="holo-${cardData.holoType}"></div>`;
+                    inner += extraHolo + vLabel;
                     if(cardData.serial) inner += `<div class="serial-badge serial-${cardData.serial.color}">${cardData.serial.current}/${cardData.serial.max}</div>`;
                     if(cardData.relic) inner += `<div class="relic-window"><div class="relic-${cardData.relic}" style="width:100%; height:100%;"></div></div>`;
+                    if(cardData.hasAuto) inner += createScribble(cardData.img);
                     inner += `</div></div>`; cardDiv.innerHTML = inner;
 
                     cardDiv.onclick = function() { 
                         if(!this.classList.contains('flipped')) { 
-                            if(cardData.holoType === 'ghost' || cardData.mythic || (cardData.serial && cardData.serial.max === 1)) {
+                            if(cardData.holoType === 'ghost' || cardData.mythic || (cardData.serial && cardData.serial.max === 1) || cardData.ewfVariant === 'card-nebula') {
                                 document.getElementById('walkout-overlay').style.display = 'flex';
                                 document.getElementById('walkout-card-container').innerHTML = `<div class="walkout-card" style="width:300px; height:420px; background-image:url('${folderPath}/${cardData.img}'); background-size:cover; border:2px solid cyan; border-radius:10px; box-shadow: 0 0 50px rgba(0,255,255,0.8); position:relative;">${inner}</div>`;
                                 setTimeout(() => { document.getElementById('walkout-overlay').style.display = 'none'; this.classList.add('flipped'); triggerConfetti(); updateBounty('holos', 1); saveCard(cardData); }, 3500);
-                            } else if(cardData.holo || cardData.serial || cardData.relic) {
+                            } else if(cardData.holo || cardData.serial || cardData.relic || cardData.ewfVariant) {
                                 this.classList.add('super-shake'); document.body.classList.add('screen-shake');
                                 setTimeout(() => { 
                                     this.classList.remove('super-shake'); document.body.classList.remove('screen-shake'); this.classList.add('flipped'); triggerConfetti(); 
@@ -642,7 +588,19 @@
             });
         }
 
-        function saveCard(cardData) { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let existing = col.find(c => c.img === cardData.img && !c.botched && c.grade === cardData.grade && c.holo === cardData.holo && c.holoType === cardData.holoType && JSON.stringify(c.serial) === JSON.stringify(cardData.serial) && c.raw === cardData.raw && c.relic === cardData.relic); if (!existing || cardData.serial || cardData.raw || cardData.relic) { col.push({ img: cardData.img, wins: 0, holo: cardData.holo, holoType: cardData.holoType, serial: cardData.serial, raw: cardData.raw, gradingUntil: 0, grade: cardData.grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, scoutingUntil: 0, buff: null, alignment: cardData.alignment, radioactive: false, mythic: false, botched: false, conditionCap: cardData.conditionCap || 10, inShowcase: cardData.inShowcase || false, blackLabel: cardData.blackLabel || false, relic: cardData.relic || null, excursionUntil: cardData.excursionUntil || 0, excursionBadge: cardData.excursionBadge || null }); } else { existing.dupes = (existing.dupes || 0) + 1; } localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI(); }
+        function saveCard(cardData) { 
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; 
+            col.push({ 
+                img: cardData.img, wins: 0, holo: cardData.holo, holoType: cardData.holoType, serial: cardData.serial, raw: cardData.raw, 
+                gradingUntil: 0, grade: cardData.grade, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, 
+                trainingUntil: 0, scoutingUntil: 0, buff: null, alignment: cardData.alignment, radioactive: false, mythic: false, 
+                botched: false, conditionCap: cardData.conditionCap || 10, inShowcase: cardData.inShowcase || false, 
+                blackLabel: cardData.blackLabel || false, relic: cardData.relic || null, excursionUntil: cardData.excursionUntil || 0, 
+                excursionBadge: cardData.excursionBadge || null, ewfVariant: cardData.ewfVariant || '', hasAuto: cardData.hasAuto || false 
+            }); 
+            localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI(); 
+        }
+
         function displayRecord() { document.getElementById('win-count').innerHTML = `${totalWins} W`; document.getElementById('loss-count').innerHTML = `${totalLosses} L`; const totalMatches = totalWins + totalLosses; document.getElementById('win-rate').innerHTML = `WIN RATE: ${totalMatches === 0 ? 0 : Math.round((totalWins / totalMatches) * 100)}%`; }
 
         function runBattle(idx, isPPV = false) {
@@ -665,15 +623,12 @@
             bCard.style.backgroundImage = `url('${folderPath}/${card.img}')`; 
             bCard.className = 'rumble'; 
             
-            // Generate AI Opponent Card
             let aiNum = getCardDropNum();
             aiCard.style.backgroundImage = `url('${folderPath}/card (${aiNum}).jpg')`;
             if (isPPV) {
-                aiCard.style.boxShadow = "0 0 50px #e0b0ff"; // Mythic visual glow for AI on PPV
-                aiCard.style.borderColor = "#e0b0ff";
+                aiCard.style.boxShadow = "0 0 50px #e0b0ff"; aiCard.style.borderColor = "#e0b0ff";
             } else {
-                aiCard.style.boxShadow = "0 0 50px rgba(231,76,60,0.8)"; // Boss red glow for standard
-                aiCard.style.borderColor = "var(--red)";
+                aiCard.style.boxShadow = "0 0 50px rgba(231,76,60,0.8)"; aiCard.style.borderColor = "var(--red)";
             }
             aiCard.className = 'rumble';
             
@@ -681,7 +636,6 @@
 
             let fightInt = setInterval(() => { step++; if(step < moves.length) { bText.innerHTML = moves[step]; document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),100); } else { clearInterval(fightInt); bCard.classList.remove('rumble'); aiCard.classList.remove('rumble'); col = JSON.parse(localStorage.getItem('EWF_Collection')); card = col[idx]; 
                 
-                // D20 Mechanic
                 let d20 = Math.floor(Math.random() * 20) + 1;
                 d20El.style.display = 'block'; d20El.innerHTML = `🎲 ${d20}`;
                 
@@ -732,8 +686,10 @@
             const grid = document.getElementById('collection-grid'); const hofGrid = document.getElementById('hof-grid'); const showcaseGrid = document.getElementById('showcase-grid'); const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             grid.innerHTML = ''; hofGrid.innerHTML = ''; showcaseGrid.innerHTML = ''; const now = Date.now();
             col.forEach((card, index) => {
-                const container = document.createElement('div'); container.className = 'card-container'; const cardDiv = document.createElement('div'); 
+                const container = document.createElement('div'); container.className = 'card-container'; 
+                if(card.ewfVariant) container.classList.add(card.ewfVariant);
                 
+                const cardDiv = document.createElement('div'); 
                 let classes = `saved-card ${card.raw ? '' : 'graded-slab'} ${card.holo ? 'is-holo' : ''} ${card.radioactive ? 'is-radioactive' : ''} ${card.mythic ? 'is-mythic' : ''} ${card.botched ? 'is-botched' : ''}`; 
                 if(factionMode && factionTeam.includes(index)) { classes += ' faction-selected'; cardDiv.style.borderColor = 'var(--green)'; cardDiv.style.boxShadow = '0 0 20px rgba(46,204,113,0.8)'; cardDiv.style.transform = 'scale(1.05)'; } 
                 if(tvWarMode && tvWarTeam.includes(index)) { classes += ' tv-selected'; }
@@ -746,12 +702,21 @@
                 let exBadgeHtml = ''; if(card.excursionBadge === 'strong') exBadgeHtml = '<div class="excursion-badge" title="Strong Style: No Stamina Drain">🥋</div>'; else if(card.excursionBadge === 'lucha') exBadgeHtml = '<div class="excursion-badge" title="Lucha Libre: 2x Boss Damage">🦅</div>';
 
                 let holoLayer = ''; if(card.holoType && card.holoType !== 'standard') { holoLayer = `<div class="holo-${card.holoType}"></div>`; } else if (card.holo) { holoLayer = `<div class="holo-standard"></div>`; }
+                
+                let extraHolo = '';
+                if(card.holoType === 'standard' && Math.random() < 0.2) extraHolo = '<div class="holo-tiger"></div>';
+                if(card.holoType === 'cracked-ice' && Math.random() < 0.2) extraHolo = '<div class="holo-zebra"></div>';
+
+                let vLabel = card.ewfVariant ? `<div class="variant-label">${card.ewfVariant.split('-')[1]}</div>` : '';
+                if(card.holoType) vLabel = `<div class="variant-label">${card.holoType}</div>`;
+
                 let serialBadge = ''; if(card.serial) { serialBadge = `<div class="serial-badge serial-${card.serial.color}">${card.serial.current}/${card.serial.max}</div>`; }
                 let relicHtml = card.relic ? `<div class="relic-window"><div class="relic-${card.relic}" style="width:100%; height:100%;"></div></div>` : '';
-                
+                let autoHtml = card.hasAuto ? createScribble(card.img) : '';
+
                 let gradeHtml = card.raw ? `<div class="grade-label" style="background:#555;"><div class="grade-score" style="padding:4px 0;">RAW UNGRADED</div></div>` : `<div class="grade-label ${card.grade === 10 ? (card.blackLabel ? 'black-label' : 'gem-mint') : ''}"><div class="grade-title">${card.botched ? 'MUTANT EXPERIMENT' : card.champion ? '🏆 EWF AUTHENTIC 🏆' : (card.blackLabel ? 'PRISTINE LABEL' : 'EWF AUTHENTIC')}</div><div class="grade-score">${card.grade === 10 ? (card.blackLabel ? 'PRISTINE 10' : 'GEM MINT 10') : `MINT ${card.grade}`}</div></div>`;
 
-                cardDiv.innerHTML = `${gradeHtml}<div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; z-index: 10; overflow: hidden;">${holoLayer}${serialBadge}${relicHtml}</div><div class="shine-layer"></div><div class="sparkle-layer"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive && !card.botched && !card.inShowcase ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${isScouting ? `<div class="scout-overlay">🚌 ON TOUR<br><span class="train-timer-text" data-time="${card.scoutingUntil}">--:--</span></div>` : ''}${isExcursion ? `<div class="scout-overlay" style="background:rgba(231,76,60,0.8);">✈️ EXCURSION<br><span class="train-timer-text" data-time="${card.excursionUntil}">--:--</span></div>` : ''}${isGrading ? `<div class="scout-overlay" style="background:rgba(212,175,55,0.8); color:black;">📦 GRADING<br><span class="train-timer-text" data-time="${card.gradingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}${alignBadge}${exBadgeHtml}`;
+                cardDiv.innerHTML = `${gradeHtml}<div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; z-index: 10; overflow: hidden;">${holoLayer}${extraHolo}${serialBadge}${relicHtml}${autoHtml}${vLabel}</div><div class="shine-layer"></div><div class="sparkle-layer"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive && !card.botched && !card.inShowcase ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${isScouting ? `<div class="scout-overlay">🚌 ON TOUR<br><span class="train-timer-text" data-time="${card.scoutingUntil}">--:--</span></div>` : ''}${isExcursion ? `<div class="scout-overlay" style="background:rgba(231,76,60,0.8);">✈️ EXCURSION<br><span class="train-timer-text" data-time="${card.excursionUntil}">--:--</span></div>` : ''}${isGrading ? `<div class="scout-overlay" style="background:rgba(212,175,55,0.8); color:black;">📦 GRADING<br><span class="train-timer-text" data-time="${card.gradingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}${alignBadge}${exBadgeHtml}`;
                 
                 setupInspector(cardDiv); if(factionMode || tvWarMode || campaign.active) { cardDiv.onclick = () => handleCardClick(index); } else if(!isHof && !card.injured && !isTraining && !isScouting && !isExcursion && !isGrading && !card.botched && !card.inShowcase) { cardDiv.ondblclick = () => runBattle(index, false); } container.appendChild(cardDiv);
                 
@@ -774,74 +739,13 @@
                         if(invasion.active && !card.inShowcase) controls.innerHTML += `<button class="gm-btn" style="background:var(--red); color:white; border-color:white; box-shadow:0 0 10px rgba(231,76,60,0.8); animation:pulse 1s infinite;" onclick="fightInvasion(${index})">⚔️ DEFEND INVASION</button>`; 
                         if(card.img !== faceCardImg && !card.inShowcase) controls.innerHTML += `<button class="gm-btn" style="border-color:#f1c40f; color:#f1c40f;" onclick="setFace('${card.img}')">👕 SET AS FACE</button>`; 
                     }
-                    // This rolls for the rarity and adds the CSS class (Gold, Silver, etc.)
-// --- NEW EWF PULL LOGIC (Serial Numbers & On-Card Signatures) ---
-let rarityClass = getEWFVariant();
-if (rarityClass) {
-    container.classList.add(rarityClass);
-
-    // Add Serial Numbers for Nebula and Gold hits
-    if (rarityClass === 'card-nebula') {
-        container.insertAdjacentHTML('afterbegin', `<div class="serial-number">1/1</div>`);
-    } else if (rarityClass === 'card-gold') {
-        let ser = Math.floor(Math.random() * 9) + 1;
-        container.insertAdjacentHTML('afterbegin', `<div class="serial-number">0${ser}/10</div>`);
-    }
-}
-
-// Add Signature directly ON the card (15% chance)
-if (Math.random() < 0.15) {
-    let name = card.name || "Wrestler";
-    let scribble = name.charAt(0) + "mmmm" + name.charAt(name.length - 1) + "zz";
-    container.insertAdjacentHTML('beforeend', `<div class="scribble-auto">${scribble}</div>`);
-}
-
-container.appendChild(controls);
-if(card.inShowcase) showcaseGrid.appendChild(container); else grid.appendChild(container);
-        /* --- EWF RARITY ENGINE --- */
-// This function picks which variant class to give the card
-function getEWFVariant() {
-    let roll = Math.floor(Math.random() * 100) + 1; // Roll 1-100
-
-    if (roll === 100) return 'card-nebula';      // 1-of-1 Nebula
-    if (roll > 98) return 'card-cracked-ice';    // Case Hit
-    if (roll > 95) return 'card-mojo';           // Mojo
-    if (roll > 85) return 'card-gold';           // Gold /10
-    if (roll > 75) return 'card-sapphire';       // Sapphire
-    if (roll > 60) return 'card-ruby';           // Ruby
-    if (roll > 45) return 'card-emerald';        // Emerald
-    if (roll > 30) return 'card-silver';         // Silver
-    return '';                                   // Base Card
-}
-
-// This function creates the "Scribble" for the signature
-function createScribble(wrestlerName) {
-    if (!wrestlerName) return "";
-    let first = wrestlerName.charAt(0);
-    let last = wrestlerName.charAt(wrestlerName.length - 1);
-    // Makes it look like: Jmmmmmmz (unreadable)
-    return `<div class="scribble-auto">${first}mm${last}zz</div>`;
-}
-        /* --- EWF RARITY ENGINE LOGIC --- */
-function getEWFVariant() {
-    let roll = Math.floor(Math.random() * 100) + 1; 
-    if (roll === 100) return 'card-nebula';      
-    if (roll > 95) return 'card-cracked-ice';    
-    if (roll > 90) return 'card-mojo';           
-    if (roll > 80) return 'card-gold';           
-    if (roll > 70) return 'card-sapphire';       
-    if (roll > 55) return 'card-ruby';           
-    if (roll > 40) return 'card-emerald';        
-    if (roll > 25) return 'card-silver';         
-    return '';                                   
-}
-
-function createScribble(name) {
-    let first = name.charAt(0);
-    let last = name.charAt(name.length - 1);
-    // This creates the "Jmmmz" unreadable signature look
-    return `<div class="scribble-auto">${first}mmm${last}zz</div>`;
-}
+                    container.appendChild(controls); 
+                    if(card.inShowcase) showcaseGrid.appendChild(container); else grid.appendChild(container);
+                } else if(isHof) { hofGrid.appendChild(container); } else { if(card.inShowcase) showcaseGrid.appendChild(container); else grid.appendChild(container); } 
+            });
+            document.getElementById('hof-section').style.display = hofGrid.innerHTML === '' ? 'none' : 'block';
+            document.getElementById('vip-showcase').style.display = showcaseGrid.innerHTML === '' ? 'none' : 'block';
+        }
     </script>
 </body>
 </html>
