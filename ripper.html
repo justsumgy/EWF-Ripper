@@ -754,6 +754,35 @@
             document.getElementById('hof-section').style.display = hofGrid.innerHTML === '' ? 'none' : 'block';
             document.getElementById('vip-showcase').style.display = showcaseGrid.innerHTML === '' ? 'none' : 'block';
         }
+        /* P2P TRADE FUNCTIONS */
+        function generateTradeCode(idx) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let card = col[idx];
+            if(!confirm("GENERATE TRADE CODE?\n\nThis card will be REMOVED from your roster so you can send the code to a friend. Proceed?")) return;
+            let code = btoa(JSON.stringify(card));
+            col.splice(idx, 1);
+            localStorage.setItem('EWF_Collection', JSON.stringify(col));
+            displayCollection();
+            updateUI();
+            prompt("COPY AND SEND THIS CODE TO THE OTHER PLAYER:", code);
+        }
+
+        function redeemTradeCode() {
+            let code = document.getElementById('trade-input').value.trim();
+            try {
+                let card = JSON.parse(atob(code));
+                if(card.img) {
+                    let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+                    col.push(card);
+                    localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                    document.getElementById('trade-input').value = "";
+                    document.getElementById('p2p-modal').style.display = 'none';
+                    displayCollection();
+                    updateUI();
+                    alert("🤝 TRADE SUCCESSFUL!");
+                }
+            } catch(e) { alert("❌ INVALID TRADE CODE"); }
+        }
     </script>
 </body>
 </html>
