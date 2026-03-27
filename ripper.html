@@ -155,7 +155,13 @@
         <div id="battle-text">FIGHTING...</div>
     </div>
 
-   
+   <div id="p2p-modal" class="modal">
+        <h2 style="color:var(--blue); border-bottom: 1px solid var(--blue);">🤝 HUMAN TRADE CENTER</h2>
+        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Paste a trade code from another player to receive their wrestler.</p>
+        <input type="text" id="trade-input" placeholder="PASTE CODE HERE" style="width:100%; padding:15px; background:#111; color:white; border:1px solid #444; border-radius:8px; margin-bottom:15px; font-family:monospace;">
+        <button class="gm-btn" style="width:100%; background:var(--blue); color:white; padding:12px;" onclick="redeemTradeCode()">REDEEM WRESTLER</button>
+        <button class="gm-btn" style="width:100%; margin-top:10px;" onclick="document.getElementById('p2p-modal').style.display='none'">CANCEL</button>
+    </div>
     <div id="trade-modal" class="modal" style="width: 500px; text-align:center;"><h2 style="color:cyan; border-bottom-color:cyan;">🤝 LOCAL TRADE OFFER</h2><p id="trade-text" style="color:#ddd; font-size:14px;"></p><div style="display:flex; justify-content:space-around; align-items:center; margin: 20px 0;"><div id="trade-offer-card" style="width:120px; height:160px; border:2px solid cyan; border-radius:10px; background-size:cover;"></div><div style="font-size:30px;">🔁</div><div id="trade-my-card" style="width:120px; height:160px; border:2px solid var(--red); border-radius:10px; background-size:cover;"></div></div><div style="display:flex; gap:10px;"><button class="modal-btn" style="flex:1; background:rgba(46,204,113,0.2); color:var(--green); border-color:var(--green); font-size:16px;" onclick="acceptTrade()">ACCEPT</button><button class="modal-btn" style="flex:1; background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red); font-size:16px;" onclick="document.getElementById('trade-modal').style.display='none'">DECLINE</button></div></div>
     <div id="season-modal" class="modal" style="width: 600px; text-align:center;"><h1 style="color:var(--gold); text-shadow:0 0 15px var(--gold); margin-top:0;">🏆 EWF MYGM AWARDS 🏆</h1><p style="color:#aaa; font-size:13px; margin-bottom:20px;">Another 30-tick season comes to a close! Here are the winners:</p><div id="season-content" style="display:flex; flex-direction:column; gap:15px; text-align:left;"></div><button class="close-btn" onclick="document.getElementById('season-modal').style.display='none'">START NEXT SEASON</button></div>
     <div id="checklist-modal" class="modal" style="width: 550px;"><h2>📋 CHECKLIST</h2><div id="checklist-list"></div><button class="close-btn" onclick="document.getElementById('checklist-modal').style.display='none'">CLOSE</button></div>
@@ -193,6 +199,7 @@
             <button class="main-btn rip-super" id="rip-super-btn" onclick="ripPack(24.99, 0.25)">SUPER HOLO ($24.99)</button>
             <button class="main-btn btn-box" id="rip-box-btn" onclick="ripBox(120, 0.15)">EWF BOX ($120)</button>
             <button class="main-btn rip-gear" id="rip-gear-btn" onclick="ripGearPack()">GEAR PACK ($10)</button>
+            <button class="main-btn" style="border-bottom:3px solid var(--blue);" onclick="document.getElementById('p2p-modal').style.display='block'">🤝 PLAYER TRADE</button>
             <button class="main-btn btn-checklist" onclick="openChecklist()">📋 CHECKLIST</button>
             <button class="main-btn btn-vault" onclick="openVault()">💼 VAULT</button>
             <button class="main-btn btn-arena" onclick="openArena()">🏟️ ARENA</button>
@@ -733,6 +740,7 @@
                         }
                         controls.innerHTML += `<div style="display:flex; gap:4px;"><button class="gm-btn btn-gear" style="flex:1;" onclick="openGearMenu(${index})">🎒 GEAR</button><button class="gm-btn" style="flex:1; border-color:var(--purple); color:var(--purple);" onclick="sendToIndies(${index})">🚌 INDIES</button></div>`; 
                         controls.innerHTML += `<div style="display:flex; gap:4px;"><button class="gm-btn" style="flex:1; border-color:#ccc; color:#ccc;" onclick="turnAlignment(${index})">TURN ${card.alignment === 'face' ? 'HEEL' : 'FACE'} ($200)</button><button class="gm-btn" style="flex:1; border-color:var(--gold); color:var(--gold);" onclick="toggleShowcase(${index})">${card.inShowcase ? 'REMOVE VIP' : '💎 VIP SHOWCASE'}</button></div>`;
+                        controls.innerHTML += `<button class="gm-btn" style="background:rgba(52,152,219,0.2); border-color:var(--blue); color:var(--blue);" onclick="generateTradeCode(${index})">🤝 TRADE CODE</button>`;
                         if(card.baseWin < 0.6 && !card.inShowcase) controls.innerHTML += `<button class="gm-btn btn-train" onclick="trainCard(${index})">TRAIN 5m ($100)</button>`; 
                         if(card.streak <= -3 && !card.inShowcase) controls.innerHTML += `<button class="gm-btn" style="background:rgba(231,76,60,0.1); border-color:var(--red); color:var(--red);" onclick="loserLeavesTown(${index})">💀 LOSER LEAVES TOWN</button>`;
                         if(!card.champion && userCash >= 100 && !card.inShowcase) controls.innerHTML += `<button class="gm-btn btn-ppv" onclick="ppvMatch(${index})">PPV TITLE ($100)</button>`; 
