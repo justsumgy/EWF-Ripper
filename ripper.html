@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF RIPPED (TCG) v8.2 - THE BOX EDITION</title>
+    <title>EWF RIPPED (TCG) v8.5 - THE ESA BINDER EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -76,11 +76,18 @@
         
         #auction-block { background: var(--dark-glass); backdrop-filter: blur(12px); border: 1px solid rgba(212, 175, 55, 0.4); padding: 20px; margin: 20px auto; width: 90%; max-width: 700px; border-radius: 16px; display: none; box-shadow: 0 15px 35px rgba(0,0,0,0.8); } #auction-content { display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; } .auction-text { color: #ccc; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; } .auction-bid { font-size: 36px; color: var(--green); font-weight: 900; text-shadow: 0 0 15px rgba(46, 204, 113, 0.3); margin: 5px 0; } .auction-time { color: var(--red); font-size: 16px; font-weight: 900; margin-top: 10px; }
         
-        .showcase-area { background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 40px; box-shadow: inset 0 0 50px rgba(0,0,0,0.8); min-height: 400px; } .card-container { width: 160px; min-height: 460px; height: auto; perspective: 1000px; display: inline-flex; flex-direction: column; align-items: center; margin: 15px; vertical-align: top; position: relative; padding-bottom: 10px; } 
+        /* BINDER & SHOWCASE CSS */
+        .showcase-area { background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 40px 0; margin-top: 40px; box-shadow: inset 0 0 50px rgba(0,0,0,0.8); min-height: 400px; } 
+        #binder-tabs { display: flex; justify-content: center; gap: 10px; margin: 20px 0 30px 0; flex-wrap: wrap; }
+        .binder-tab { padding: 10px 20px; font-size: 12px; font-weight: 900; background: var(--dark-glass); border: 1px solid rgba(255,255,255,0.2); color: #aaa; cursor: pointer; border-radius: 8px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .binder-tab:hover { color: white; border-color: rgba(255,255,255,0.5); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .binder-tab.active { background: rgba(212,175,55,0.2); color: var(--gold); border-color: var(--gold); box-shadow: 0 0 15px var(--gold-glow); }
+
+        .card-container { width: 160px; min-height: 460px; height: auto; perspective: 1000px; display: inline-flex; flex-direction: column; align-items: center; margin: 15px; vertical-align: top; position: relative; padding-bottom: 10px; } 
         
         /* 3D PARALLAX SLABS */
         .saved-card { width: 100%; height: 230px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); position: relative; transition: transform 0.1s ease-out, box-shadow 0.1s ease-out; cursor: pointer; transform-style: preserve-3d; box-shadow: 0 15px 25px rgba(0,0,0,0.6); padding-top: 30px; background-color: #1a1a1a; flex-shrink: 0; }
-        .saved-card.graded-slab { border: 5px solid #ddd; border-radius: 8px; padding-top: 25px; box-shadow: 5px 5px 15px rgba(0,0,0,0.9), inset 0 0 5px rgba(255,255,255,0.8); background: linear-gradient(135deg, #eee 0%, #fff 50%, #eee 100%); }
+        .saved-card.graded-slab { border: 5px solid #e0e0e0; border-radius: 8px; padding-top: 38px; box-shadow: 5px 5px 15px rgba(0,0,0,0.9), inset 0 0 5px rgba(255,255,255,0.8); background: linear-gradient(135deg, #eee 0%, #fff 50%, #ddd 100%); }
         
         .gm-controls { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; width: 100%; } .gm-btn { padding: 6px; font-size: 10px; color: #aaa; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; font-weight: 700; transition: all 0.2s; font-family: inherit; letter-spacing: 0.5px; text-transform: uppercase; } .btn-sell:hover { border-color: var(--green); color: var(--green); background: rgba(46, 204, 113, 0.1); } .btn-auction:hover { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); } .btn-gear:hover { border-color: silver; color: white; background: rgba(255, 255, 255, 0.1); } .btn-train:hover { border-color: var(--blue); color: var(--blue); background: rgba(52, 152, 219, 0.1); } .btn-ppv:hover { border-color: var(--purple); color: var(--purple); background: rgba(155, 89, 182, 0.1); } .btn-forge:hover { border-color: #f39c12; color: #f39c12; background: rgba(243, 156, 18, 0.1); } .btn-splice:hover { border-color: #39ff14; color: #39ff14; background: rgba(57, 255, 20, 0.1); } .btn-heal { border-color: rgba(231, 76, 60, 0.5); color: var(--red); } .btn-heal:hover { border-color: var(--red); background: rgba(231, 76, 60, 0.1); }
         
@@ -99,7 +106,19 @@
         .walkout-card { transform: translateY(100vh) rotateX(45deg); animation: riseUp 3s cubic-bezier(0.1, 0.8, 0.2, 1) forwards; filter: drop-shadow(0 0 50px rgba(255,215,0,0.8)); } 
         @keyframes riseUp { 100% { transform: translateY(0) rotateX(0deg); } }
 
-        .grade-label { position: absolute; top: 0; left: 0; width: 100%; background: #c00; border-bottom: 2px solid #000; color: white; text-align: center; border-top-left-radius: 8px; border-top-right-radius: 8px; z-index: 20; pointer-events: none; } .grade-title { font-size: 8px; font-weight: 900; letter-spacing: 1px; padding-top: 4px; } .grade-score { font-size: 13px; font-weight: 900; padding-bottom: 4px; letter-spacing: 0.5px; } .gem-mint { background: linear-gradient(45deg, #D4AF37, #FFDF00, #D4AF37); color: black; } .black-label { background: linear-gradient(135deg, #111, #333, #000); color: var(--gold); border-bottom: 2px solid var(--gold); }
+        /* ESA GRADING LABELS */
+        .grade-label { position: absolute; top: 0; left: 0; width: 100%; height: 38px; background: #eee; border-bottom: 2px solid #ccc; color: #111; text-align: center; border-top-left-radius: 6px; border-top-right-radius: 6px; z-index: 20; pointer-events: none; overflow: hidden; display: flex; flex-direction: column; }
+        .grade-header { display: flex; justify-content: space-between; align-items: center; padding: 1px 5px; background: linear-gradient(90deg, #111, #333); border-bottom: 1px solid silver; }
+        .esa-logo { font-size: 7px; font-weight: 900; color: silver; font-style: italic; letter-spacing: 1px; }
+        .esa-barcode { font-family: monospace; font-size: 7px; letter-spacing: -1px; color: #fff; opacity: 0.6; }
+        .grade-title { font-size: 6px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; color: #333; margin-top: 2px; } 
+        .grade-score { font-size: 16px; font-weight: 900; color: #c00; font-family: 'Times New Roman', serif; line-height: 1; margin-top: 1px; } 
+        
+        .gem-mint { background: linear-gradient(135deg, #fff, #f5f5f5); border-bottom: 2px solid var(--gold); }
+        .gem-mint .grade-score { color: #111; }
+        .black-label { background: linear-gradient(135deg, #111, #333, #000); color: var(--gold); border-bottom: 2px solid var(--gold); }
+        .black-label .grade-title, .black-label .grade-score, .black-label div { color: var(--gold) !important; }
+
         .shine-layer { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(255,255,255,0.8) 0%, transparent 60%); z-index: 15; pointer-events: none; opacity: 0; mix-blend-mode: overlay; transition: opacity 0.3s; } .sparkle-layer { position: absolute; inset: 0; border-radius: 10px; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-repeat: repeat; mix-blend-mode: color-dodge; z-index: 13; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .is-holo { border-color: cyan !important; box-shadow: 0 0 15px rgba(0,255,255,0.4); } .saved-card:hover .shine-layer, .saved-card:hover .sparkle-layer { opacity: 1; }
         
         /* ORIGINAL HOLOS */
@@ -121,7 +140,7 @@
         .relic-window { position:absolute; top: 75%; left: 50%; transform:translate(-50%, -50%); width:45px; height:45px; border: 2px solid #ddd; box-shadow: inset 0 0 15px #000, 0 5px 10px rgba(0,0,0,0.8); z-index:18; border-radius:4px; overflow:hidden; } .relic-canvas { background: repeating-linear-gradient(45deg, #ddd 25%, #eee 25%, #eee 50%, #ddd 50%, #ddd 75%, #eee 75%, #eee); background-size: 8px 8px; } .relic-table { background: repeating-linear-gradient(90deg, #8b4513, #a0522d 5px, #8b4513 10px); } .relic-rope { background: repeating-linear-gradient(45deg, #e74c3c, #c0392b 5px, #e74c3c 10px); }
 
         .win-count { position: absolute; top: 12px; left: -8px; background: var(--dark-glass); color: white; border-radius: 4px; padding: 4px 8px; font-size: 11px; border: 1px solid rgba(255,255,255,0.2); z-index: 21; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.5); backdrop-filter: blur(5px); } .dupe-count { position: absolute; top: 12px; right: -8px; background: rgba(52,152,219,0.9); color: white; border-radius: 50%; width: 24px; height: 24px; font-size: 11px; line-height: 24px; border: 1px solid rgba(255,255,255,0.5); z-index: 21; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.5); } .streak-badge { position: absolute; bottom: 12px; right: -8px; font-size: 20px; z-index: 21; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.5)); } .stamina-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #222; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; overflow: hidden; z-index: 21; border-top: 1px solid #000; } .stamina-fill { height: 100%; width: 100%; background: var(--green); transition: width 0.2s linear; }
-        .injured-overlay { position: absolute; inset: 0; background: rgba(231,76,60,0.7); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; pointer-events: none; } .training-overlay { position: absolute; inset: 0; background: rgba(52,152,219,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; } .scout-overlay { position: absolute; inset: 0; background: rgba(155,89,182,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; } .align-badge { position: absolute; top: 35px; right: 5px; font-size: 18px; z-index: 25; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); } .excursion-badge { position: absolute; bottom: 35px; left: -8px; font-size: 20px; z-index: 25; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); }
+        .injured-overlay { position: absolute; inset: 0; background: rgba(231,76,60,0.7); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; pointer-events: none; } .training-overlay { position: absolute; inset: 0; background: rgba(52,152,219,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; } .scout-overlay { position: absolute; inset: 0; background: rgba(155,89,182,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; } .align-badge { position: absolute; top: 40px; right: 5px; font-size: 18px; z-index: 25; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); } .excursion-badge { position: absolute; bottom: 35px; left: -8px; font-size: 20px; z-index: 25; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); }
         .auto-pop { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; font-weight: 900; z-index: 40; pointer-events: none; animation: popUp 1s forwards; text-shadow: 0 4px 10px rgba(0,0,0,0.8); } @keyframes popUp { 0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); } 100% { opacity: 0; transform: translate(-50%, -150%) scale(1.2); } }
         
         /* BATTLE OVERLAY CSS (PLAYER VS AI) */
@@ -142,7 +161,7 @@
     <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
     <div id="tv-war-banner" onclick="startTVWar()">📺 FRIDAY NIGHT RATINGS WAR! CLICK TO MAIN EVENT!</div>
     <div id="gimmick-banner"></div><div id="sponsor-tracker"></div><div id="prestige-border"></div>
-    <div id="early-access">V8.2 THE BOX EDITION (57 CARD DECK)</div>
+    <div id="early-access">V8.5 THE ESA BINDER EDITION (57 CARD DECK)</div>
     <button id="music-toggle" onclick="toggleMusic()">Mute</button>
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio><audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
@@ -218,12 +237,26 @@
     
     <div id="vip-showcase"><h2 style="color:var(--gold); margin-top:0; font-weight:900; letter-spacing:2px; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:10px;">💎 VIP SHOWCASE</h2><div id="showcase-grid"></div></div>
 
-    <div class="showcase-area"><h2 style="color: white; margin-top: 0; font-weight: 900; letter-spacing: 2px;">MY EWF ROSTER</h2><div id="collection-grid"></div></div>
+    <div class="showcase-area">
+        <h2 style="color: white; margin-top: 0; font-weight: 900; letter-spacing: 2px;">ESA PRO PLAYER BINDER</h2>
+        
+        <div id="binder-tabs">
+            <button class="binder-tab active" onclick="setBinderTab('all')">ALL CARDS</button>
+            <button class="binder-tab" onclick="setBinderTab('base')">BASE SET</button>
+            <button class="binder-tab" onclick="setBinderTab('holo')">HOLOS & RARES</button>
+            <button class="binder-tab" onclick="setBinderTab('relic')">RELICS & AUTOS</button>
+            <button class="binder-tab" onclick="setBinderTab('upgraded')">UPGRADED (SLABS)</button>
+        </div>
+
+        <div id="collection-grid"></div>
+    </div>
     <div id="record-box" class="glass-panel"><h3>PROMOTER RECORD</h3><div id="record-display"><span class="win-text" id="win-count">0 W</span> <span style="color:#555;">-</span> <span class="loss-text" id="loss-count">0 L</span></div><div id="win-rate" style="font-size: 13px; color: #aaa; letter-spacing: 1px; font-weight:700;">WIN RATE: 0%</div><button style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#666; font-size:9px; padding:6px 12px; margin-top:20px; cursor:pointer; border-radius:4px; font-family:inherit; transition:0.2s;" onclick="hardReset()" onmouseover="this.style.color='white'; this.style.borderColor='white';" onmouseout="this.style.color='#666'; this.style.borderColor='rgba(255,255,255,0.1)';">FULL DATA RESET</button></div>
     <div id="hof-section"><h1 style="color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); font-size: 2.5em; margin-bottom: 5px; font-weight:900;">🏛️ EWF HALL OF FAME 🏛️</h1><p style="color: #aaa; font-size: 13px; margin-top: 0; font-weight:700; letter-spacing:1px;">LEGENDS WITH 200+ WINS</p><div id="hof-grid"></div></div>
 
     <script>
         const totalCards = 57; const folderPath = "rare ewf cards";
+        let currentBinderTab = 'all'; // Tracks the active binder tab
+
         function getCardDropNum() { let num; let valid = false; while(!valid) { num = Math.floor(Math.random() * totalCards) + 1; if (num === 32) { if (Math.random() < 0.01) valid = true; } else if (num === 30 || num === 36) { if (Math.random() < 0.05) valid = true; } else { valid = true; } } return num; }
         
         let userCash = parseInt(localStorage.getItem('EWF_Cash')); if (isNaN(userCash) || userCash <= 0) userCash = 50;
@@ -300,6 +333,14 @@
             setInterval(() => { tick(); }, 30000); setInterval(() => { fastTick(); }, 1000); setInterval(() => { if(autoMode) runAutoMatches(); }, 5000); applyGimmickEffects();
         }
 
+        /* NEW BINDER FILTER FUNCTION */
+        function setBinderTab(tab) {
+            currentBinderTab = tab;
+            document.querySelectorAll('.binder-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            displayCollection();
+        }
+
         function buyAutoBooker() {
             if(userCash >= 10000) {
                 userCash -= 10000; autoBookerOwned = true; localStorage.setItem('EWF_AutoBooker', 'true');
@@ -309,7 +350,7 @@
         }
 
         function triggerSeasonAwards() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let html = ""; let totalWinnings = 0; if(col.length > 0) { let mvp = col.reduce((prev, current) => (prev.wins > current.wins) ? prev : current); html += `<div style="background:rgba(212,175,55,0.1); padding:15px; border-radius:8px; border:1px solid var(--gold);"><b>🏅 SEASON MVP: Card #${mvp.img.match(/\d+/)[0]} (${mvp.wins} Wins)</b><br><span style="color:var(--green); font-size:12px;">+$250 Bonus</span></div>`; totalWinnings += 250; } if(userCash > 500) { html += `<div style="background:rgba(46,204,113,0.1); padding:15px; border-radius:8px; border:1px solid var(--green);"><b>👔 PROMOTER OF THE SEASON</b><br><span style="color:var(--green); font-size:12px;">Revenue Goal Met! +$500 Bonus</span></div>`; totalWinnings += 500; } html += `<div style="text-align:center; font-size:20px; font-weight:900; color:var(--green); margin-top:10px;">TOTAL PAYOUT: $${totalWinnings}</div>`; userCash += totalWinnings; vault.push({ id: Date.now(), unlockAt: 0 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); saveGame(); updateUI(); document.getElementById('season-content').innerHTML = html; document.getElementById('season-modal').style.display = 'block'; }
-        function sendToGrading(idx) { if(userCash < 25) return alert("You need $25 to grade a card."); let col = JSON.parse(localStorage.getItem('EWF_Collection')); if(confirm("Send this raw card to the Authenticator for $25? Takes 1 minute.")) { userCash -= 25; col[idx].gradingUntil = Date.now() + 60000; localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); } }
+        function sendToGrading(idx) { if(userCash < 25) return alert("You need $25 to grade a card."); let col = JSON.parse(localStorage.getItem('EWF_Collection')); if(confirm("Send this raw card to ESA Authenticators for $25? Takes 1 minute.")) { userCash -= 25; col[idx].gradingUntil = Date.now() + 60000; localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); } }
         function turnAlignment(idx) { if(userCash < 200) return alert("You need $200 to execute a turn."); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; if(confirm(`Pay $200 to execute a ${card.alignment === 'face' ? 'HEEL' : 'FACE'} turn?`)) { userCash -= 200; card.alignment = card.alignment === 'face' ? 'heel' : 'face'; localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); } }
 
         function updateBackground() { document.body.style.background = "url('background.jpg') center/cover no-repeat fixed"; applyGimmickEffects(); }
@@ -348,10 +389,20 @@
                 if(c.excursionUntil > 0 && now >= c.excursionUntil) { c.excursionUntil = 0; c.excursionBadge = Math.random()>0.5 ? 'strong' : 'lucha'; needsRender = true; alert(`✈️ EXCURSION COMPLETE! Your wrestler returned with the ${c.excursionBadge === 'strong' ? 'Strong Style' : 'Lucha Libre'} Badge!`); }
                 if(c.gradingUntil > 0 && now >= c.gradingUntil) { 
                     c.gradingUntil = 0; c.raw = false; needsRender = true; const roll = Math.random(); 
-                    if(roll > 0.95 && c.conditionCap === 10) { c.grade = 10; if(Math.random() < 0.01) { c.blackLabel = true; alert(`💎 UNBELIEVABLE! Your card came back as a PRISTINE 10 BLACK LABEL!`); } else { alert(`📦 Mail day! Your card came back as a GEM MINT 10!`); } } 
-                    else if(roll > 0.75 && c.conditionCap >= 9) { c.grade = 9; alert(`📦 Mail day! Your card came back as a MINT 9.`); } 
-                    else if(c.conditionCap >= 8) { c.grade = 8; alert(`📦 Mail day! Your card came back as a NM-MT 8.`); } 
-                    else { c.grade = 7; alert(`📦 Mail day! Your card came back as a EX 7.`); }
+                    
+                    // NEW: Updated PSA-Style grading odds. Hard, but realistic.
+                    if(roll > 0.80 && c.conditionCap === 10) { 
+                        c.grade = 10; 
+                        if(Math.random() < 0.02) { 
+                            c.blackLabel = true; 
+                            alert(`💎 UNBELIEVABLE! Your card came back as a PRISTINE 10 BLACK LABEL!`); 
+                        } else { 
+                            alert(`📦 Mail day! Your card came back as an ESA GEM MINT 10!`); 
+                        } 
+                    } 
+                    else if(roll > 0.50 && c.conditionCap >= 9) { c.grade = 9; alert(`📦 Mail day! Your card came back as an ESA MINT 9.`); } 
+                    else if(c.conditionCap >= 8) { c.grade = 8; alert(`📦 Mail day! Your card came back as an ESA NM-MT 8.`); } 
+                    else { c.grade = 7; alert(`📦 Mail day! Your card came back as an ESA EX 7.`); }
                 }
             });
             if(needsRender) { localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); }
@@ -382,8 +433,11 @@
                     
                     let winChance = card.baseWin; if(gimmickMode.active && gimmickMode.type === 'hardcore') winChance += 0.15;
                     let win = Math.random() < winChance;
+                    
+                    // Grab DOM element (safely if hidden by binder filter)
                     let el = document.querySelectorAll('.card-container')[i];
-                    if(el) { let pop = document.createElement('div'); pop.className = 'auto-pop'; pop.innerHTML = win ? '<span style="color:var(--green);">+WIN</span>' : '<span style="color:var(--red);">-LOSS</span>'; el.appendChild(pop); setTimeout(()=>pop.remove(), 1000); }
+                    if(el && document.body.contains(el)) { let pop = document.createElement('div'); pop.className = 'auto-pop'; pop.innerHTML = win ? '<span style="color:var(--green);">+WIN</span>' : '<span style="color:var(--red);">-LOSS</span>'; el.appendChild(pop); setTimeout(()=>pop.remove(), 1000); }
+                    
                     if(win) { card.wins++; totalWins++; card.streak = card.streak > 0 ? card.streak+1 : 1; hitBoss(card.excursionBadge === 'lucha' ? 2 : 1); if(Math.random()<0.05){ vault.push({ id: Date.now(), unlockAt: Date.now() + 10*60*1000 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); } progressSponsor(); } 
                     else { totalLosses++; card.streak = card.streak < 0 ? card.streak-1 : -1; }
                     fought = true;
@@ -682,6 +736,19 @@
             const grid = document.getElementById('collection-grid'); const hofGrid = document.getElementById('hof-grid'); const showcaseGrid = document.getElementById('showcase-grid'); const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             grid.innerHTML = ''; hofGrid.innerHTML = ''; showcaseGrid.innerHTML = ''; const now = Date.now();
             col.forEach((card, index) => {
+                
+                // BINDER FILTER LOGIC
+                if(card.wins < 200 && !card.inShowcase) {
+                    let showCard = false;
+                    if(currentBinderTab === 'all') showCard = true;
+                    else if(currentBinderTab === 'base') showCard = !card.holo && !card.relic && !card.hasAuto && !card.grade && !card.radioactive && !card.mythic;
+                    else if(currentBinderTab === 'holo') showCard = card.holo && !card.relic && !card.hasAuto && !card.grade && !card.mythic;
+                    else if(currentBinderTab === 'relic') showCard = (card.relic || card.hasAuto) && !card.grade;
+                    else if(currentBinderTab === 'upgraded') showCard = card.grade || card.radioactive || card.mythic;
+                    
+                    if(!showCard) return; // Skip rendering if it doesn't match the active filter
+                }
+
                 const container = document.createElement('div'); container.className = 'card-container'; 
                 if(card.ewfVariant) container.classList.add(card.ewfVariant);
                 
@@ -698,9 +765,24 @@
 
                 let innerVisuals = getCardInnerHtml(card);
 
-                let gradeHtml = card.raw ? `<div class="grade-label" style="background:#555;"><div class="grade-score" style="padding:4px 0;">RAW UNGRADED</div></div>` : `<div class="grade-label ${card.grade === 10 ? (card.blackLabel ? 'black-label' : 'gem-mint') : ''}"><div class="grade-title">${card.botched ? 'MUTANT EXPERIMENT' : card.champion ? '🏆 EWF AUTHENTIC 🏆' : (card.blackLabel ? 'PRISTINE LABEL' : 'EWF AUTHENTIC')}</div><div class="grade-score">${card.grade === 10 ? (card.blackLabel ? 'PRISTINE 10' : 'GEM MINT 10') : `MINT ${card.grade}`}</div></div>`;
+                let titleText = card.botched ? 'MUTANT EXPERIMENT' : (card.champion ? 'EWF CHAMPION' : (card.blackLabel ? 'PRISTINE LABEL' : 'AUTHENTIC CARD'));
+                let gradeString = card.grade === 10 ? 'GEM MINT' : `MINT`; 
+                if(card.grade === 8) gradeString = 'NM-MT'; if(card.grade === 7) gradeString = 'EX';
+                
+                let gradeHtml = card.raw ? 
+                    `<div class="grade-label" style="background:#444; height:auto; padding:4px 0;"><div class="grade-score" style="color:#aaa; font-size:10px;">RAW UNGRADED</div></div>` : 
+                    `<div class="grade-label ${card.grade === 10 ? (card.blackLabel ? 'black-label' : 'gem-mint') : ''}">
+                        <div class="grade-header"><span class="esa-logo">ESA</span><span class="esa-barcode">|||||||||||</span></div>
+                        <div style="display:flex; justify-content:space-between; padding:2px 5px;">
+                            <div style="text-align:left;">
+                                <div class="grade-title">${titleText}</div>
+                                <div style="font-size:6px; color:#666; font-weight:bold; margin-top:1px;">${gradeString}</div>
+                            </div>
+                            <div class="grade-score">${card.grade}</div>
+                        </div>
+                    </div>`;
 
-                cardDiv.innerHTML = `${gradeHtml}<div style="position:absolute; top:30px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; z-index: 10; overflow: hidden;">${innerVisuals}</div><div class="shine-layer"></div><div class="sparkle-layer"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive && !card.botched && !card.inShowcase ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${isScouting ? `<div class="scout-overlay">🚌 ON TOUR<br><span class="train-timer-text" data-time="${card.scoutingUntil}">--:--</span></div>` : ''}${isExcursion ? `<div class="scout-overlay" style="background:rgba(231,76,60,0.8);">✈️ EXCURSION<br><span class="train-timer-text" data-time="${card.excursionUntil}">--:--</span></div>` : ''}${isGrading ? `<div class="scout-overlay" style="background:rgba(212,175,55,0.8); color:black;">📦 GRADING<br><span class="train-timer-text" data-time="${card.gradingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}${alignBadge}${exBadgeHtml}`;
+                cardDiv.innerHTML = `${gradeHtml}<div style="position:absolute; top:38px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; z-index: 10; overflow: hidden;">${innerVisuals}</div><div class="shine-layer"></div><div class="sparkle-layer"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive && !card.botched && !card.inShowcase ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${isScouting ? `<div class="scout-overlay">🚌 ON TOUR<br><span class="train-timer-text" data-time="${card.scoutingUntil}">--:--</span></div>` : ''}${isExcursion ? `<div class="scout-overlay" style="background:rgba(231,76,60,0.8);">✈️ EXCURSION<br><span class="train-timer-text" data-time="${card.excursionUntil}">--:--</span></div>` : ''}${isGrading ? `<div class="scout-overlay" style="background:rgba(212,175,55,0.8); color:black;">📦 GRADING<br><span class="train-timer-text" data-time="${card.gradingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}${alignBadge}${exBadgeHtml}`;
                 
                 setupInspector(cardDiv); if(factionMode || tvWarMode) { cardDiv.onclick = () => handleCardClick(index); } else if(!isHof && !card.injured && !isTraining && !isScouting && !isExcursion && !isGrading && !card.botched && !card.inShowcase) { cardDiv.ondblclick = () => runBattle(index, false); } container.appendChild(cardDiv);
                 
