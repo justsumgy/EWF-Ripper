@@ -4,7 +4,77 @@
     <title>EWF RIPPED (TCG) v8.0 - FULL PHASE 3</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #D4AF37; --gold-glow: rgba(212, 175, 55, 0.5); --dark-glass: rgba(15, 15, 20, 0.85); --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --purple: #9b59b6; }
+        :root {
+            /* --- TIER 1: STANDARD PARALLELS --- */
+.card-silver { border: 3px solid var(--silver) !important; box-shadow: 0 0 10px var(--silver-glow) !important; }
+.card-ruby { border: 3px solid var(--ruby-red) !important; box-shadow: 0 0 10px var(--ruby-red) !important; }
+.card-emerald { border: 3px solid var(--emerald-green) !important; box-shadow: 0 0 10px var(--emerald-green) !important; }
+
+/* --- TIER 2: RARE "HITS" --- */
+.card-gold { border: 3px solid var(--gold) !important; box-shadow: 0 0 20px var(--gold-glow) !important; }
+.card-sapphire { border: 3px solid var(--sapphire-blue) !important; box-shadow: inset 0 0 15px var(--sapphire-blue), 0 0 10px var(--sapphire-blue) !important; }
+.card-atomic { border: 3px solid var(--atomic-neon) !important; box-shadow: 0 0 15px var(--atomic-neon) !important; animation: blink 1.5s infinite alternate; }
+
+/* --- TIER 3: ULTRA RARE CASE HITS --- */
+.card-mojo { 
+    border: 3px solid var(--mojo-teal) !important; 
+    background: radial-gradient(circle, var(--mojo-teal) 1px, transparent 1px) !important;
+    background-size: 10px 10px !important;
+    box-shadow: 0 0 20px var(--mojo-teal) !important; 
+}
+
+.card-cracked-ice { 
+    border: 3px solid var(--ice-white) !important; 
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 25%, transparent 25%), linear-gradient(225deg, rgba(255,255,255,0.1) 25%, transparent 25%) !important;
+    background-size: 15px 15px !important;
+}
+
+.card-nebula { 
+    border: 3px solid #fff !important; 
+    background: linear-gradient(270deg, var(--nebula-pink), #00ffff, #7000ff) !important;
+    background-size: 400% 400% !important;
+    animation: nebulaShift 4s ease infinite; 
+}
+
+/* --- THE SCRIBBLE AUTO (Signature Sticker) --- */
+.scribble-auto {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 26px;
+    color: var(--auto-ink);
+    letter-spacing: -5px; /* THE SCRIBBLE EFFECT */
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 3px;
+    padding: 2px 12px;
+    display: inline-block;
+    transform: rotate(-2deg);
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+/* ANIMATIONS */
+@keyframes nebulaShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+@keyframes blink { from { opacity: 1; } to { opacity: 0.7; } }
+    /* YOUR ORIGINALS */
+    --gold: #D4AF37; 
+    --gold-glow: rgba(212, 175, 55, 0.5); 
+    --dark-glass: rgba(15, 15, 20, 0.85); 
+    --green: #2ecc71; 
+    --red: #e74c3c; 
+    --blue: #3498db; 
+    --purple: #9b59b6; 
+    
+    /* NEW COLORS & PARALLELS */
+    --silver: #C0C0C0;
+    --silver-glow: rgba(192, 192, 192, 0.4);
+    --ruby-red: #e0115f;
+    --sapphire-blue: #0f52ba;
+    --emerald-green: #50c878;
+    --ice-white: #e0f7fa;
+    --atomic-neon: #39ff14;
+    --mojo-teal: #00ffcc;
+    --nebula-pink: #ff00de;
+    --auto-ink: #000080; /* Blue ink for signatures */
+}
         * { box-sizing: border-box; } img { max-width: 100%; height: auto; }
         body { background: url('background.jpg') center/cover no-repeat fixed; background-color: #111; color: white; font-family: 'Montserrat', sans-serif; text-align: center; padding: 0; margin: 0; overflow-x: hidden; user-select: none; transition: background 1s ease-in-out, box-shadow 0.5s, filter 1s; }
         body.battle-locked { overflow: hidden !important; }
@@ -660,6 +730,14 @@
                         if(invasion.active && !card.inShowcase) controls.innerHTML += `<button class="gm-btn" style="background:var(--red); color:white; border-color:white; box-shadow:0 0 10px rgba(231,76,60,0.8); animation:pulse 1s infinite;" onclick="fightInvasion(${index})">⚔️ DEFEND INVASION</button>`; 
                         if(card.img !== faceCardImg && !card.inShowcase) controls.innerHTML += `<button class="gm-btn" style="border-color:#f1c40f; color:#f1c40f;" onclick="setFace('${card.img}')">👕 SET AS FACE</button>`; 
                     }
+                    // This rolls for the rarity and adds the CSS class (Gold, Silver, etc.)
+let rarityClass = getEWFVariant();
+if (rarityClass) container.classList.add(rarityClass);
+
+// This adds the "Scribble Auto" (10% chance)
+if (Math.random() < 0.10) {
+    controls.innerHTML += createScribble(card.name || "Wrestler");
+}
                     container.appendChild(controls); 
                     if(card.inShowcase) showcaseGrid.appendChild(container); else grid.appendChild(container);
                 } else if(isHof) { hofGrid.appendChild(container); } else { if(card.inShowcase) showcaseGrid.appendChild(container); else grid.appendChild(container); } 
@@ -667,6 +745,50 @@
             document.getElementById('hof-section').style.display = hofGrid.innerHTML === '' ? 'none' : 'block';
             document.getElementById('vip-showcase').style.display = showcaseGrid.innerHTML === '' ? 'none' : 'block';
         }
+        /* --- EWF RARITY ENGINE --- */
+// This function picks which variant class to give the card
+function getEWFVariant() {
+    let roll = Math.floor(Math.random() * 100) + 1; // Roll 1-100
+
+    if (roll === 100) return 'card-nebula';      // 1-of-1 Nebula
+    if (roll > 98) return 'card-cracked-ice';    // Case Hit
+    if (roll > 95) return 'card-mojo';           // Mojo
+    if (roll > 85) return 'card-gold';           // Gold /10
+    if (roll > 75) return 'card-sapphire';       // Sapphire
+    if (roll > 60) return 'card-ruby';           // Ruby
+    if (roll > 45) return 'card-emerald';        // Emerald
+    if (roll > 30) return 'card-silver';         // Silver
+    return '';                                   // Base Card
+}
+
+// This function creates the "Scribble" for the signature
+function createScribble(wrestlerName) {
+    if (!wrestlerName) return "";
+    let first = wrestlerName.charAt(0);
+    let last = wrestlerName.charAt(wrestlerName.length - 1);
+    // Makes it look like: Jmmmmmmz (unreadable)
+    return `<div class="scribble-auto">${first}mm${last}zz</div>`;
+}
+        /* --- EWF RARITY ENGINE LOGIC --- */
+function getEWFVariant() {
+    let roll = Math.floor(Math.random() * 100) + 1; 
+    if (roll === 100) return 'card-nebula';      
+    if (roll > 95) return 'card-cracked-ice';    
+    if (roll > 90) return 'card-mojo';           
+    if (roll > 80) return 'card-gold';           
+    if (roll > 70) return 'card-sapphire';       
+    if (roll > 55) return 'card-ruby';           
+    if (roll > 40) return 'card-emerald';        
+    if (roll > 25) return 'card-silver';         
+    return '';                                   
+}
+
+function createScribble(name) {
+    let first = name.charAt(0);
+    let last = name.charAt(name.length - 1);
+    // This creates the "Jmmmz" unreadable signature look
+    return `<div class="scribble-auto">${first}mmm${last}zz</div>`;
+}
     </script>
 </body>
 </html>
