@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF RIPPED (TCG) v8.0 - P2P TRADE EDITION</title>
+    <title>EWF RIPPED (TCG) v8.0 - HUMAN TRADE EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -12,11 +12,10 @@
         body { background: url('background.jpg') center/cover no-repeat fixed; background-color: #111; color: white; font-family: 'Montserrat', sans-serif; text-align: center; padding: 0; margin: 0; overflow-x: hidden; user-select: none; transition: background 1s ease-in-out, box-shadow 0.5s, filter 1s; }
         body.battle-locked { overflow: hidden !important; }
         
-        /* VARIANT CSS STYLES */
+        /* FULL VISUAL ENGINE PRESERVED */
         .card-silver { border: 3px solid var(--silver) !important; box-shadow: 0 0 10px rgba(192,192,192,0.5) !important; }
         .card-gold { border: 3px solid var(--gold) !important; box-shadow: 0 0 20px var(--gold-glow) !important; }
         .card-ruby { border: 3px solid var(--ruby) !important; box-shadow: 0 0 15px var(--ruby) !important; }
-        .card-sapphire { border: 3px solid var(--sapphire) !important; box-shadow: inset 0 0 15px var(--sapphire) !important; }
         .card-mojo { border: 3px solid var(--mojo) !important; background: radial-gradient(circle, var(--mojo) 1px, transparent 1px) !important; background-size: 10px 10px !important; box-shadow: 0 0 20px var(--mojo) !important; }
         .card-atomic { border: 3px solid var(--atomic) !important; box-shadow: 0 0 15px var(--atomic) !important; animation: atomicPulse 1.5s infinite alternate; }
         .card-nebula { border: 3px solid #fff !important; background: linear-gradient(270deg, var(--nebula), #00ffff, #7000ff) !important; background-size: 400% 400% !important; animation: nebulaShift 4s ease infinite; }
@@ -26,9 +25,7 @@
 
         .holo-standard { position: absolute; inset: 0; border-radius: 10px; background-image: linear-gradient(110deg, transparent 15%, rgba(255,0,255,0.4) 30%, rgba(0,255,255,0.4) 50%, rgba(255,255,0,0.4) 70%, transparent 85%); background-size: 200% 200%; mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
         .is-holo .holo-standard { opacity: 0.9 !important; animation: ambient-shimmer 4s ease-in-out infinite; }
-
-        @keyframes atomicPulse { from { filter: brightness(1); } to { filter: brightness(1.4); } }
-        @keyframes nebulaShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        @keyframes ambient-shimmer { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
 
         #ticker-wrap { background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--gold); padding: 8px; overflow: hidden; white-space: nowrap; font-size: 13px; color: #ddd; position: relative; z-index: 1000; letter-spacing: 2px; text-transform: uppercase; }
         #ticker-text { display: inline-block; animation: scroll-ticker 40s linear infinite; font-weight: 700; }
@@ -40,37 +37,38 @@
         #cash-display { color: var(--green); font-size: 32px; font-weight: 900; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
         
         #action-panel { flex: 2; min-width: 400px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
-        .main-btn { padding: 12px 10px; font-size: 11px; font-weight: 900; color: white; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: all 0.2s ease; }
+        .main-btn { padding: 12px 10px; font-size: 11px; font-weight: 900; color: white; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: all 0.2s ease; border-bottom: 3px solid transparent; }
         .main-btn:hover { transform: translateY(-3px); border-color: white; }
         
-        .modal { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 450px; background: var(--dark-glass); backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 25px; z-index: 5000; display: none; box-shadow: 0 25px 50px rgba(0,0,0,0.9); }
-        .card-container { width: 160px; min-height: 460px; perspective: 1000px; display: inline-flex; flex-direction: column; align-items: center; margin: 15px; vertical-align: top; } 
-        .saved-card { width: 100%; height: 230px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); position: relative; transition: transform 0.1s; background-color: #1a1a1a; transform-style: preserve-3d; }
+        /* 3D SLAB STYLES */
+        .card-container { width: 160px; min-height: 480px; perspective: 1000px; display: inline-flex; flex-direction: column; align-items: center; margin: 15px; vertical-align: top; } 
+        .saved-card { width: 100%; height: 230px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); position: relative; cursor: pointer; transition: transform 0.1s; background-color: #1a1a1a; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .graded-slab { border: 5px solid #ddd; border-radius: 8px; padding-top: 25px; background: linear-gradient(135deg, #eee 0%, #fff 50%, #eee 100%); }
+        .grade-label { position: absolute; top: 0; left: 0; width: 100%; background: #c00; color: white; text-align: center; font-size: 10px; font-weight: 900; z-index: 20; border-top-left-radius: 4px; border-top-right-radius: 4px; padding: 2px 0; border-bottom: 1px solid black; }
         
-        .grade-label { position: absolute; top: 0; left: 0; width: 100%; background: #c00; color: white; text-align: center; font-size: 10px; font-weight: 900; z-index: 20; border-top-left-radius: 4px; border-top-right-radius: 4px; }
         .win-count { position: absolute; top: 12px; left: -8px; background: var(--dark-glass); color: white; border-radius: 4px; padding: 4px 8px; font-size: 11px; z-index: 21; font-weight: 900; }
-        
-        #battle-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
         .gm-controls { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; width: 100%; }
-        .gm-btn { padding: 6px; font-size: 10px; color: #aaa; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; text-transform: uppercase; font-weight: 700; transition: 0.2s; }
-        .gm-btn:hover { color: white; border-color: white; }
+        .gm-btn { padding: 6px; font-size: 10px; color: #aaa; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; text-transform: uppercase; font-weight: 700; }
+        .gm-btn:hover { border-color: white; color: white; }
+
+        .modal { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 450px; background: var(--dark-glass); backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 25px; z-index: 5000; display: none; box-shadow: 0 25px 50px rgba(0,0,0,0.9); text-align: left; }
+        #battle-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
     </style>
 </head>
 <body onload="initGame()">
 
-    <div id="ticker-wrap"><div id="ticker-text">EWF RIPPED V8.0 ... P2P TRADING CENTER IS LIVE ... SEND CARDS TO FRIENDS VIA SECURE CODE ...</div></div>
+    <div id="ticker-wrap"><div id="ticker-text">EWF RIPPED ... HUMAN TRADING SYSTEM ONLINE ... NO ARENA ... NO FANS ... JUST ELITE COLLECTING ...</div></div>
 
-    <div id="battle-overlay" onclick="this.style.display='none'; document.body.classList.remove('battle-locked');">
+    <div id="battle-overlay" onclick="this.style.display='none';">
         <div id="battle-text" style="font-size:4em; color:white; font-weight:900;">FIGHTING...</div>
     </div>
 
-    <div id="trade-modal" class="modal">
-        <h2 style="color:var(--blue); border-bottom: 1px solid var(--blue);">🤝 PLAYER TRADE CENTER</h2>
-        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Redeem a card code from another human player.</p>
-        <input type="text" id="trade-input" placeholder="PASTE TRADE CODE HERE" style="width:100%; padding:12px; background:#111; color:white; border:1px solid #444; border-radius:8px; margin-bottom:15px; font-family:monospace;">
-        <button class="gm-btn" style="width:100%; background:var(--blue); color:white; padding:12px;" onclick="redeemTradeCode()">REDEEM CARD</button>
-        <button class="gm-btn" style="width:100%; margin-top:10px;" onclick="document.getElementById('trade-modal').style.display='none'">CANCEL</button>
+    <div id="p2p-modal" class="modal">
+        <h2 style="color:var(--blue); border-bottom: 1px solid var(--blue);">🤝 HUMAN TRADE CENTER</h2>
+        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Paste a trade code from another player to receive their wrestler.</p>
+        <input type="text" id="trade-input" placeholder="PASTE CODE HERE" style="width:100%; padding:15px; background:#111; color:white; border:1px solid #444; border-radius:8px; margin-bottom:15px; font-family:monospace;">
+        <button class="gm-btn" style="width:100%; background:var(--blue); color:white; padding:12px;" onclick="redeemTradeCode()">REDEEM WRESTLER</button>
+        <button class="gm-btn" style="width:100%; margin-top:10px;" onclick="document.getElementById('p2p-modal').style.display='none'">CANCEL</button>
     </div>
 
     <div id="checklist-modal" class="modal"><h2>📋 CHECKLIST</h2><div id="checklist-list"></div><button class="gm-btn" style="width:100%; margin-top:10px;" onclick="this.parentElement.style.display='none'">CLOSE</button></div>
@@ -88,14 +86,14 @@
         <div id="stats-panel">
             <div id="cash-display">CONTRACT FUNDS: $0</div>
             <div id="income-display" style="color:#aaa; font-size:13px; margin-top:5px;">PASSIVE INCOME: $0 / tick</div>
-            <div id="rank-display" style="color:var(--gold); font-size:14px; margin-top:10px; font-weight:900;">RANK: EWF PROMOTER</div>
+            <div id="rank-display" style="color:var(--gold); font-size:14px; margin-top:10px; font-weight:900;">RANK: EWF GM</div>
             <div id="progress-text" style="font-size:10px; color:cyan; margin-top:10px;">COLLECTION: 0 / 38</div>
             <div style="width:100%; height:8px; background:#222; border-radius:4px;"><div id="progress-fill" style="height:100%; width:0%; background:var(--gold);"></div></div>
         </div>
         <div id="action-panel">
             <button class="main-btn" style="border-bottom:3px solid var(--red);" onclick="ripPack(5, 0.05)">STANDARD PACK ($5)</button>
             <button class="main-btn" style="border-bottom:3px solid var(--gold);" onclick="ripPack(25, 0.25)">SUPER HOLO ($25)</button>
-            <button class="main-btn" style="border-bottom:3px solid var(--blue);" onclick="document.getElementById('trade-modal').style.display='block'">🤝 PLAYER TRADE</button>
+            <button class="main-btn" style="border-bottom:3px solid var(--blue);" onclick="document.getElementById('p2p-modal').style.display='block'">🤝 PLAYER TRADE</button>
             <button class="main-btn" style="border-bottom:3px solid #39ff14;" onclick="openChecklist()">📋 CHECKLIST</button>
             <button class="main-btn" style="border-bottom:3px solid #8b4513;" onclick="digBargainBin()">🗑️ BARGAIN BIN ($2)</button>
             <button class="main-btn" style="border-bottom:3px solid var(--red);" onclick="hardReset()">WIPE DATA</button>
@@ -136,14 +134,14 @@
             document.getElementById('boss-hp-text').innerHTML = `${bossHP} / ${bossMaxHP} HP`;
         }
 
-        /* P2P TRADING LOGIC */
+        /* P2P TRADE FUNCTIONS */
         function generateTradeCode(idx) {
             let card = collection[idx];
-            if(!confirm("GENERATE TRADE CODE?\n\nThis will remove the card from your roster so you can send it to a friend. Proceed?")) return;
+            if(!confirm("GENERATE TRADE CODE?\n\nThis card will be REMOVED from your roster so you can send the code to another human player. Proceed?")) return;
             let code = btoa(JSON.stringify(card));
             collection.splice(idx, 1);
             saveGame(); displayCollection(); updateUI();
-            prompt("COPY AND SEND THIS CODE TO THE OTHER PLAYER:", code);
+            prompt("COPY THIS CODE AND SEND TO YOUR BROTHER/FRIEND:", code);
         }
 
         function redeemTradeCode() {
@@ -153,11 +151,11 @@
                 if(card.img) {
                     collection.push(card);
                     document.getElementById('trade-input').value = "";
-                    document.getElementById('trade-modal').style.display = 'none';
+                    document.getElementById('p2p-modal').style.display = 'none';
                     saveGame(); displayCollection(); updateUI();
-                    alert("🤝 TRADE SUCCESSFUL! Card added to roster.");
+                    alert("🤝 TRADE REDEEMED! The card is now in your roster.");
                 }
-            } catch(e) { alert("❌ INVALID TRADE CODE"); }
+            } catch(e) { alert("❌ INVALID OR CORRUPT TRADE CODE"); }
         }
 
         function ripPack(cost, holoChance) {
@@ -169,7 +167,14 @@
                 for (let i = 0; i < 3; i++) {
                     let num = Math.floor(Math.random() * totalCards) + 1;
                     let isHolo = Math.random() < holoChance;
-                    collection.push({ img: `card (${num}).jpg`, wins: 0, holo: isHolo, grade: isHolo ? 10 : 9, raw: false });
+                    collection.push({ 
+                        img: `card (${num}).jpg`, 
+                        wins: 0, 
+                        holo: isHolo, 
+                        grade: isHolo ? 10 : 9, 
+                        raw: false,
+                        variant: isHolo ? 'card-gold' : '' 
+                    });
                 }
                 saveGame(); displayCollection(); updateUI();
             }, 800);
@@ -187,15 +192,15 @@
             const grid = document.getElementById('collection-grid'); grid.innerHTML = '';
             collection.forEach((card, idx) => {
                 const container = document.createElement('div'); container.className = 'card-container';
-                const div = document.createElement('div'); 
-                div.className = `saved-card ${card.raw ? '' : 'graded-slab'} ${card.holo ? 'is-holo' : ''}`;
-                div.style.backgroundImage = `url('${folderPath}/${card.img}')`;
-                div.style.backgroundSize = 'cover';
+                const cardDiv = document.createElement('div'); 
+                cardDiv.className = `saved-card ${card.raw ? '' : 'graded-slab'} ${card.holo ? 'is-holo' : ''} ${card.variant || ''}`;
+                cardDiv.style.backgroundImage = `url('${folderPath}/${card.img}')`;
+                cardDiv.style.backgroundSize = 'cover';
                 
-                let gradeHtml = card.raw ? '' : `<div class="grade-label">GEM MINT ${card.grade}</div>`;
-                div.innerHTML = `${gradeHtml}<div class="win-count">${card.wins} W</div><div class="holo-standard"></div>`;
+                let gradeHtml = card.raw ? '' : `<div class="grade-label">EWF GEM MINT 10</div>`;
+                cardDiv.innerHTML = `${gradeHtml}<div class="win-count">${card.wins} W</div><div class="holo-standard"></div>`;
                 
-                div.ondblclick = () => {
+                cardDiv.ondblclick = () => {
                     document.getElementById('battle-overlay').style.display = 'flex';
                     setTimeout(() => {
                         if(Math.random() > 0.5) { card.wins++; bossHP = Math.max(0, bossHP - 1); }
@@ -203,7 +208,7 @@
                         saveGame(); displayCollection(); updateUI();
                     }, 600);
                 };
-                container.appendChild(div);
+                container.appendChild(cardDiv);
                 const ctrl = document.createElement('div'); ctrl.className = 'gm-controls';
                 ctrl.innerHTML = `
                     <button class="gm-btn" style="background:var(--blue); color:white;" onclick="generateTradeCode(${idx})">🤝 TRADE CODE</button>
