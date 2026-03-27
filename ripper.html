@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF RIPPED (TCG) v8.5 - THE ESA BINDER EDITION</title>
+    <title>EWF RIPPED (TCG) v8.5 - THE ESA EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -17,12 +17,28 @@
         /* NEW VARIANT CSS STYLES */
         .card-silver { border: 3px solid var(--silver) !important; box-shadow: 0 0 10px rgba(192,192,192,0.5) !important; }
         .card-gold { border: 3px solid var(--gold) !important; box-shadow: 0 0 20px var(--gold-glow) !important; }
+        .card-emerald { border: 3px solid var(--emerald) !important; box-shadow: 0 0 15px var(--emerald) !important; }
         .card-ruby { border: 3px solid var(--ruby) !important; box-shadow: 0 0 15px var(--ruby) !important; }
         .card-sapphire { border: 3px solid var(--sapphire) !important; box-shadow: inset 0 0 15px var(--sapphire) !important; }
         .card-mojo { border: 3px solid var(--mojo) !important; background: radial-gradient(circle, var(--mojo) 1px, transparent 1px) !important; background-size: 10px 10px !important; box-shadow: 0 0 20px var(--mojo) !important; }
         .card-atomic { border: 3px solid var(--atomic) !important; box-shadow: 0 0 15px var(--atomic) !important; animation: atomicPulse 1.5s infinite alternate; }
         .card-nebula { border: 3px solid #fff !important; background: linear-gradient(270deg, var(--nebula), #00ffff, #7000ff) !important; background-size: 400% 400% !important; animation: nebulaShift 4s ease infinite; }
         
+        /* ULTRA RARE VFX VARIANTS */
+        .card-diamond { border: 3px solid #b9f2ff !important; box-shadow: 0 0 25px #b9f2ff, inset 0 0 15px #ffffff !important; animation: diamondSparkle 2s infinite alternate; }
+        .card-glitch { border: 3px solid #0ff !important; box-shadow: -3px 0 #f0f, 3px 0 #0ff !important; animation: glitchAnim 0.2s infinite; }
+        .card-starlight { border: 3px solid #fffdf2 !important; box-shadow: 0 0 20px #fffdf2, 0 0 40px #f9e596 !important; animation: starlightTwinkle 1.5s infinite alternate; }
+        .card-void { border: 3px solid #220033 !important; box-shadow: 0 0 30px #000, inset 0 0 20px #550088 !important; animation: voidPulse 3s infinite; }
+        .card-radiant { border: 3px solid #ffdd00 !important; background: linear-gradient(45deg, #ff0000, #ffdd00, #00ff00, #0000ff, #ff00ff) !important; background-size: 400% 400% !important; animation: nebulaShift 3s ease infinite, radiantGlow 2s infinite alternate; }
+
+        @keyframes atomicPulse { from { filter: brightness(1); } to { filter: brightness(1.4); } }
+        @keyframes nebulaShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        @keyframes diamondSparkle { 0% { box-shadow: 0 0 10px #b9f2ff; filter: brightness(1.1); } 100% { box-shadow: 0 0 30px #ffffff, inset 0 0 20px #b9f2ff; filter: brightness(1.5); } }
+        @keyframes glitchAnim { 0% { transform: translate(0) } 20% { transform: translate(-2px, 2px) } 40% { transform: translate(-2px, -2px) } 60% { transform: translate(2px, 2px) } 80% { transform: translate(2px, -2px) } 100% { transform: translate(0) } }
+        @keyframes starlightTwinkle { 0% { box-shadow: 0 0 10px #fffdf2; opacity: 0.9; } 100% { box-shadow: 0 0 40px #ffffff, 0 0 60px #f9e596; opacity: 1; } }
+        @keyframes voidPulse { 0% { box-shadow: 0 0 10px #000; filter: contrast(1.2); } 50% { box-shadow: 0 0 40px #220033, inset 0 0 30px #000; filter: contrast(1.5); } 100% { box-shadow: 0 0 10px #000; filter: contrast(1.2); } }
+        @keyframes radiantGlow { 0% { filter: hue-rotate(0deg) brightness(1.2); } 100% { filter: hue-rotate(360deg) brightness(1.5); } }
+
         /* VARIANT LABELS (Small Print) */
         .variant-label { position: absolute; bottom: 5px; left: 8px; font-size: 8px; font-weight: 900; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; z-index: 30; pointer-events: none; text-shadow: 1px 1px 2px black; }
 
@@ -32,9 +48,6 @@
         /* TIGER & ZEBRA EFFECTS */
         .holo-tiger { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.4) 15px, transparent 20px); mix-blend-mode: overlay; z-index: 14; }
         .holo-zebra { position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.2) 5px, rgba(0,0,0,0.2) 5px, rgba(0,0,0,0.2) 10px); mix-blend-mode: difference; z-index: 14; }
-
-        @keyframes atomicPulse { from { filter: brightness(1); } to { filter: brightness(1.4); } }
-        @keyframes nebulaShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
         /* DYNAMIC SIRENS */
         body.boss-alert { box-shadow: inset 0 0 150px rgba(231,76,60,0.6); animation: pulse-red 2s infinite; }
@@ -119,7 +132,20 @@
         .black-label { background: linear-gradient(135deg, #111, #333, #000); color: var(--gold); border-bottom: 2px solid var(--gold); }
         .black-label .grade-title, .black-label .grade-score, .black-label div { color: var(--gold) !important; }
 
-        .shine-layer { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(255,255,255,0.8) 0%, transparent 60%); z-index: 15; pointer-events: none; opacity: 0; mix-blend-mode: overlay; transition: opacity 0.3s; } .sparkle-layer { position: absolute; inset: 0; border-radius: 10px; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-repeat: repeat; mix-blend-mode: color-dodge; z-index: 13; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .is-holo { border-color: cyan !important; box-shadow: 0 0 15px rgba(0,255,255,0.4); } .saved-card:hover .shine-layer, .saved-card:hover .sparkle-layer { opacity: 1; }
+        .shine-layer { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(255,255,255,0.8) 0%, transparent 60%); z-index: 15; pointer-events: none; opacity: 0; mix-blend-mode: overlay; transition: opacity 0.3s; } 
+        .sparkle-layer { position: absolute; inset: 0; border-radius: 10px; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-repeat: repeat; mix-blend-mode: color-dodge; z-index: 13; pointer-events: none; opacity: 0; transition: opacity 0.3s; } 
+        
+        .is-holo { border-color: cyan !important; box-shadow: 0 0 15px rgba(0,255,255,0.4); } 
+        .saved-card:hover .shine-layer, .saved-card:hover .sparkle-layer { opacity: 1; }
+
+        /* CONSTANT SPARKLES FOR ULTRA RARES */
+        .card-nebula .sparkle-layer, .card-diamond .sparkle-layer, .card-radiant .sparkle-layer, .card-starlight .sparkle-layer, .card-glitch .sparkle-layer, .card-void .sparkle-layer {
+            opacity: 0.8 !important; 
+            animation: diamondSparkle 2s infinite alternate;
+        }
+        .card-nebula .shine-layer, .card-diamond .shine-layer, .card-radiant .shine-layer, .card-starlight .shine-layer, .card-glitch .shine-layer, .card-void .shine-layer {
+            opacity: 0.4 !important;
+        }
         
         /* ORIGINAL HOLOS */
         .holo-standard { position: absolute; inset: 0; border-radius: 10px; background-image: linear-gradient(110deg, transparent 15%, rgba(255,0,255,0.4) 30%, rgba(0,255,255,0.4) 50%, rgba(255,255,0,0.4) 70%, transparent 85%); background-size: 200% 200%; mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-cracked-ice { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(0,255,255,0.5) 45%, rgba(255,255,255,0.9) 50%, rgba(0,255,255,0.5) 55%, rgba(255,255,255,0) 100%), repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px); background-size: 300% 300%; mix-blend-mode: overlay; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-gold-vinyl { position: absolute; inset: 0; border-radius: 10px; background: repeating-radial-gradient(circle at center, transparent, transparent 4px, rgba(212,175,55,0.4) 4px, rgba(212,175,55,0.4) 8px), linear-gradient(45deg, rgba(255,215,0,0.2), rgba(255,215,0,0.8), rgba(255,215,0,0.2)); mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-cosmic { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle, rgba(255,0,255,0.5) 0%, rgba(0,255,255,0.5) 50%, rgba(0,0,0,0) 100%), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-size: 150% 150%, auto; mix-blend-mode: screen; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-obsidian { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,0,0,0.9)), repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,0,255,0.3) 15px, rgba(0,255,255,0.3) 30px); mix-blend-mode: hard-light; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; box-shadow: inset 0 0 20px rgba(0,0,0,1); } .holo-plasma { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(57,255,20,0.8), transparent 40%), radial-gradient(circle at calc(100% - var(--lx, 50%)) calc(100% - var(--ly, 50%)), rgba(255,20,147,0.8), transparent 40%); mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-prismatic { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.8) 25%, transparent 30%), repeating-radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); mix-blend-mode: color-dodge; background-size: 200% 200%; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-ghost { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(255,255,255,1) 0%, rgba(200,200,200,0.5) 30%, transparent 60%); mix-blend-mode: screen; backdrop-filter: grayscale(100%) contrast(150%); z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } 
@@ -135,7 +161,7 @@
         .serial-badge { position: absolute; bottom: 8px; right: 8px; font-weight: 900; font-size: 12px; z-index: 25; padding: 2px 4px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; letter-spacing: -1px; mix-blend-mode: hard-light; } .serial-silver { background: linear-gradient(to right, #e0e0e0, #ffffff, #e0e0e0); -webkit-background-clip: text; color: transparent; text-shadow: 1px 1px 1px rgba(0,0,0,0.9); border: 1px solid rgba(255,255,255,0.3); background-color: rgba(0,0,0,0.5); } .serial-gold { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7); -webkit-background-clip: text; color: transparent; text-shadow: 1px 1px 1px rgba(0,0,0,0.9); border: 1px solid rgba(212,175,55,0.5); background-color: rgba(0,0,0,0.8); font-size: 14px; }
         .is-radioactive { border-color: #39ff14 !important; animation: toxic-pulse 2s infinite alternate; } .is-mythic { border-color: #e0b0ff !important; animation: mythic-shine 1.5s infinite alternate; }
         
-        #vip-showcase { display: none; margin: 40px auto; max-width: 800px; background: rgba(0,0,0,0.8); border: 2px solid var(--gold); border-radius: 16px; padding: 20px; box-shadow: 0 0 30px rgba(212,175,55,0.3), inset 0 0 20px rgba(0,0,0,0.9); text-align: center; } #showcase-grid { display: flex; justify-content: center; gap: 30px; min-height: 250px; align-items: center; }
+        #vip-showcase { display: none; margin: 40px auto; max-width: 800px; background: rgba(0,0,0,0.8); border: 2px solid var(--gold); border-radius: 16px; padding: 20px; box-shadow: 0 0 30px rgba(212,175,55,0.3), inset 0 0 20px rgba(0,0,0,0.9); text-align: center; } #showcase-grid { display: flex; justify-content: center; gap: 30px; min-height: 250px; align-items: center; flex-wrap: wrap; }
         
         .relic-window { position:absolute; top: 75%; left: 50%; transform:translate(-50%, -50%); width:45px; height:45px; border: 2px solid #ddd; box-shadow: inset 0 0 15px #000, 0 5px 10px rgba(0,0,0,0.8); z-index:18; border-radius:4px; overflow:hidden; } .relic-canvas { background: repeating-linear-gradient(45deg, #ddd 25%, #eee 25%, #eee 50%, #ddd 50%, #ddd 75%, #eee 75%, #eee); background-size: 8px 8px; } .relic-table { background: repeating-linear-gradient(90deg, #8b4513, #a0522d 5px, #8b4513 10px); } .relic-rope { background: repeating-linear-gradient(45deg, #e74c3c, #c0392b 5px, #e74c3c 10px); }
 
@@ -282,15 +308,20 @@
 
         /* RARITY ENGINE FUNCTIONS */
         function getEWFVariant() {
-            let roll = Math.floor(Math.random() * 100) + 1;
-            if (roll === 100) return 'card-nebula';
-            if (roll > 98) return 'card-cracked-ice';
-            if (roll > 95) return 'card-mojo';
-            if (roll > 85) return 'card-gold';
-            if (roll > 75) return 'card-sapphire';
-            if (roll > 60) return 'card-ruby';
-            if (roll > 45) return 'card-emerald';
-            if (roll > 30) return 'card-silver';
+            let roll = Math.random() * 100;
+            if (roll > 99.5) return 'card-radiant'; // 0.5%
+            if (roll > 98.5) return 'card-nebula'; // 1%
+            if (roll > 97) return 'card-void'; // 1.5%
+            if (roll > 95) return 'card-glitch'; // 2%
+            if (roll > 92) return 'card-diamond'; // 3%
+            if (roll > 89) return 'card-starlight'; // 3%
+            if (roll > 85) return 'card-atomic'; // 4%
+            if (roll > 80) return 'card-mojo'; // 5%
+            if (roll > 74) return 'card-sapphire'; // 6%
+            if (roll > 67) return 'card-ruby'; // 7%
+            if (roll > 55) return 'card-emerald'; // 12%
+            if (roll > 40) return 'card-gold'; // 15%
+            if (roll > 25) return 'card-silver'; // 15%
             return '';
         }
 
@@ -531,7 +562,7 @@
         
         function useGear(type) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[activeGearTarget]; if(type === 'drink' && inventory.drink > 0) { inventory.drink--; card.stamina = 5; } else if(type === 'chair' && inventory.chair > 0) { inventory.chair--; card.buff = 'chair'; } localStorage.setItem('EWF_Gear', JSON.stringify(inventory)); localStorage.setItem('EWF_Collection', JSON.stringify(col)); document.getElementById('gear-modal').style.display = 'none'; displayCollection(); updateUI(); }
         
-        function toggleShowcase(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; if(card.inShowcase) { card.inShowcase = false; } else { let count = col.filter(c => c.inShowcase).length; if(count >= 3) return alert("Showcase is full! Remove a card first."); card.inShowcase = true; } localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI(); }
+        function toggleShowcase(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; if(card.inShowcase) { card.inShowcase = false; } else { let count = col.filter(c => c.inShowcase).length; if(count >= 10) return alert("Showcase is full! Remove a card first."); card.inShowcase = true; } localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI(); }
 
         function trainCard(idx) { if(userCash < 100) return; if(confirm("Send to Camp for $100? Locked for 5m, permanent +10% Win Rate.")) { userCash -= 100; saveGame(); updateUI(); let col = JSON.parse(localStorage.getItem('EWF_Collection')); col[idx].trainingUntil = Date.now() + (5 * 60 * 1000); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); } }
         function hardReset() { if(confirm("Wipe all cards, stats, and start fresh?")) { localStorage.clear(); location.reload(); } }
