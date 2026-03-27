@@ -4,6 +4,34 @@
     <title>EWF RIPPED (TCG) v8.0 - FULL PHASE 3</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
+        :root { 
+        --gold: #D4AF37; 
+        --gold-glow: rgba(212, 175, 55, 0.5); 
+        --silver: #C0C0C0;
+        --silver-glow: rgba(192, 192, 192, 0.4);
+        --ruby-red: #e0115f;
+        --emerald-green: #50c878;
+        --sapphire-blue: #0f52ba;
+        --mojo-teal: #00ffcc;
+        --ice-white: #e0f7fa;
+        --nebula-pink: #ff00de;
+        --dark-glass: rgba(15, 15, 20, 0.85); 
+        --green: #2ecc71;
+        --auto-ink: #000080;
+    }
+        .scribble-auto { 
+    position: absolute; 
+    bottom: 50px; 
+    left: 50%; 
+    transform: translateX(-50%) rotate(-3deg); 
+    z-index: 10; 
+}
+.serial-number { 
+    position: absolute; 
+    top: 5px; 
+    right: 10px; 
+    z-index: 11; 
+}
         :root {
             /* --- TIER 1: STANDARD PARALLELS --- */
 .card-silver { border: 3px solid var(--silver) !important; box-shadow: 0 0 10px var(--silver-glow) !important; }
@@ -36,21 +64,37 @@
     animation: nebulaShift 4s ease infinite; 
 }
 
-/* --- THE SCRIBBLE AUTO (Signature Sticker) --- */
+/* THE SCRIBBLE AUTO (Placed ON the card) */
 .scribble-auto {
     font-family: 'Brush Script MT', cursive;
-    font-size: 26px;
+    font-size: 24px;
     color: var(--auto-ink);
-    letter-spacing: -5px; /* THE SCRIBBLE EFFECT */
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 3px;
-    padding: 2px 12px;
-    display: inline-block;
-    transform: rotate(-2deg);
-    border: 1px solid #ccc;
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    letter-spacing: -4px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+    padding: 2px 8px;
+    position: absolute; /* THIS KEEPS IT ON THE CARD */
+    bottom: 60px;       /* Adjust this to move it up or down */
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    z-index: 10;
+    pointer-events: none;
+    border: 1px solid rgba(0,0,0,0.1);
 }
 
+/* SERIAL NUMBER TAG */
+.serial-number {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 10px;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'monospace';
+    z-index: 11;
+}
 /* ANIMATIONS */
 @keyframes nebulaShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 @keyframes blink { from { opacity: 1; } to { opacity: 0.7; } }
@@ -731,20 +775,29 @@
                         if(card.img !== faceCardImg && !card.inShowcase) controls.innerHTML += `<button class="gm-btn" style="border-color:#f1c40f; color:#f1c40f;" onclick="setFace('${card.img}')">👕 SET AS FACE</button>`; 
                     }
                     // This rolls for the rarity and adds the CSS class (Gold, Silver, etc.)
+// --- NEW EWF PULL LOGIC (Serial Numbers & On-Card Signatures) ---
 let rarityClass = getEWFVariant();
-if (rarityClass) container.classList.add(rarityClass);
+if (rarityClass) {
+    container.classList.add(rarityClass);
 
-// This adds the "Scribble Auto" (10% chance)
-if (Math.random() < 0.10) {
-    controls.innerHTML += createScribble(card.name || "Wrestler");
+    // Add Serial Numbers for Nebula and Gold hits
+    if (rarityClass === 'card-nebula') {
+        container.insertAdjacentHTML('afterbegin', `<div class="serial-number">1/1</div>`);
+    } else if (rarityClass === 'card-gold') {
+        let ser = Math.floor(Math.random() * 9) + 1;
+        container.insertAdjacentHTML('afterbegin', `<div class="serial-number">0${ser}/10</div>`);
+    }
 }
-                    container.appendChild(controls); 
-                    if(card.inShowcase) showcaseGrid.appendChild(container); else grid.appendChild(container);
-                } else if(isHof) { hofGrid.appendChild(container); } else { if(card.inShowcase) showcaseGrid.appendChild(container); else grid.appendChild(container); } 
-            });
-            document.getElementById('hof-section').style.display = hofGrid.innerHTML === '' ? 'none' : 'block';
-            document.getElementById('vip-showcase').style.display = showcaseGrid.innerHTML === '' ? 'none' : 'block';
-        }
+
+// Add Signature directly ON the card (15% chance)
+if (Math.random() < 0.15) {
+    let name = card.name || "Wrestler";
+    let scribble = name.charAt(0) + "mmmm" + name.charAt(name.length - 1) + "zz";
+    container.insertAdjacentHTML('beforeend', `<div class="scribble-auto">${scribble}</div>`);
+}
+
+container.appendChild(controls);
+if(card.inShowcase) showcaseGrid.appendChild(container); else grid.appendChild(container);
         /* --- EWF RARITY ENGINE --- */
 // This function picks which variant class to give the card
 function getEWFVariant() {
