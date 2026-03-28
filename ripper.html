@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF RIPPED (TCG) v8.5 - THE ESA EDITION</title>
+    <title>EWF RIPPED (TCG) v8.6 - THE ESA EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -163,7 +163,12 @@
         
         #vip-showcase { display: none; margin: 40px auto; max-width: 800px; background: rgba(0,0,0,0.8); border: 2px solid var(--gold); border-radius: 16px; padding: 20px; box-shadow: 0 0 30px rgba(212,175,55,0.3), inset 0 0 20px rgba(0,0,0,0.9); text-align: center; } #showcase-grid { display: flex; justify-content: center; gap: 30px; min-height: 250px; align-items: center; flex-wrap: wrap; }
         
-        .relic-window { position:absolute; top: 75%; left: 50%; transform:translate(-50%, -50%); width:45px; height:45px; border: 2px solid #ddd; box-shadow: inset 0 0 15px #000, 0 5px 10px rgba(0,0,0,0.8); z-index:18; border-radius:4px; overflow:hidden; } .relic-canvas { background: repeating-linear-gradient(45deg, #ddd 25%, #eee 25%, #eee 50%, #ddd 50%, #ddd 75%, #eee 75%, #eee); background-size: 8px 8px; } .relic-table { background: repeating-linear-gradient(90deg, #8b4513, #a0522d 5px, #8b4513 10px); } .relic-rope { background: repeating-linear-gradient(45deg, #e74c3c, #c0392b 5px, #e74c3c 10px); }
+        /* UPDATED RELICS: Hand-painted canvas & authentic textures */
+        .relic-window { position:absolute; top: 75%; left: 50%; transform:translate(-50%, -50%); width:45px; height:45px; border: 2px solid #ddd; box-shadow: inset 0 0 15px #000, 0 5px 10px rgba(0,0,0,0.8); z-index:18; border-radius:4px; overflow:hidden; } 
+        .relic-canvas { background: radial-gradient(circle at 30% 30%, rgba(200, 0, 0, 0.4) 1px, transparent 4px), radial-gradient(circle at 70% 60%, rgba(0, 50, 200, 0.3) 2px, transparent 5px), repeating-linear-gradient(45deg, rgba(255,255,255,0.9), rgba(255,255,255,0.9) 2px, rgba(240,240,240,0.9) 2px, rgba(240,240,240,0.9) 4px), linear-gradient(135deg, #e0e0e0 0%, #ffffff 50%, #d0d0d0 100%); background-size: 15px 15px, 20px 20px, 4px 4px, 100% 100%; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); } 
+        .relic-table { background: repeating-radial-gradient(ellipse at center, rgba(139, 69, 19, 0.8) 0, rgba(160, 82, 45, 0.8) 2px, rgba(139, 69, 19, 0.8) 4px), linear-gradient(to right, #654321, #8b4513); background-size: 150% 200%, 100% 100%; background-position: center; } 
+        .relic-rope { background: repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(0,0,0,0.3) 4px, rgba(0,0,0,0.3) 6px), linear-gradient(90deg, #800000 0%, #e74c3c 50%, #800000 100%); background-size: 10px 10px, 100% 100%; }
+        .relic-leather { background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.8) 2px, transparent 3px), linear-gradient(45deg, #111 25%, #222 25%, #222 50%, #111 50%, #111 75%, #222 75%, #222); background-size: 15px 15px, 4px 4px; background-color: #0a0a0a; }
 
         .win-count { position: absolute; top: 12px; left: -8px; background: var(--dark-glass); color: white; border-radius: 4px; padding: 4px 8px; font-size: 11px; border: 1px solid rgba(255,255,255,0.2); z-index: 21; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.5); backdrop-filter: blur(5px); } .dupe-count { position: absolute; top: 12px; right: -8px; background: rgba(52,152,219,0.9); color: white; border-radius: 50%; width: 24px; height: 24px; font-size: 11px; line-height: 24px; border: 1px solid rgba(255,255,255,0.5); z-index: 21; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.5); } .streak-badge { position: absolute; bottom: 12px; right: -8px; font-size: 20px; z-index: 21; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.5)); } .stamina-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #222; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; overflow: hidden; z-index: 21; border-top: 1px solid #000; } .stamina-fill { height: 100%; width: 100%; background: var(--green); transition: width 0.2s linear; }
         .injured-overlay { position: absolute; inset: 0; background: rgba(231,76,60,0.7); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; pointer-events: none; } .training-overlay { position: absolute; inset: 0; background: rgba(52,152,219,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; } .scout-overlay { position: absolute; inset: 0; background: rgba(155,89,182,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; } .align-badge { position: absolute; top: 40px; right: 5px; font-size: 18px; z-index: 25; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); } .excursion-badge { position: absolute; bottom: 35px; left: -8px; font-size: 20px; z-index: 25; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); }
@@ -187,7 +192,7 @@
     <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
     <div id="tv-war-banner" onclick="startTVWar()">📺 FRIDAY NIGHT RATINGS WAR! CLICK TO MAIN EVENT!</div>
     <div id="gimmick-banner"></div><div id="sponsor-tracker"></div><div id="prestige-border"></div>
-    <div id="early-access">V8.5 THE ESA BINDER EDITION (57 CARD DECK)</div>
+    <div id="early-access">V8.6 THE ESA BINDER EDITION (67 CARD DECK)</div>
     <button id="music-toggle" onclick="toggleMusic()">Mute</button>
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio><audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
@@ -233,7 +238,7 @@
             <div id="income-display">PASSIVE INCOME: $0 / tick</div>
             <div id="rank-display">RANK: ROOKIE PROMOTER</div>
             <div id="season-display">SEASON: TICK 0/30</div>
-            <div id="progress-text">COLLECTION: 0 / 57</div>
+            <div id="progress-text">COLLECTION: 0 / 67</div>
             <div id="progress-container"><div id="progress-fill"></div></div>
             <button id="auto-btn" class="toggle-btn toggle-off" onclick="toggleAuto()">AUTO-BOOK: OFF</button>
             <button id="rebirth-btn" onclick="doRebirth()">🔥 INITIATE REBIRTH 🔥</button>
@@ -280,7 +285,7 @@
     <div id="hof-section"><h1 style="color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); font-size: 2.5em; margin-bottom: 5px; font-weight:900;">🏛️ EWF HALL OF FAME 🏛️</h1><p style="color: #aaa; font-size: 13px; margin-top: 0; font-weight:700; letter-spacing:1px;">LEGENDS WITH 200+ WINS</p><div id="hof-grid"></div></div>
 
     <script>
-        const totalCards = 57; const folderPath = "rare ewf cards";
+        const totalCards = 67; const folderPath = "rare ewf cards";
         let currentBinderTab = 'all'; // Tracks the active binder tab
 
         function getCardDropNum() { let num; let valid = false; while(!valid) { num = Math.floor(Math.random() * totalCards) + 1; if (num === 32) { if (Math.random() < 0.01) valid = true; } else if (num === 30 || num === 36) { if (Math.random() < 0.05) valid = true; } else { valid = true; } } return num; }
@@ -398,7 +403,7 @@
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col)); 
         }
 
-        function openChecklist() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let uniqueIds = new Set(); col.forEach(c => { if(!c.botched) { let numMatch = c.img.match(/\d+/); if(numMatch) uniqueIds.add(parseInt(numMatch[0])); } }); let html = `<div style="text-align:center; color:var(--gold); font-size:20px; font-weight:900; margin-bottom:15px; letter-spacing:1px;">UNIQUE CARDS: <span style="color:cyan;">${uniqueIds.size} / 57</span></div>`; html += `<div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center; max-height:400px; overflow-y:auto; padding-right:5px;">`; for(let i=1; i<=57; i++) { let hasCard = uniqueIds.has(i); let bg = hasCard ? `url('${folderPath}/card (${i}).jpg') center/cover` : '#222'; let border = hasCard ? '2px solid var(--green)' : '2px solid #444'; let opacity = hasCard ? '1' : '0.4'; let icon = hasCard ? '' : '?'; let shadow = hasCard ? 'box-shadow: 0 0 10px rgba(46,204,113,0.5);' : ''; html += `<div style="width:50px; height:75px; background:${bg}; border:${border}; opacity:${opacity}; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#777; font-size:24px; ${shadow}">${icon}</div>`; } html += `</div>`; document.getElementById('checklist-list').innerHTML = html; document.getElementById('checklist-modal').style.display = 'block'; }
+        function openChecklist() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let uniqueIds = new Set(); col.forEach(c => { if(!c.botched) { let numMatch = c.img.match(/\d+/); if(numMatch) uniqueIds.add(parseInt(numMatch[0])); } }); let html = `<div style="text-align:center; color:var(--gold); font-size:20px; font-weight:900; margin-bottom:15px; letter-spacing:1px;">UNIQUE CARDS: <span style="color:cyan;">${uniqueIds.size} / 67</span></div>`; html += `<div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center; max-height:400px; overflow-y:auto; padding-right:5px;">`; for(let i=1; i<=67; i++) { let hasCard = uniqueIds.has(i); let bg = hasCard ? `url('${folderPath}/card (${i}).jpg') center/cover` : '#222'; let border = hasCard ? '2px solid var(--green)' : '2px solid #444'; let opacity = hasCard ? '1' : '0.4'; let icon = hasCard ? '' : '?'; let shadow = hasCard ? 'box-shadow: 0 0 10px rgba(46,204,113,0.5);' : ''; html += `<div style="width:50px; height:75px; background:${bg}; border:${border}; opacity:${opacity}; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#777; font-size:24px; ${shadow}">${icon}</div>`; } html += `</div>`; document.getElementById('checklist-list').innerHTML = html; document.getElementById('checklist-modal').style.display = 'block'; }
         
         function tick() {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; const hofCount = col.filter(c => c.wins >= 200).length; const mythicCount = col.filter(c => c.mythic).length;
@@ -577,9 +582,9 @@
             document.getElementById('season-display').innerText = `SEASON: TICK ${seasonTicks}/30`;
             
             document.getElementById('faction-btn').disabled = (userCash < 50) || col.length < 3 || gauntlet.active || tvWarMode;
-            let r = "ROOKIE PROMOTER"; let next = 20; let base = 0; let isLegendary = false; let uniqueCount = new Set(col.filter(c => !c.botched).map(c => parseInt(c.img.match(/\d+/)[0]))).size;
-            if (uniqueCount >= 50) { r = "LEGENDARY COLLECTOR"; next = 57; base = 50; isLegendary = true; } else if (uniqueCount >= 35) { r = "ELITE EXECUTIVE"; next = 50; base = 35; } else if (uniqueCount >= 20) { r = "PRO MANAGER"; next = 35; base = 20; }
-            let rankText = `RANK: ${r}`; if(prestigeLevel > 0) rankText += ` <span style="color:cyan; font-weight:900;">[PRESTIGE ${prestigeLevel}]</span>`; document.getElementById('rank-display').innerHTML = rankText; document.getElementById('progress-text').innerHTML = `COLLECTION: ${uniqueCount} / 57`; document.getElementById('progress-fill').style.width = Math.min((uniqueCount / 57) * 100, 100) + "%"; const hofCount = col.filter(c => c.wins >= 200).length; document.getElementById('rebirth-btn').style.display = (isLegendary && hofCount >= 5) ? 'block' : 'none';
+            let r = "ROOKIE PROMOTER"; let next = 25; let base = 0; let isLegendary = false; let uniqueCount = new Set(col.filter(c => !c.botched).map(c => parseInt(c.img.match(/\d+/)[0]))).size;
+            if (uniqueCount >= 60) { r = "LEGENDARY COLLECTOR"; next = 67; base = 60; isLegendary = true; } else if (uniqueCount >= 45) { r = "ELITE EXECUTIVE"; next = 60; base = 45; } else if (uniqueCount >= 25) { r = "PRO MANAGER"; next = 45; base = 25; }
+            let rankText = `RANK: ${r}`; if(prestigeLevel > 0) rankText += ` <span style="color:cyan; font-weight:900;">[PRESTIGE ${prestigeLevel}]</span>`; document.getElementById('rank-display').innerHTML = rankText; document.getElementById('progress-text').innerHTML = `COLLECTION: ${uniqueCount} / 67`; document.getElementById('progress-fill').style.width = Math.min((uniqueCount / 67) * 100, 100) + "%"; const hofCount = col.filter(c => c.wins >= 200).length; document.getElementById('rebirth-btn').style.display = (isLegendary && hofCount >= 5) ? 'block' : 'none';
         }
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
@@ -598,12 +603,12 @@
              }
              else if(type === 'elite') {
                  if(!isHolo) isHolo = Math.random() < 0.25;
-                 if(Math.random() < 0.05) { let rRoll = Math.random(); relic = rRoll > 0.8 ? 'rope' : rRoll > 0.5 ? 'table' : 'canvas'; }
+                 if(Math.random() < 0.05) { let rRoll = Math.random(); relic = rRoll > 0.9 ? 'leather' : rRoll > 0.6 ? 'rope' : rRoll > 0.3 ? 'table' : 'canvas'; }
                  if(Math.random() < 0.02) hasAuto = true;
              }
              else if(type === 'legendary') {
                  if(!isHolo) isHolo = Math.random() < 0.50;
-                 if(isGuaranteedRelic || Math.random() < 0.10) { let rRoll = Math.random(); relic = rRoll > 0.8 ? 'rope' : rRoll > 0.5 ? 'table' : 'canvas'; }
+                 if(isGuaranteedRelic || Math.random() < 0.10) { let rRoll = Math.random(); relic = rRoll > 0.9 ? 'leather' : rRoll > 0.6 ? 'rope' : rRoll > 0.3 ? 'table' : 'canvas'; }
                  if(Math.random() < 0.10) hasAuto = true;
                  if(Math.random() < 0.05) mythic = true;
              }
