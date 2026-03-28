@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF RIPPED (TCG) v8.6 - THE ESA EDITION</title>
+    <title>EWF RIPPED (TCG) v9.0 - THE TRIPLE-A EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root { 
             --gold: #D4AF37; --gold-glow: rgba(212, 175, 55, 0.5); --dark-glass: rgba(15, 15, 20, 0.85); --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --purple: #9b59b6;
-            --silver: #C0C0C0; --ruby: #e0115f; --emerald: #50c878; --sapphire: #0f52ba; --mojo: #00ffcc; --atomic: #39ff14; --ice: #e0f7fa; --nebula: #ff00de; --auto-ink: #000080;
+            --silver: #C0C0C0; --ruby: #e0115f; --emerald: #50c878; --sapphire: #0f52ba; --mojo: #00ffcc; --atomic: #39ff14; --ice: #e0f7fa; --nebula: #ff00de; --auto-ink: #0a0a3a;
         }
         * { box-sizing: border-box; } img { max-width: 100%; height: auto; }
         body { background: url('background.jpg') center/cover no-repeat fixed; background-color: #111; color: white; font-family: 'Montserrat', sans-serif; text-align: center; padding: 0; margin: 0; overflow-x: hidden; user-select: none; transition: background 1s ease-in-out, box-shadow 0.5s, filter 1s; }
@@ -42,8 +42,30 @@
         /* VARIANT LABELS (Small Print) */
         .variant-label { position: absolute; bottom: 5px; left: 8px; font-size: 8px; font-weight: 900; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; z-index: 30; pointer-events: none; text-shadow: 1px 1px 2px black; }
 
-        /* SCRIBBLE SIGNATURE */
-        .scribble-auto { font-family: 'Brush Script MT', cursive; font-size: 24px; color: var(--auto-ink); letter-spacing: -4px; background: rgba(255, 255, 255, 0.7); border-radius: 4px; padding: 2px 8px; position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%) rotate(-3deg); z-index: 35; pointer-events: none; border: 1px solid rgba(0,0,0,0.1); box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+        /* UPDATE 9: WET INK SIGNATURES */
+        .scribble-auto { 
+            font-family: 'Brush Script MT', cursive; font-size: 28px; 
+            background: linear-gradient(110deg, var(--auto-ink) 0%, #0000ff 40%, #87ceeb 50%, #0000ff 60%, var(--auto-ink) 100%); 
+            background-size: 200% auto; 
+            color: transparent; 
+            -webkit-background-clip: text; 
+            background-clip: text; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5), -1px -1px 1px rgba(255,255,255,0.3); 
+            border: none; box-shadow: none; padding: 0; 
+            position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%) rotate(-5deg); z-index: 35; 
+            animation: wet-ink 3s linear infinite; pointer-events: none; 
+        }
+        @keyframes wet-ink { to { background-position: 200% center; } }
+
+        /* UPDATE 9: KINETIC TYPOGRAPHY SLAM */
+        .text-slam { animation: slam 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; display: inline-block; transform-origin: center; }
+        @keyframes slam { 0% { transform: scale(3) rotate(-5deg); opacity: 0; filter: blur(10px); } 100% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0); } }
+
+        /* UPDATE 9: INSPECT LOUPE OVERLAY */
+        #inspect-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 30000; display: none; align-items: center; justify-content: center; cursor: zoom-out; flex-direction: column; }
+        #inspect-container { width: 400px; height: 560px; border: 2px solid var(--gold); border-radius: 16px; box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 50px rgba(212,175,55,0.3); position: relative; cursor: crosshair; overflow: hidden; background: #111; }
+        #inspect-content { width: 100%; height: 100%; transform-origin: var(--x, 50%) var(--y, 50%); transition: transform 0.15s ease-out; }
+        #inspect-container:hover #inspect-content { transform: scale(2.5); transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 
         /* TIGER & ZEBRA EFFECTS */
         .holo-tiger { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.4) 15px, transparent 20px); mix-blend-mode: overlay; z-index: 14; }
@@ -205,7 +227,7 @@
     <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
     <div id="tv-war-banner" onclick="startTVWar()">📺 FRIDAY NIGHT RATINGS WAR! CLICK TO MAIN EVENT!</div>
     <div id="gimmick-banner"></div><div id="sponsor-tracker"></div><div id="prestige-border"></div>
-    <div id="early-access">V8.6 THE ESA BINDER EDITION (67 CARD DECK)</div>
+    <div id="early-access">V9.0 THE TRIPLE-A EDITION (67 CARD DECK)</div>
     <button id="music-toggle" onclick="toggleMusic()">Mute</button>
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio><audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
@@ -218,6 +240,13 @@
             <div id="ai-battle-card"></div>
         </div>
         <div id="battle-text">FIGHTING...</div>
+    </div>
+
+    <div id="inspect-overlay" onclick="this.style.display='none'">
+        <div id="inspect-container" onclick="event.stopPropagation()">
+            <div id="inspect-content"></div>
+        </div>
+        <div style="position:absolute; bottom:20px; color:white; font-weight:900; letter-spacing:2px;">CLICK ANYWHERE TO CLOSE | HOVER TO USE LOUPE</div>
     </div>
 
    <div id="p2p-modal" class="modal">
@@ -393,8 +422,74 @@
         function initGame() {
             if(prestigeLevel > 0) document.body.classList.add('prestige-active'); 
             if(autoBookerOwned) { document.getElementById('auto-btn').style.display = 'inline-block'; document.getElementById('buy-auto-btn').style.display = 'none'; }
-            migrateData(); updateBackground(); updateMarketUI(); updateBossUI(); updateUI(); displayCollection(); displayRecord();
+            migrateData(); updateBackground(); updateMarketUI(); updateBossUI(); updateUI(); displayCollection(); displayRecord(); setupInspectZoom();
             setInterval(() => { tick(); }, 30000); setInterval(() => { fastTick(); }, 1000); setInterval(() => { if(autoMode) runAutoMatches(); }, 5000); applyGimmickEffects();
+        }
+
+        /* UPDATE 9: CRYPTIC ANOMALY SYSTEM */
+        function triggerCrypticAnomaly() {
+            const elements = document.querySelectorAll('.main-btn, .binder-tab, #cash-display');
+            if(elements.length === 0) return;
+            const target = elements[Math.floor(Math.random() * elements.length)];
+            const origText = target.innerHTML;
+            if(target.dataset.glitching === "true") return;
+            target.dataset.glitching = "true";
+            const ciphers = ["◬ ⎍ ☍", "E̷R̷R̷O̷R̷", "V̷O̷I̷D̷", "010101", "⍙ ⍝ ⍎", "C̷O̷S̷M̷I̷C̷", "A̷N̷O̷M̷A̷L̷Y̷"];
+            target.innerHTML = ciphers[Math.floor(Math.random() * ciphers.length)];
+            const origColor = target.style.color;
+            const origShadow = target.style.textShadow;
+            target.style.color = "cyan";
+            target.style.textShadow = "0 0 15px cyan, 0 0 30px #f0f";
+            setTimeout(() => {
+                target.innerHTML = origText;
+                target.style.color = origColor;
+                target.style.textShadow = origShadow;
+                target.dataset.glitching = "false";
+            }, 800 + Math.random() * 1500);
+        }
+
+        /* UPDATE 9: LOUPE INSPECTION SETUP */
+        function setupInspectZoom() {
+            const container = document.getElementById('inspect-container');
+            container.addEventListener('mousemove', e => {
+                const rect = container.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                document.getElementById('inspect-content').style.setProperty('--x', `${x}%`);
+                document.getElementById('inspect-content').style.setProperty('--y', `${y}%`);
+            });
+        }
+        function inspectCard(idx) {
+            const overlay = document.getElementById('inspect-overlay');
+            const content = document.getElementById('inspect-content');
+            let col = JSON.parse(localStorage.getItem('EWF_Collection'));
+            let card = col[idx];
+            
+            let innerVisuals = getCardInnerHtml(card);
+            let titleText = card.botched ? 'MUTANT EXPERIMENT' : (card.champion ? 'EWF CHAMPION' : (card.blackLabel ? 'PRISTINE LABEL' : 'AUTHENTIC CARD'));
+            let gradeString = card.grade === 10 ? 'GEM MINT' : `MINT`; 
+            if(card.grade === 8) gradeString = 'NM-MT'; if(card.grade === 7) gradeString = 'EX';
+            
+            let gradeHtml = card.raw ? 
+                `<div class="grade-label" style="background:#444; height:auto; padding:8px 0;"><div class="grade-score" style="color:#aaa; font-size:16px;">RAW UNGRADED</div></div>` : 
+                `<div class="grade-label ${card.grade === 10 ? (card.blackLabel ? 'black-label' : 'gem-mint') : ''}" style="height:60px;">
+                    <div class="grade-header" style="padding:4px 10px;"><span class="esa-logo" style="font-size:12px;">ESA</span><span class="esa-barcode" style="font-size:12px;">||||||||||||||||||</span></div>
+                    <div style="display:flex; justify-content:space-between; padding:4px 10px;">
+                        <div style="text-align:left;">
+                            <div class="grade-title" style="font-size:10px;">${titleText}</div>
+                            <div style="font-size:10px; color:#666; font-weight:bold; margin-top:2px;">${gradeString}</div>
+                        </div>
+                        <div class="grade-score" style="font-size:24px;">${card.grade}</div>
+                    </div>
+                </div>`;
+
+            content.innerHTML = `<div class="${card.holo ? 'is-holo' : ''} ${card.radioactive ? 'is-radioactive' : ''} ${card.mythic ? 'is-mythic' : ''} ${card.botched ? 'is-botched' : ''} ${card.ewfVariant}" style="width:100%; height:100%; position:relative; overflow:hidden; border-radius:12px;">
+                ${gradeHtml}
+                <div style="position:absolute; top:${card.raw ? '35px' : '60px'}; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; z-index: 10; overflow: hidden;">${innerVisuals}</div>
+                <div class="shine-layer" style="opacity:1;"></div><div class="sparkle-layer" style="opacity:1;"></div>
+            </div>`;
+            
+            overlay.style.display = 'flex';
         }
 
         /* NEW BINDER FILTER FUNCTION */
@@ -457,6 +552,7 @@
         }
 
         function fastTick() {
+            if(Math.random() < 0.01) triggerCrypticAnomaly();
             const now = Date.now(); let needsRender = false; let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             col.forEach((c) => { 
                 if(c.trainingUntil > 0 && now >= c.trainingUntil) { c.trainingUntil = 0; c.baseWin = 0.6; needsRender = true; } 
@@ -465,7 +561,6 @@
                 if(c.gradingUntil > 0 && now >= c.gradingUntil) { 
                     c.gradingUntil = 0; c.raw = false; needsRender = true; const roll = Math.random(); 
                     
-                    // NEW: Updated PSA-Style grading odds. Hard, but realistic.
                     if(roll > 0.80 && c.conditionCap === 10) { 
                         c.grade = 10; 
                         if(Math.random() < 0.02) { 
@@ -527,7 +622,7 @@
         function renderSponsor() { if(!sponsor.active) { document.getElementById('sponsor-tracker').style.display = 'none'; return; } document.getElementById('sponsor-tracker').style.display = 'block'; let m = Math.floor(sponsor.timeLeft/60); let s = sponsor.timeLeft%60; document.getElementById('sponsor-tracker').innerHTML = `<h4 style="margin:0; color:var(--gold);">📝 SPONSOR CONTRACT</h4>Win ${sponsor.target} Matches<br>Progress: <span style="color:cyan;">${sponsor.progress}/${sponsor.target}</span><br>Time: <span style="color:var(--red);">${m}:${s<10?'0':''}${s}</span>`; }
 
         function startTVWar() { document.getElementById('tv-war-banner').style.display = 'none'; tvWarMode = true; tvWarTeam = []; document.getElementById('tv-war-msg').style.display = 'block'; displayCollection(); }
-        function confirmTVWar() { tvWarMode = false; document.getElementById('tv-war-msg').style.display = 'none'; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; bCard.innerHTML = ''; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; bText.innerHTML = "CALCULATING RATINGS..."; bText.style.color = "var(--blue)"; setTimeout(() => { bCard.classList.remove('rumble'); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let myPower = 0; tvWarTeam.forEach(idx => { myPower += getCardValue(col[idx]); if(!col[idx].radioactive) col[idx].stamina--; }); let rivalPower = Math.floor(Math.random() * myPower * 1.5) + (50 * multi); if(myPower > rivalPower) { bText.innerHTML = `RATINGS WAR WON!`; bText.style.color = "var(--green)"; triggerConfetti(); let steal = Math.floor(userCash * 0.05); userCash += steal; setTimeout(()=>alert(`📺 You crushed the rival network! Stole $${steal} in ad revenue!`), 500); } else { bText.innerHTML = `RATINGS TANKED!`; bText.style.color = "var(--red)"; let lost = Math.floor(userCash * 0.05); userCash -= lost; setTimeout(()=>alert(`📺 The rival network beat your show! You lost $${lost} in sponsors!`), 500); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); tvWarTimer = 600; localStorage.setItem('EWF_TVWarTimer', tvWarTimer); saveGame(); setTimeout(() => { overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); displayCollection(); updateUI(); }, 2500); }, 2000); }
+        function confirmTVWar() { tvWarMode = false; document.getElementById('tv-war-msg').style.display = 'none'; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; bCard.innerHTML = ''; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; bText.innerHTML = "CALCULATING RATINGS..."; bText.style.color = "var(--blue)"; setTimeout(() => { bCard.classList.remove('rumble'); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let myPower = 0; tvWarTeam.forEach(idx => { myPower += getCardValue(col[idx]); if(!col[idx].radioactive) col[idx].stamina--; }); let rivalPower = Math.floor(Math.random() * myPower * 1.5) + (50 * multi); if(myPower > rivalPower) { bText.innerHTML = `<span class="text-slam">RATINGS WAR WON!</span>`; bText.style.color = "var(--green)"; triggerConfetti(); let steal = Math.floor(userCash * 0.05); userCash += steal; setTimeout(()=>alert(`📺 You crushed the rival network! Stole $${steal} in ad revenue!`), 500); } else { bText.innerHTML = `<span class="text-slam">RATINGS TANKED!</span>`; bText.style.color = "var(--red)"; let lost = Math.floor(userCash * 0.05); userCash -= lost; setTimeout(()=>alert(`📺 The rival network beat your show! You lost $${lost} in sponsors!`), 500); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); tvWarTimer = 600; localStorage.setItem('EWF_TVWarTimer', tvWarTimer); saveGame(); setTimeout(() => { overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); displayCollection(); updateUI(); }, 2500); }, 2000); }
 
         function openCloning() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let html = ""; col.forEach((c, i) => { if((c.grade === 10 || c.radioactive) && !c.botched && !c.raw && !c.inShowcase) { html += `<div class="modal-item"><div>Card #${c.img.match(/\d+/)[0]} ${c.grade===10?'[GEM 10]':''} ${c.radioactive?'[RADIOACTIVE]':''}</div><div><button class="modal-btn" style="background:rgba(155,89,182,0.2); color:var(--purple); border-color:var(--purple);" onclick="attemptClone(${i})">CLONE ($2500)</button></div></div>`; } }); if(html === "") html = "<p style='color:#aaa; text-align:center;'>You need a GRADED GEM MINT 10 or RADIOACTIVE card.</p>"; document.getElementById('cloning-list').innerHTML = html; document.getElementById('cloning-modal').style.display = 'block'; }
         function attemptClone(idx) { if(userCash < 2500) return alert("You need $2500 to clone!"); userCash -= 2500; document.getElementById('cloning-modal').style.display = 'none'; document.body.classList.add('screen-shake'); setTimeout(() => document.body.classList.remove('screen-shake'), 500); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let target = col[idx]; if(Math.random() < 0.6) { alert("🧬 CLONING SUCCESSFUL! A perfect duplicate was created!"); let clone = JSON.parse(JSON.stringify(target)); clone.dupes = 0; clone.champion = false; clone.streak = 0; clone.wins = 0; col.push(clone); } else { alert("⚠️ CLONING BOTCHED! The experiment failed horribly."); let botch = JSON.parse(JSON.stringify(target)); botch.botched = true; botch.grade = 1; botch.baseWin = 0.1; botch.dupes = 0; botch.champion = false; botch.streak = 0; botch.wins = 0; botch.radioactive = false; botch.holo = false; botch.mythic = false; col.push(botch); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); }
@@ -539,7 +634,7 @@
 
         function triggerInvasion() { document.body.classList.add('boss-alert'); let rival = aiRivals[Math.floor(Math.random() * aiRivals.length)]; invasion = { active: true, timeLeft: 300, rivalName: rival.name }; document.getElementById('invasion-name').innerText = rival.name; localStorage.setItem('EWF_Invasion', JSON.stringify(invasion)); displayCollection(); }
         function openInvasionModal() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let html = ""; document.getElementById('invasion-rival-name').innerText = invasion.rivalName; col.forEach((c, i) => { if(!c.injured && !c.botched && c.trainingUntil < Date.now() && c.excursionUntil < Date.now() && !c.inShowcase) { html += `<div style="width:75px; height:105px; background:url('${folderPath}/${c.img}') center/cover; border:2px solid rgba(255,255,255,0.2); border-radius:6px; cursor:pointer; transition:0.2s;" onmouseover="this.style.borderColor='var(--gold)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)';" onclick="fightInvasion(${i})"></div>`; } }); if(html === "") html = "<p style='color:var(--red); width:100%; text-align:center;'>You have no healthy wrestlers to defend!</p>"; document.getElementById('invasion-roster').innerHTML = html; document.getElementById('invasion-modal').style.display = 'block'; }
-        function fightInvasion(idx) { document.getElementById('invasion-modal').style.display = 'none'; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${JSON.parse(localStorage.getItem('EWF_Collection'))[idx].img}')`; bCard.className = 'rumble'; bText.innerHTML = `FIGHTING ${invasion.rivalName}...`; bText.style.color = "var(--red)"; setTimeout(() => { bCard.classList.remove('rumble'); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; renderBattleCard(bCard, card); let chance = card.baseWin - 0.2; let win = Math.random() < chance; if(win) { bText.innerHTML = "INVASION REPELLED!"; bText.style.color = "var(--green)"; triggerConfetti(); setTimeout(()=>resolveInvasion(true, false), 2000); } else { bText.innerHTML = "YOUR CHAMPION FELL!"; bText.style.color = "var(--red)"; setTimeout(()=>resolveInvasion(false, false), 2000); } setTimeout(()=>{ overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); }, 2000); }, 2000); }
+        function fightInvasion(idx) { document.getElementById('invasion-modal').style.display = 'none'; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${JSON.parse(localStorage.getItem('EWF_Collection'))[idx].img}')`; bCard.className = 'rumble'; bText.innerHTML = `FIGHTING ${invasion.rivalName}...`; bText.style.color = "var(--red)"; setTimeout(() => { bCard.classList.remove('rumble'); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; renderBattleCard(bCard, card); let chance = card.baseWin - 0.2; let win = Math.random() < chance; if(win) { bText.innerHTML = `<span class="text-slam">INVASION REPELLED!</span>`; bText.style.color = "var(--green)"; triggerConfetti(); setTimeout(()=>resolveInvasion(true, false), 2000); } else { bText.innerHTML = `<span class="text-slam">YOUR CHAMPION FELL!</span>`; bText.style.color = "var(--red)"; setTimeout(()=>resolveInvasion(false, false), 2000); } setTimeout(()=>{ overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); }, 2000); }, 2000); }
         function resolveInvasion(won, timeout) { let rName = invasion.rivalName; invasion.active = false; document.body.classList.remove('boss-alert'); document.getElementById('invasion-banner').style.display = 'none'; document.getElementById('invasion-modal').style.display = 'none'; if(won) { alert(`🚨 You defeated ${rName}! Awarded $250 and a Diamond Briefcase!`); userCash += 250; vault.push({ id: Date.now(), unlockAt: 0 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); } else { let loss = Math.floor(userCash * 0.15); userCash -= loss; alert(`🚨 ${rName} destroyed your arena! ${timeout ? 'You ran out of time! ' : ''}Lost $${loss}.`); } saveGame(); updateUI(); localStorage.removeItem('EWF_Invasion'); displayCollection(); }
 
         function triggerAIAuction() { document.body.classList.add('auction-alert'); let num = getCardDropNum(); let val = 50 * multi; let card = { img: `card (${num}).jpg`, wins: 0, holo: true, grade: 10, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.6, trainingUntil: 0, buff: null, mythic: false, radioactive: Math.random()>0.8, botched: false, raw: false, alignment: 'heel', conditionCap: 10, inShowcase: false, blackLabel: false, relic: null, excursionUntil: 0, excursionBadge: null }; auction = { active: true, timeLeft: 60, card: card, currentBid: Math.floor(val/2), highestBidder: 'NONE', isPlayerSelling: false, trueValue: val }; localStorage.setItem('EWF_Auction', JSON.stringify(auction)); renderAuction(); }
@@ -572,7 +667,7 @@
         let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let hasSynergy = new Set(factionTeam.map(i => col[i].grade)).size < factionTeam.length; let cNums = factionTeam.map(i => parseInt(col[i].img.match(/\d+/)[0])); let bloodBrothers = false; for(let i=0; i<cNums.length; i++) { for(let j=i+1; j<cNums.length; j++) { if(Math.abs(cNums[i] - cNums[j]) === 1) bloodBrothers = true; } } if(bloodBrothers) setTimeout(()=> { bText.innerHTML = "🩸 BLOOD BROTHERS SYNERGY!"; bText.style.color = "var(--red)"; document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),300); }, 500); else if(hasSynergy) setTimeout(()=> { bText.innerHTML = "TAG TEAM SYNERGY ACTIVATED!"; bText.style.color = "cyan"; }, 1000);
         setTimeout(() => { bCard.classList.remove('rumble'); let teamWins = 0; factionTeam.forEach(idx => { if(!col[idx].radioactive && col[idx].excursionBadge !== 'strong') col[idx].stamina--; 
         if(col[idx].raw && Math.random() < 0.1) col[idx].conditionCap = Math.max(1, col[idx].conditionCap - 1);
-        let winChance = col[idx].baseWin; if(col[idx].streak >= 3) winChance += 0.1; if(bloodBrothers) winChance += 0.3; else if(hasSynergy) winChance += 0.2; if(Math.random() < winChance) teamWins++; }); if(teamWins >= 2) { const payout = 500 * multi; bText.innerHTML = `FACTION WINS ${teamWins}-` + (3-teamWins) + `! ($${payout})`; bText.style.color = "var(--green)"; userCash += payout; hitBoss(teamWins); saveGame(); triggerConfetti(); } else { bText.innerHTML = `FACTION DEFEATED ${teamWins}-` + (3-teamWins); bText.style.color = "var(--red)"; } localStorage.setItem('EWF_Collection', JSON.stringify(col)); setTimeout(() => { overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); factionSimulating = false; displayCollection(); updateUI(); }, 3000); }, 2000); } else { toggleFactionWar(); } }
+        let winChance = col[idx].baseWin; if(col[idx].streak >= 3) winChance += 0.1; if(bloodBrothers) winChance += 0.3; else if(hasSynergy) winChance += 0.2; if(Math.random() < winChance) teamWins++; }); if(teamWins >= 2) { const payout = 500 * multi; bText.innerHTML = `<span class="text-slam">FACTION WINS ${teamWins}-` + (3-teamWins) + `! ($${payout})</span>`; bText.style.color = "var(--green)"; userCash += payout; hitBoss(teamWins); saveGame(); triggerConfetti(); } else { bText.innerHTML = `<span class="text-slam">FACTION DEFEATED ${teamWins}-` + (3-teamWins) + `</span>`; bText.style.color = "var(--red)"; } localStorage.setItem('EWF_Collection', JSON.stringify(col)); setTimeout(() => { overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); factionSimulating = false; displayCollection(); updateUI(); }, 3000); }, 2000); } else { toggleFactionWar(); } }
 
         function startGauntlet() { if(userCash < 25) return alert("Need $25 to enter!"); if(!confirm("Enter Ironman Gauntlet for $25?")) return; userCash -= 25; saveGame(); updateUI(); gauntlet = { active: true, team: [], wins: 0, losses: 0 }; document.getElementById('gauntlet-close-btn').style.display = 'block'; renderGauntletDraft(); }
         
@@ -590,7 +685,7 @@
 
         function draftCard(num) { gauntlet.team.push(num); renderGauntletDraft(); }
         function renderGauntletBattle() { let html = `<h2 style="color:var(--red); text-shadow: 0 0 10px var(--red); border-bottom:none;">IRONMAN GAUNTLET ⚔️</h2><p style="color:white; font-size:20px; text-align:center; font-weight:900; background:rgba(0,0,0,0.5); padding:10px; border-radius:8px;">WINS: <span style="color:var(--green);">${gauntlet.wins}/5</span> &nbsp;|&nbsp; LOSSES: <span style="color:var(--red);">${gauntlet.losses}/3</span></p><div style="display:flex; justify-content:center; gap:20px; margin:25px 0;">`; gauntlet.team.forEach(num => { html += `<div style="width:110px; height:150px; background:url('${folderPath}/card (${num}).jpg') center/cover; border:2px solid var(--gold); border-radius:10px; box-shadow: 0 10px 20px rgba(0,0,0,0.8);"></div>`; }); html += `</div><button class="modal-btn" style="width:100%; font-size:16px; padding:15px; background:rgba(155,89,182,0.2); color:var(--purple); border-color:var(--purple);" onmouseover="this.style.background='var(--purple)'; this.style.color='white';" onmouseout="this.style.background='rgba(155,89,182,0.2)'; this.style.color='var(--purple)';" onclick="fightGauntlet()">FIGHT NEXT WAVE</button>`; document.getElementById('gauntlet-content').innerHTML = html; }
-        function fightGauntlet() { const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; bCard.innerHTML = ''; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; let moves = ["THE GAUNTLET CONTINUES!", "ABSOLUTE CHAOS IN THE RING!", "SOMEBODY STOP THIS!", "A MASSIVE SPEAR!", "1... 2..."]; let step = 0; bText.innerHTML = moves[0]; bText.style.color = "white"; let fightInt = setInterval(() => { step++; if(step < moves.length) { bText.innerHTML = moves[step]; document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),100); } else { clearInterval(fightInt); bCard.classList.remove('rumble'); if(Math.random() > 0.4) { bText.innerHTML = "WAVE CLEARED!"; bText.style.color = "var(--green)"; gauntlet.wins++; hitBoss(1); triggerConfetti(); if(gauntlet.wins >= 5) { let payout = 1000 * multi; setTimeout(() => { alert(`🏆 YOU CONQUERED THE GAUNTLET! You won $${payout}!`); userCash += payout; saveGame(); updateUI(); document.getElementById('gauntlet-modal').style.display='none'; overlay.style.display='none'; document.body.classList.remove('battle-locked'); gauntlet.active=false; }, 2000); return; } } else { bText.innerHTML = "WAVE FAILED!"; bText.style.color = "var(--red)"; gauntlet.losses++; if(gauntlet.losses >= 3) { setTimeout(() => { alert("☠️ ELIMINATED FROM THE GAUNTLET."); document.getElementById('gauntlet-modal').style.display='none'; overlay.style.display='none'; document.body.classList.remove('battle-locked'); gauntlet.active=false; }, 2000); return; } } setTimeout(() => { overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); renderGauntletBattle(); }, 2000); } }, 500); }
+        function fightGauntlet() { const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; bCard.innerHTML = ''; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; let moves = ["THE GAUNTLET CONTINUES!", "ABSOLUTE CHAOS IN THE RING!", "SOMEBODY STOP THIS!", "A MASSIVE SPEAR!", "1... 2..."]; let step = 0; bText.innerHTML = moves[0]; bText.style.color = "white"; let fightInt = setInterval(() => { step++; if(step < moves.length) { bText.innerHTML = moves[step]; document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),100); } else { clearInterval(fightInt); bCard.classList.remove('rumble'); if(Math.random() > 0.4) { bText.innerHTML = `<span class="text-slam">WAVE CLEARED!</span>`; bText.style.color = "var(--green)"; gauntlet.wins++; hitBoss(1); triggerConfetti(); if(gauntlet.wins >= 5) { let payout = 1000 * multi; setTimeout(() => { alert(`🏆 YOU CONQUERED THE GAUNTLET! You won $${payout}!`); userCash += payout; saveGame(); updateUI(); document.getElementById('gauntlet-modal').style.display='none'; overlay.style.display='none'; document.body.classList.remove('battle-locked'); gauntlet.active=false; }, 2000); return; } } else { bText.innerHTML = `<span class="text-slam">WAVE FAILED!</span>`; bText.style.color = "var(--red)"; gauntlet.losses++; if(gauntlet.losses >= 3) { setTimeout(() => { alert("☠️ ELIMINATED FROM THE GAUNTLET."); document.getElementById('gauntlet-modal').style.display='none'; overlay.style.display='none'; document.body.classList.remove('battle-locked'); gauntlet.active=false; }, 2000); return; } } setTimeout(() => { overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); renderGauntletBattle(); }, 2000); } }, 500); }
 
         function generateCommentary(context) { let moves = []; if(context.isPPV) moves.push("TITLE MATCH IS UNDERWAY!"); else moves.push("THE BELL RINGS!"); if(context.buff === 'chair') moves.push("HE BROUGHT A CHAIR INTO THE RING!"); else if(context.radioactive) moves.push("THE MUTANT IS LITERALLY GLOWING!"); else moves.push("TYPICAL TIE-UP IN THE CENTER!"); if(context.stamina <= 1 && !context.radioactive) moves.push("HE LOOKS COMPLETELY EXHAUSTED..."); else if(context.streak >= 3) moves.push("HE'S RIDING A MASSIVE STREAK!"); else moves.push("TRADING BLOWS!"); moves.push("DEVASTATING FINISHER!"); moves.push("1... 2... 3!!"); return moves; }
 
@@ -785,7 +880,7 @@
                     if(isCrit) win = true; if(isBotch) win = false;
 
                     if (win) { 
-                        bText.innerHTML = isCrit ? "CRITICAL WIN!" : "WINNER!"; bText.style.color = "var(--green)"; triggerConfetti(); 
+                        bText.innerHTML = `<span class="text-slam">${isCrit ? "CRITICAL WIN!" : "WINNER!"}</span>`; bText.style.color = "var(--green)"; triggerConfetti(); 
                         card.wins++; totalWins++; card.streak = (card.streak > 0) ? card.streak + 1 : 1; progressSponsor(); 
                         let matchPay = (Math.floor(Math.random() * 40) + 10) * multi; userCash += matchPay;
                         if(isCrit) { vault.push({ id: Date.now(), unlockAt: 0 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); }
@@ -794,7 +889,7 @@
                         updateBounty('wins', 1); hitBoss(card.excursionBadge === 'lucha' ? 2 : 1); 
                         if(!isCrit && Math.random() < 0.1) { vault.push({ id: Date.now(), unlockAt: Date.now() + 10*60*1000 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); setTimeout(() => alert("💼 A MONEY IN THE BANK BRIEFCASE DROPPED! Check your vault!"), 500); } 
                     } else { 
-                        bText.innerHTML = isBotch ? "CRITICAL BOTCH!" : "DEFEAT"; bText.style.color = "var(--red)"; totalLosses++; card.streak = (card.streak < 0) ? card.streak - 1 : -1;
+                        bText.innerHTML = `<span class="text-slam">${isBotch ? "CRITICAL BOTCH!" : "DEFEAT"}</span>`; bText.style.color = "var(--red)"; totalLosses++; card.streak = (card.streak < 0) ? card.streak - 1 : -1;
                         if(isBotch) { card.injured = true; card.stamina = 0; }
                     } 
                     localStorage.setItem('EWF_Wins', totalWins); localStorage.setItem('EWF_Losses', totalLosses); localStorage.setItem('EWF_Collection', JSON.stringify(col)); 
@@ -809,7 +904,7 @@
         function sendToExcursion(idx) { if(userCash < 1000) return alert("You need $1000 to fund a foreign excursion!"); let col = JSON.parse(localStorage.getItem('EWF_Collection')); if(confirm("Send this wrestler to Japan/Mexico for 60 real-time minutes? They will return with a permanent Strong Style or Lucha Libre badge!")) { userCash -= 1000; col[idx].excursionUntil = Date.now() + (60 * 60 * 1000); localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); } }
         function loserLeavesTown(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; if(confirm("🚨 HIGH STAKES! 🚨\n\nBook a Career vs. Career match?\nWin: Resets losing streak + Permanent stat boost.\nLoss: CARD IS PERMANENTLY DELETED.")) { const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const aiCard = document.getElementById('ai-battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; bCard.innerHTML=''; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; aiCard.innerHTML=''; aiCard.style.backgroundImage = `url('wrapper.jpg')`; aiCard.style.borderColor = "var(--red)"; aiCard.style.boxShadow = "0 0 50px rgba(231,76,60,0.8)"; aiCard.className = 'rumble'; let moves = ["CAREER VS CAREER!", "EVERYTHING IS ON THE LINE!", "KICKOUT AT 2!", "GOING FOR BROKE!", "1... 2..."]; let step = 0; bText.innerHTML = moves[0]; bText.style.color = "var(--red)"; let fightInt = setInterval(() => { step++; if(step < moves.length) { bText.innerHTML = moves[step]; document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),100); } else { clearInterval(fightInt); bCard.classList.remove('rumble'); aiCard.classList.remove('rumble'); col = JSON.parse(localStorage.getItem('EWF_Collection')); card = col[idx]; 
         renderBattleCard(bCard, card); renderBattleCard(aiCard, generateAICard());
-        let win = Math.random() < card.baseWin; if(win) { bText.innerHTML = "CAREER SAVED!"; bText.style.color = "var(--green)"; triggerConfetti(); card.streak = 1; card.baseWin = Math.min(0.9, card.baseWin + 0.2); card.stamina = 5; card.injured = false; } else { bText.innerHTML = "CAREER OVER."; bText.style.color = "var(--red)"; col.splice(idx, 1); userCash += 1000; setTimeout(()=>alert("💀 Match Lost. The card has been permanently deleted, but the crowd's respect generated $1000 in memorial merch sales."), 500); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); setTimeout(() => { overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); displayCollection(); updateUI(); }, 2500); } }, 500); } }
+        let win = Math.random() < card.baseWin; if(win) { bText.innerHTML = `<span class="text-slam">CAREER SAVED!</span>`; bText.style.color = "var(--green)"; triggerConfetti(); card.streak = 1; card.baseWin = Math.min(0.9, card.baseWin + 0.2); card.stamina = 5; card.injured = false; } else { bText.innerHTML = `<span class="text-slam">CAREER OVER.</span>`; bText.style.color = "var(--red)"; col.splice(idx, 1); userCash += 1000; setTimeout(()=>alert("💀 Match Lost. The card has been permanently deleted, but the crowd's respect generated $1000 in memorial merch sales."), 500); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); setTimeout(() => { overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); displayCollection(); updateUI(); }, 2500); } }, 500); } }
 
         function sellCard(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); const val = getCardValue(col[idx]); if(confirm(`Sell for $${val}?`)) { if(col[idx].dupes > 0) col[idx].dupes--; else col.splice(idx, 1); userCash += val; localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); updateUI(); displayCollection(); } }
         function healCard(idx) { if(userCash < 50) return; userCash -= 50; saveGame(); let col = JSON.parse(localStorage.getItem('EWF_Collection')); col[idx].injured = false; col[idx].stamina = 5; localStorage.setItem('EWF_Collection', JSON.stringify(col)); updateUI(); displayCollection(); }
@@ -895,6 +990,10 @@
                         if(!card.champion && userCash >= 100 && !card.inShowcase) controls.innerHTML += `<button class="gm-btn btn-ppv" onclick="ppvMatch(${index})">PPV TITLE ($100)</button>`; 
                         if(invasion.active && !card.inShowcase) controls.innerHTML += `<button class="gm-btn" style="background:var(--red); color:white; border-color:white; box-shadow:0 0 10px rgba(231,76,60,0.8); animation:pulse 1s infinite;" onclick="fightInvasion(${index})">⚔️ DEFEND INVASION</button>`; 
                     }
+                    
+                    /* UPDATE 9: ADD INSPECT LOUPE BUTTON TO CONTROLS */
+                    controls.innerHTML += `<div style="display:flex; gap:4px; margin-top:4px;"><button class="gm-btn" style="flex:1; background:rgba(255,255,255,0.1); border-color:#fff; color:#fff;" onclick="inspectCard(${index})">🔍 INSPECT LOUPE</button></div>`;
+
                     container.appendChild(controls); 
                     if(card.inShowcase) showcaseElements.push(container); else grid.appendChild(container);
                 } else if(isHof) { 
