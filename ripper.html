@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EWF RIPPED (TCG) v10.0 - THE TRIPLE-A EDITION</title>
+    <title>EWF RIPPED (TCG) v9.0 - THE TRIPLE-A EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -31,15 +31,6 @@
         .card-void { border: 3px solid #220033 !important; box-shadow: 0 0 30px #000, inset 0 0 20px #550088 !important; animation: voidPulse 3s infinite; }
         .card-radiant { border: 3px solid #ffdd00 !important; background: linear-gradient(45deg, #ff0000, #ffdd00, #00ff00, #0000ff, #ff00ff) !important; background-size: 400% 400% !important; animation: nebulaShift 3s ease infinite, radiantGlow 2s infinite alternate; }
 
-        /* UPDATE 10: NEW ELITE VARIANTS */
-        .card-impasto { border: 5px solid #fff !important; box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 15px 35px rgba(0,0,0,0.9) !important; filter: contrast(1.2) sepia(0.1); }
-        .card-impasto::after { content:''; position:absolute; inset:0; background: url('https://www.transparenttextures.com/patterns/canvas-orange.png'); mix-blend-mode: multiply; opacity: 0.9; pointer-events: none; z-index: 12; }
-        
-        .card-deep-space { border: 3px solid #b9f2ff !important; box-shadow: 0 0 30px #b9f2ff, inset 0 0 50px #000 !important; }
-        .card-deep-space::after { content:''; position:absolute; inset:-50px; background: url('https://www.transparenttextures.com/patterns/stardust.png'), radial-gradient(circle, transparent 20%, #000 100%); background-size: 150px 150px, 100% 100%; mix-blend-mode: color-dodge; pointer-events:none; z-index:11; transform: translate(calc((var(--lx, 50%) - 50%) * -0.5px), calc((var(--ly, 50%) - 50%) * -0.5px)); }
-        
-        .card-blank { border: 4px solid #fff !important; box-shadow: 0 0 30px rgba(255,255,255,0.8) !important; background: #eee !important; }
-
         @keyframes atomicPulse { from { filter: brightness(1); } to { filter: brightness(1.4); } }
         @keyframes nebulaShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
         @keyframes diamondSparkle { 0% { box-shadow: 0 0 10px #b9f2ff; filter: brightness(1.1); } 100% { box-shadow: 0 0 30px #ffffff, inset 0 0 20px #b9f2ff; filter: brightness(1.5); } }
@@ -51,7 +42,7 @@
         /* VARIANT LABELS (Small Print) */
         .variant-label { position: absolute; bottom: 5px; left: 8px; font-size: 8px; font-weight: 900; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; z-index: 30; pointer-events: none; text-shadow: 1px 1px 2px black; }
 
-        /* WET INK SIGNATURES */
+        /* UPDATE 9: WET INK SIGNATURES */
         .scribble-auto { 
             font-family: 'Brush Script MT', cursive; font-size: 28px; 
             background: linear-gradient(110deg, var(--auto-ink) 0%, #0000ff 40%, #87ceeb 50%, #0000ff 60%, var(--auto-ink) 100%); 
@@ -66,10 +57,11 @@
         }
         @keyframes wet-ink { to { background-position: 200% center; } }
 
+        /* UPDATE 9: KINETIC TYPOGRAPHY SLAM */
         .text-slam { animation: slam 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; display: inline-block; transform-origin: center; }
         @keyframes slam { 0% { transform: scale(3) rotate(-5deg); opacity: 0; filter: blur(10px); } 100% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0); } }
 
-        /* INSPECT LOUPE OVERLAY */
+        /* UPDATE 9: INSPECT LOUPE OVERLAY */
         #inspect-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 30000; display: none; align-items: center; justify-content: center; cursor: zoom-out; flex-direction: column; }
         #inspect-container { width: 400px; height: 560px; border: 2px solid var(--gold); border-radius: 16px; box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 50px rgba(212,175,55,0.3); position: relative; cursor: crosshair; overflow: hidden; background: #111; }
         #inspect-content { width: 100%; height: 100%; transform-origin: var(--x, 50%) var(--y, 50%); transition: transform 0.15s ease-out; }
@@ -139,29 +131,6 @@
         
         #pack-area { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; min-height: 250px; align-items: center; } #sealed-box { width: 280px; height: 220px; background: linear-gradient(135deg, #111, #2a2a2a, #000); border: 3px solid var(--gold); border-radius: 15px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(212,175,55,0.3); transition: 0.3s; position: relative; overflow: hidden; perspective: 1000px; } #sealed-box::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(212,175,55,0.05) 10px, rgba(212,175,55,0.05) 20px); pointer-events: none; } #sealed-box h2 { color: var(--gold); font-size: 26px; text-transform: uppercase; text-shadow: 0 0 15px var(--gold); z-index: 2; letter-spacing: 2px; text-align: center; line-height: 1.2; } #sealed-box:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 50px rgba(212,175,55,0.5); border-color: #fff; } .box-flare { position: absolute; width: 200%; height: 50%; background: rgba(255,255,255,0.2); transform: rotate(45deg); top: -50%; left: -100%; animation: foil-shine 3s infinite; pointer-events: none; }
         
-        /* UPDATE 10: INTERACTIVE FOIL TEARING OVERLAY */
-        #foil-tear-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 40000; display: none; align-items: center; justify-content: center; cursor: crosshair; user-select: none; flex-direction: column; }
-        #foil-pack { width: 300px; height: 420px; background: linear-gradient(135deg, silver, #fff, gray); border-radius: 15px; box-shadow: 0 0 50px rgba(255,255,255,0.2); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        #foil-pack.ripping { cursor: ew-resize; }
-        #foil-top { position: absolute; top: 0; width: 100%; height: 50px; background: repeating-linear-gradient(90deg, #aaa, #aaa 2px, #fff 2px, #fff 4px); border-bottom: 2px solid #555; }
-        #tear-line { position: absolute; top: 25px; left: 0; height: 4px; background: #000; width: 0%; box-shadow: 0 0 10px #000; z-index: 10; pointer-events: none; }
-        .foil-particle { position: absolute; background: silver; width: 10px; height: 10px; pointer-events: none; animation: dropFoil 1s forwards; }
-        @keyframes dropFoil { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(200px) rotate(360deg); opacity: 0; } }
-
-        /* UPDATE 10: GOD-RAY VAULT REVEAL */
-        #god-ray-overlay { position: fixed; inset: 0; background: #000; z-index: 50000; display: none; align-items: center; justify-content: center; perspective: 1000px; overflow: hidden; }
-        .god-ray { position: absolute; top: -50%; left: 50%; width: 200vw; height: 200vh; background: conic-gradient(from 180deg at 50% 0%, transparent 40%, rgba(255,215,0,0.4) 50%, transparent 60%); transform: translateX(-50%); pointer-events: none; mix-blend-mode: screen; animation: ray-shift 5s infinite alternate; }
-        .dust-mote { position: absolute; background: white; border-radius: 50%; filter: blur(2px); opacity: 0.6; animation: float-dust 10s infinite linear; }
-        @keyframes float-dust { 0% { transform: translateY(100vh) translateX(0px); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateY(-10vh) translateX(50px); opacity: 0; } }
-        @keyframes ray-shift { 0% { transform: translateX(-50%) rotate(-5deg); } 100% { transform: translateX(-50%) rotate(5deg); } }
-        #god-ray-card { transform: translateY(-100vh) scale(1.5) rotateY(180deg); transition: transform 3s cubic-bezier(0.1, 0.8, 0.2, 1); box-shadow: 0 50px 100px rgba(0,0,0,1); }
-        #god-ray-card.dropped { transform: translateY(0) scale(1.5) rotateY(0deg); }
-
-        /* UPDATE 10: BLANK CANVAS PAINT MODAL */
-        #paint-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; border: 2px solid var(--gold); border-radius: 12px; z-index: 60000; display: none; padding: 20px; flex-direction: column; align-items: center; box-shadow: 0 0 50px #000; }
-        #paint-canvas { background: #fff; border: 1px solid #333; cursor: crosshair; border-radius: 8px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
-        .color-picker { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; display: inline-block; margin: 0 5px; }
-
         .pack-card { width: 150px; height: 210px; perspective: 1000px; cursor: pointer; } .card-inner { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; position: relative; } .pack-card.flipped .card-inner { transform: rotateY(180deg); } .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2); } .back { background: url('wrapper.jpg') center/cover; background-color: #222; } .front { transform: rotateY(180deg); background-size: cover; background-position: center; overflow: hidden; }
         
         /* WALKOUT ANIMATION CSS */
@@ -192,7 +161,7 @@
         .saved-card:hover .shine-layer, .saved-card:hover .sparkle-layer { opacity: 1; }
 
         /* CONSTANT SPARKLES FOR ULTRA RARES */
-        .card-nebula .sparkle-layer, .card-diamond .sparkle-layer, .card-radiant .sparkle-layer, .card-starlight .sparkle-layer, .card-glitch .sparkle-layer, .card-void .sparkle-layer, .card-deep-space .sparkle-layer {
+        .card-nebula .sparkle-layer, .card-diamond .sparkle-layer, .card-radiant .sparkle-layer, .card-starlight .sparkle-layer, .card-glitch .sparkle-layer, .card-void .sparkle-layer {
             opacity: 0.8 !important; 
             animation: diamondSparkle 2s infinite alternate;
         }
@@ -203,6 +172,7 @@
         /* ORIGINAL HOLOS */
         .holo-standard { position: absolute; inset: 0; border-radius: 10px; background-image: linear-gradient(110deg, transparent 15%, rgba(255,0,255,0.4) 30%, rgba(0,255,255,0.4) 50%, rgba(255,255,0,0.4) 70%, transparent 85%); background-size: 200% 200%; mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-cracked-ice { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(0,255,255,0.5) 45%, rgba(255,255,255,0.9) 50%, rgba(0,255,255,0.5) 55%, rgba(255,255,255,0) 100%), repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px); background-size: 300% 300%; mix-blend-mode: overlay; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-gold-vinyl { position: absolute; inset: 0; border-radius: 10px; background: repeating-radial-gradient(circle at center, transparent, transparent 4px, rgba(212,175,55,0.4) 4px, rgba(212,175,55,0.4) 8px), linear-gradient(45deg, rgba(255,215,0,0.2), rgba(255,215,0,0.8), rgba(255,215,0,0.2)); mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-cosmic { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle, rgba(255,0,255,0.5) 0%, rgba(0,255,255,0.5) 50%, rgba(0,0,0,0) 100%), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNZv349RgaoWKsGpgbAawOQ/r0D0wU/EQAAAABJRU5ErkJggg=='); background-size: 150% 150%, auto; mix-blend-mode: screen; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-obsidian { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,0,0,0.9)), repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,0,255,0.3) 15px, rgba(0,255,255,0.3) 30px); mix-blend-mode: hard-light; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; box-shadow: inset 0 0 20px rgba(0,0,0,1); } .holo-plasma { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(57,255,20,0.8), transparent 40%), radial-gradient(circle at calc(100% - var(--lx, 50%)) calc(100% - var(--ly, 50%)), rgba(255,20,147,0.8), transparent 40%); mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-prismatic { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.8) 25%, transparent 30%), repeating-radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); mix-blend-mode: color-dodge; background-size: 200% 200%; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } .holo-ghost { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(255,255,255,1) 0%, rgba(200,200,200,0.5) 30%, transparent 60%); mix-blend-mode: screen; backdrop-filter: grayscale(100%) contrast(150%); z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; } 
         
+        /* NEW ATTITUDE-ERA VIBE HOLOS */
         .holo-inferno { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(0deg, rgba(255,69,0,0.6) 0%, rgba(255,140,0,0.3) 40%, transparent 100%), repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(255,0,0,0.2) 5px, rgba(255,0,0,0.2) 10px); mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; animation: inferno-blaze 3s infinite alternate; }
         .holo-shatter { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.8) 45%, transparent 50%), linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.8) 45%, transparent 50%); background-size: 40px 40px; mix-blend-mode: overlay; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; box-shadow: inset 0 0 20px rgba(255,255,255,0.5); }
         .holo-toxic { position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(57,255,20,0.8) 0%, rgba(0,0,0,0.6) 80%); mix-blend-mode: color-dodge; z-index: 14; pointer-events: none; opacity: 0; transition: opacity 0.3s; animation: toxic-pulse 2s infinite alternate; }
@@ -228,18 +198,12 @@
         .ring::after { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: rgba(0,0,0,0.5); }
         .book-page .card-container { transform: scale(0.9); margin: -5px; } 
 
-        /* UPDATED RELICS & NEW CRT RELIC */
+        /* UPDATED RELICS: Hand-painted canvas & authentic textures */
         .relic-window { position:absolute; top: 75%; left: 50%; transform:translate(-50%, -50%); width:45px; height:45px; border: 2px solid #ddd; box-shadow: inset 0 0 15px #000, 0 5px 10px rgba(0,0,0,0.8); z-index:18; border-radius:4px; overflow:hidden; } 
         .relic-canvas { background: radial-gradient(circle at 30% 30%, rgba(200, 0, 0, 0.4) 1px, transparent 4px), radial-gradient(circle at 70% 60%, rgba(0, 50, 200, 0.3) 2px, transparent 5px), repeating-linear-gradient(45deg, rgba(255,255,255,0.9), rgba(255,255,255,0.9) 2px, rgba(240,240,240,0.9) 2px, rgba(240,240,240,0.9) 4px), linear-gradient(135deg, #e0e0e0 0%, #ffffff 50%, #d0d0d0 100%); background-size: 15px 15px, 20px 20px, 4px 4px, 100% 100%; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); } 
         .relic-table { background: repeating-radial-gradient(ellipse at center, rgba(139, 69, 19, 0.8) 0, rgba(160, 82, 45, 0.8) 2px, rgba(139, 69, 19, 0.8) 4px), linear-gradient(to right, #654321, #8b4513); background-size: 150% 200%, 100% 100%; background-position: center; } 
         .relic-rope { background: repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(0,0,0,0.3) 4px, rgba(0,0,0,0.3) 6px), linear-gradient(90deg, #800000 0%, #e74c3c 50%, #800000 100%); background-size: 10px 10px, 100% 100%; }
         .relic-leather { background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.8) 2px, transparent 3px), linear-gradient(45deg, #111 25%, #222 25%, #222 50%, #111 50%, #111 75%, #222 75%, #222); background-size: 15px 15px, 4px 4px; background-color: #0a0a0a; }
-        
-        /* UPDATE 10: TAPE TRADER CRT RELIC */
-        .relic-crt { background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 2px, 3px 100%; background-color: #111; box-shadow: inset 0 0 10px #000, 0 0 15px rgba(0,255,255,0.4); animation: crt-flicker 0.15s infinite; overflow: hidden; position: relative; }
-        .relic-crt::after { content:'► PLAY'; position:absolute; top:2px; left:4px; color:#0f0; font-family:monospace; font-size:6px; font-weight:bold; text-shadow:0 0 2px #0f0; animation: blink 1s infinite; }
-        @keyframes crt-flicker { 0% { opacity: 0.95; } 100% { opacity: 1; filter: brightness(1.2) contrast(1.2); } }
-        @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
         .win-count { position: absolute; top: 12px; left: -8px; background: var(--dark-glass); color: white; border-radius: 4px; padding: 4px 8px; font-size: 11px; border: 1px solid rgba(255,255,255,0.2); z-index: 21; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.5); backdrop-filter: blur(5px); } .dupe-count { position: absolute; top: 12px; right: -8px; background: rgba(52,152,219,0.9); color: white; border-radius: 50%; width: 24px; height: 24px; font-size: 11px; line-height: 24px; border: 1px solid rgba(255,255,255,0.5); z-index: 21; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.5); } .streak-badge { position: absolute; bottom: 12px; right: -8px; font-size: 20px; z-index: 21; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.5)); } .stamina-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #222; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; overflow: hidden; z-index: 21; border-top: 1px solid #000; } .stamina-fill { height: 100%; width: 100%; background: var(--green); transition: width 0.2s linear; }
         .injured-overlay { position: absolute; inset: 0; background: rgba(231,76,60,0.7); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 40px; pointer-events: none; } .training-overlay { position: absolute; inset: 0; background: rgba(52,152,219,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; } .scout-overlay { position: absolute; inset: 0; background: rgba(155,89,182,0.8); backdrop-filter: blur(3px); z-index: 25; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; pointer-events: none; font-size: 14px; letter-spacing: 1px; } .align-badge { position: absolute; top: 40px; right: 5px; font-size: 18px; z-index: 25; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); } .excursion-badge { position: absolute; bottom: 35px; left: -8px; font-size: 20px; z-index: 25; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); }
@@ -263,40 +227,10 @@
     <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
     <div id="tv-war-banner" onclick="startTVWar()">📺 FRIDAY NIGHT RATINGS WAR! CLICK TO MAIN EVENT!</div>
     <div id="gimmick-banner"></div><div id="sponsor-tracker"></div><div id="prestige-border"></div>
-    <div id="early-access">V10.0 THE TRIPLE-A EDITION (67 CARD DECK)</div>
+    <div id="early-access">V9.0 THE TRIPLE-A EDITION (67 CARD DECK)</div>
     <button id="music-toggle" onclick="toggleMusic()">Mute</button>
     <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio><audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
     
-    <div id="foil-tear-overlay">
-        <h2 style="color:white; text-shadow:0 0 10px black; pointer-events:none;">CLICK AND DRAG ACROSS THE TOP TO TEAR OPEN</h2>
-        <div id="foil-pack" onmousedown="startTear(event)" onmousemove="dragTear(event)" onmouseup="stopTear()" onmouseleave="stopTear()" ontouchstart="startTear(event)" ontouchmove="dragTear(event)" ontouchend="stopTear()">
-            <div id="foil-top"></div>
-            <div id="tear-line"></div>
-            <h1 style="color:black; font-style:italic; pointer-events:none;">EWF RIPPED</h1>
-        </div>
-    </div>
-
-    <div id="god-ray-overlay">
-        <div class="god-ray"></div>
-        <div id="god-ray-dust-container"></div>
-        <div id="god-ray-card-container"></div>
-        <h1 id="god-ray-text" style="position:absolute; bottom:10%; color:var(--gold); font-size:40px; font-weight:900; letter-spacing:10px; opacity:0; transition:opacity 2s; text-shadow: 0 0 20px var(--gold), 0 0 40px #fff;">PRISTINE 10 BLACK LABEL</h1>
-    </div>
-
-    <div id="paint-modal">
-        <h2 style="color:var(--gold); margin-top:0;">🎨 BLANK CANVAS STUDIO</h2>
-        <canvas id="paint-canvas" width="200" height="280"></canvas>
-        <div style="margin: 15px 0;">
-            <div class="color-picker" style="background:#000;" onclick="setPaintColor('#000')"></div>
-            <div class="color-picker" style="background:#e74c3c;" onclick="setPaintColor('#e74c3c')"></div>
-            <div class="color-picker" style="background:#3498db;" onclick="setPaintColor('#3498db')"></div>
-            <div class="color-picker" style="background:#2ecc71;" onclick="setPaintColor('#2ecc71')"></div>
-            <div class="color-picker" style="background:#f1c40f;" onclick="setPaintColor('#f1c40f')"></div>
-            <div class="color-picker" style="background:#fff;" onclick="setPaintColor('#fff')"></div>
-        </div>
-        <button class="modal-btn" style="width:100%; background:var(--gold); color:black;" onclick="savePainting()">BAKE HOLO-FOIL & SAVE 1-OF-1</button>
-        <button class="close-btn" onclick="document.getElementById('paint-modal').style.display='none'">CANCEL</button>
-    </div>
     <div id="walkout-overlay"><div class="spotlight left"></div><div class="spotlight right"></div><div id="walkout-card-container"></div></div>
     
     <div id="battle-overlay" onclick="if(!factionSimulating && !gauntlet.active && !tvWarMode) { this.style.display='none'; document.body.classList.remove('battle-locked'); }">
@@ -408,8 +342,8 @@
 
     <script>
         const totalCards = 67; const folderPath = "rare ewf cards";
-        let currentBinderTab = 'all'; 
-        let showcasePage = 0; 
+        let currentBinderTab = 'all'; // Tracks the active binder tab
+        let showcasePage = 0; // Tracks the active page in The Showcase book
 
         function getCardDropNum() { let num; let valid = false; while(!valid) { num = Math.floor(Math.random() * totalCards) + 1; if (num === 32) { if (Math.random() < 0.01) valid = true; } else if (num === 30 || num === 36) { if (Math.random() < 0.05) valid = true; } else { valid = true; } } return num; }
         
@@ -434,25 +368,22 @@
         const aiRivals = [ { name: "Billionaire Ted", style: "whale", handle: "@TedMoney" }, { name: "The Trashman", style: "cheap", handle: "@TrashyPromoter" }, { name: "The Scrapper", style: "aggro", handle: "@ScrapKing" } ];
         let bounties = JSON.parse(localStorage.getItem('EWF_Bounties')) || { wins: { target: 10, current: 0, reward: 200, desc: "Win 10 Matches", claimed: false }, holos: { target: 3, current: 0, reward: 300, desc: "Pull 3 Holo Cards", claimed: false } };
 
-        /* UPDATE 10: ADVANCED RARITY ENGINE FUNCTIONS */
+        /* RARITY ENGINE FUNCTIONS */
         function getEWFVariant() {
             let roll = Math.random() * 100;
-            if (roll > 99.9) return 'card-blank'; // NEW: Interactive Canvas 1-of-1
-            if (roll > 99.8) return 'card-deep-space'; // NEW: Deep Space Parallax
-            if (roll > 99.6) return 'card-impasto'; // NEW: Impasto Art Variant
-            if (roll > 99.5) return 'card-radiant'; 
-            if (roll > 98.5) return 'card-nebula'; 
-            if (roll > 97) return 'card-void'; 
-            if (roll > 95) return 'card-glitch'; 
-            if (roll > 92) return 'card-diamond'; 
-            if (roll > 89) return 'card-starlight'; 
-            if (roll > 85) return 'card-atomic'; 
-            if (roll > 80) return 'card-mojo'; 
-            if (roll > 74) return 'card-sapphire'; 
-            if (roll > 67) return 'card-ruby'; 
-            if (roll > 55) return 'card-emerald'; 
-            if (roll > 40) return 'card-gold'; 
-            if (roll > 25) return 'card-silver'; 
+            if (roll > 99.5) return 'card-radiant'; // 0.5%
+            if (roll > 98.5) return 'card-nebula'; // 1%
+            if (roll > 97) return 'card-void'; // 1.5%
+            if (roll > 95) return 'card-glitch'; // 2%
+            if (roll > 92) return 'card-diamond'; // 3%
+            if (roll > 89) return 'card-starlight'; // 3%
+            if (roll > 85) return 'card-atomic'; // 4%
+            if (roll > 80) return 'card-mojo'; // 5%
+            if (roll > 74) return 'card-sapphire'; // 6%
+            if (roll > 67) return 'card-ruby'; // 7%
+            if (roll > 55) return 'card-emerald'; // 12%
+            if (roll > 40) return 'card-gold'; // 15%
+            if (roll > 25) return 'card-silver'; // 15%
             return '';
         }
 
@@ -471,152 +402,21 @@
             if(card.holoType === 'cracked-ice' && Math.random() < 0.2) extraHolo = '<div class="holo-zebra"></div>';
             let vLabel = card.ewfVariant ? `<div class="variant-label">${card.ewfVariant.split('-')[1]}</div>` : '';
             if(card.holoType) vLabel = `<div class="variant-label">${card.holoType}</div>`;
-            if(card.ewfVariant === 'card-blank') vLabel = `<div class="variant-label" style="color:black; text-shadow:none;">BLANK CANVAS 1/1</div>`;
             let serialBadge = ''; if(card.serial) { serialBadge = `<div class="serial-badge serial-${card.serial.color}">${card.serial.current}/${card.serial.max}</div>`; }
             let relicHtml = card.relic ? `<div class="relic-window"><div class="relic-${card.relic}" style="width:100%; height:100%;"></div></div>` : '';
             let autoHtml = card.hasAuto ? createScribble(card.img) : '';
             return `${holoLayer}${extraHolo}${serialBadge}${relicHtml}${autoHtml}${vLabel}`;
         }
-        
         function renderBattleCard(container, card) {
             container.style.backgroundImage = 'none';
             let classes = ``;
             if(card.holo) container.classList.add('is-holo'); else container.classList.remove('is-holo');
             if(card.ewfVariant) container.className += ` ${card.ewfVariant}`;
-            let imgSource = card.customArt ? card.customArt : `${folderPath}/${card.img}`;
-            container.innerHTML = `<div style="position:absolute; top:0; left:0; right:0; bottom:0; background-image:url('${imgSource}'); background-size:cover; border-radius:inherit; z-index:1; overflow:hidden;">${getCardInnerHtml(card)}</div><div class="shine-layer"></div><div class="sparkle-layer"></div>`;
+            container.innerHTML = `<div style="position:absolute; top:0; left:0; right:0; bottom:0; background-image:url('${folderPath}/${card.img}'); background-size:cover; border-radius:inherit; z-index:1; overflow:hidden;">${getCardInnerHtml(card)}</div><div class="shine-layer"></div><div class="sparkle-layer"></div>`;
         }
-        
         function generateAICard() {
             let num = getCardDropNum(); let holo = Math.random() > 0.5; let type = holo ? (Math.random() > 0.8 ? 'plasma' : 'standard') : null;
-            return { img: `card (${num}).jpg`, holo: holo, holoType: type, raw: false, grade: 10, alignment: 'heel', conditionCap: 10, ewfVariant: getEWFVariant(), serial: null, relic: null, hasAuto: false, customArt: null };
-        }
-
-        /* UPDATE 10: PAINTING MODAL LOGIC */
-        let paintCtx = null;
-        let currentColor = '#000';
-        let isPainting = false;
-        let activePaintIdx = null;
-
-        function openPaintModal(idx) {
-            activePaintIdx = idx;
-            document.getElementById('paint-modal').style.display = 'flex';
-            let canvas = document.getElementById('paint-canvas');
-            paintCtx = canvas.getContext('2d');
-            let col = JSON.parse(localStorage.getItem('EWF_Collection'));
-            let card = col[idx];
-            
-            if(card.customArt) {
-                let img = new Image();
-                img.onload = () => paintCtx.drawImage(img, 0, 0);
-                img.src = card.customArt;
-            } else {
-                paintCtx.fillStyle = "#fff";
-                paintCtx.fillRect(0, 0, canvas.width, canvas.height);
-            }
-            
-            canvas.onmousedown = (e) => { isPainting = true; paintCtx.beginPath(); paintCtx.moveTo(e.offsetX, e.offsetY); };
-            canvas.onmousemove = (e) => { if(isPainting) { paintCtx.lineTo(e.offsetX, e.offsetY); paintCtx.strokeStyle = currentColor; paintCtx.lineCap = 'round'; paintCtx.lineWidth = 4; paintCtx.stroke(); } };
-            canvas.onmouseup = () => isPainting = false;
-            canvas.onmouseleave = () => isPainting = false;
-        }
-        
-        function setPaintColor(c) { currentColor = c; }
-        
-        function savePainting() {
-            let data = document.getElementById('paint-canvas').toDataURL('image/png');
-            let col = JSON.parse(localStorage.getItem('EWF_Collection'));
-            col[activePaintIdx].customArt = data;
-            localStorage.setItem('EWF_Collection', JSON.stringify(col));
-            document.getElementById('paint-modal').style.display = 'none';
-            displayCollection(); updateUI();
-        }
-
-        /* UPDATE 10: INTERACTIVE FOIL TEAR LOGIC */
-        let isTearing = false;
-        let startX = 0;
-        let tearProgress = 0;
-        
-        function startTear(e) { isTearing = true; startX = e.clientX || (e.touches ? e.touches[0].clientX : 0); document.getElementById('foil-pack').classList.add('ripping'); }
-        function dragTear(e) {
-            if(!isTearing) return;
-            let currentX = e.clientX || (e.touches ? e.touches[0].clientX : startX);
-            let diff = currentX - startX;
-            if(diff > 0) {
-                tearProgress = Math.min((diff / 250) * 100, 100);
-                document.getElementById('tear-line').style.width = tearProgress + '%';
-                if(Math.random() < 0.2) createFoilParticle(currentX, e.clientY || (e.touches ? e.touches[0].clientY : window.innerHeight/2));
-                if(tearProgress >= 90) { finishTear(); }
-            }
-        }
-        function stopTear() { isTearing = false; document.getElementById('foil-pack').classList.remove('ripping'); }
-        function finishTear() {
-            isTearing = false;
-            document.getElementById('foil-tear-overlay').style.display = 'none';
-            document.getElementById('tear-line').style.width = '0%';
-            document.getElementById('foil-pack').classList.remove('ripping');
-            triggerActualPackOpening(); 
-        }
-        function createFoilParticle(x, y) {
-            let p = document.createElement('div');
-            p.className = 'foil-particle';
-            p.style.left = x + 'px';
-            p.style.top = y + 'px';
-            document.getElementById('foil-tear-overlay').appendChild(p);
-            setTimeout(()=>p.remove(), 1000);
-        }
-
-        /* UPDATE 10: GOD RAY VAULT REVEAL LOGIC */
-        function triggerGodRayReveal(cardData) {
-            let overlay = document.getElementById('god-ray-overlay');
-            let container = document.getElementById('god-ray-card-container');
-            let text = document.getElementById('god-ray-text');
-            overlay.style.display = 'flex';
-            
-            let dustContainer = document.getElementById('god-ray-dust-container');
-            dustContainer.innerHTML = '';
-            for(let i=0; i<30; i++) {
-                let d = document.createElement('div');
-                d.className = 'dust-mote';
-                d.style.width = Math.random() * 5 + 'px';
-                d.style.height = d.style.width;
-                d.style.left = Math.random() * 100 + 'vw';
-                d.style.animationDuration = Math.random() * 10 + 5 + 's';
-                d.style.animationDelay = Math.random() * 5 + 's';
-                dustContainer.appendChild(d);
-            }
-
-            let innerVisuals = getCardInnerHtml(cardData);
-            let imgSource = cardData.customArt ? cardData.customArt : `${folderPath}/${cardData.img}`;
-            let gradeHtml = `<div class="grade-label black-label" style="height:60px;">
-                                <div class="grade-header"><span class="esa-logo">ESA</span><span class="esa-barcode">||||||||||||||</span></div>
-                                <div style="display:flex; justify-content:space-between; padding:2px 5px;">
-                                    <div style="text-align:left;">
-                                        <div class="grade-title">PRISTINE LABEL</div>
-                                        <div style="font-size:8px; color:#d4af37; font-weight:bold; margin-top:1px;">GEM MINT</div>
-                                    </div>
-                                    <div class="grade-score">10</div>
-                                </div>
-                            </div>`;
-
-            container.innerHTML = `<div id="god-ray-card" class="saved-card graded-slab is-holo ${cardData.ewfVariant}" style="width:200px; height:280px;">
-                ${gradeHtml}
-                <div style="position:absolute; top:60px; left:0; right:0; bottom:0; background-image: url('${imgSource}'); background-size: cover; z-index: 10;">${innerVisuals}</div>
-                <div class="shine-layer" style="opacity:1;"></div><div class="sparkle-layer" style="opacity:1;"></div>
-            </div>`;
-
-            setTimeout(() => {
-                document.getElementById('god-ray-card').classList.add('dropped');
-                text.style.opacity = 1;
-                document.body.classList.add('screen-shake');
-            }, 100);
-
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                document.getElementById('god-ray-card').classList.remove('dropped');
-                text.style.opacity = 0;
-                displayCollection();
-            }, 5500);
+            return { img: `card (${num}).jpg`, holo: holo, holoType: type, raw: false, grade: 10, alignment: 'heel', conditionCap: 10, ewfVariant: getEWFVariant(), serial: null, relic: null, hasAuto: false };
         }
 
         function initGame() {
@@ -626,6 +426,7 @@
             setInterval(() => { tick(); }, 30000); setInterval(() => { fastTick(); }, 1000); setInterval(() => { if(autoMode) runAutoMatches(); }, 5000); applyGimmickEffects();
         }
 
+        /* UPDATE 9: CRYPTIC ANOMALY SYSTEM */
         function triggerCrypticAnomaly() {
             const elements = document.querySelectorAll('.main-btn, .binder-tab, #cash-display');
             if(elements.length === 0) return;
@@ -647,6 +448,7 @@
             }, 800 + Math.random() * 1500);
         }
 
+        /* UPDATE 9: LOUPE INSPECTION SETUP */
         function setupInspectZoom() {
             const container = document.getElementById('inspect-container');
             container.addEventListener('mousemove', e => {
@@ -657,7 +459,6 @@
                 document.getElementById('inspect-content').style.setProperty('--y', `${y}%`);
             });
         }
-        
         function inspectCard(idx) {
             const overlay = document.getElementById('inspect-overlay');
             const content = document.getElementById('inspect-content');
@@ -682,16 +483,16 @@
                     </div>
                 </div>`;
 
-            let imgSource = card.customArt ? card.customArt : `${folderPath}/${card.img}`;
             content.innerHTML = `<div class="${card.holo ? 'is-holo' : ''} ${card.radioactive ? 'is-radioactive' : ''} ${card.mythic ? 'is-mythic' : ''} ${card.botched ? 'is-botched' : ''} ${card.ewfVariant}" style="width:100%; height:100%; position:relative; overflow:hidden; border-radius:12px;">
                 ${gradeHtml}
-                <div style="position:absolute; top:${card.raw ? '35px' : '60px'}; left:0; right:0; bottom:0; background-image: url('${imgSource}'); background-size: cover; background-position: center; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; z-index: 10; overflow: hidden;">${innerVisuals}</div>
+                <div style="position:absolute; top:${card.raw ? '35px' : '60px'}; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; z-index: 10; overflow: hidden;">${innerVisuals}</div>
                 <div class="shine-layer" style="opacity:1;"></div><div class="sparkle-layer" style="opacity:1;"></div>
             </div>`;
             
             overlay.style.display = 'flex';
         }
 
+        /* NEW BINDER FILTER FUNCTION */
         function setBinderTab(tab) {
             currentBinderTab = tab;
             document.querySelectorAll('.binder-tab').forEach(btn => btn.classList.remove('active'));
@@ -699,6 +500,7 @@
             displayCollection();
         }
 
+        /* PAGE FLIPPING FUNCTION */
         function changeShowcasePage(dir) {
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
             let showcaseCount = col.filter(c => c.inShowcase).length;
@@ -731,7 +533,6 @@
             if(c.excursionUntil === undefined) { c.excursionUntil = 0; c.excursionBadge = null; mod = true; }
             if(c.ewfVariant === undefined) { c.ewfVariant = ''; mod = true; }
             if(c.hasAuto === undefined) { c.hasAuto = false; mod = true; }
-            if(c.customArt === undefined) { c.customArt = null; mod = true; }
         }); 
             if(mod) localStorage.setItem('EWF_Collection', JSON.stringify(col)); 
         }
@@ -762,9 +563,9 @@
                     
                     if(roll > 0.80 && c.conditionCap === 10) { 
                         c.grade = 10; 
-                        if(Math.random() < 0.05) { 
+                        if(Math.random() < 0.02) { 
                             c.blackLabel = true; 
-                            triggerGodRayReveal(c); // UPDATE 10: TRIGGER THE VAULT
+                            alert(`💎 UNBELIEVABLE! Your card came back as a PRISTINE 10 BLACK LABEL!`); 
                         } else { 
                             alert(`📦 Mail day! Your card came back as an ESA GEM MINT 10!`); 
                         } 
@@ -803,6 +604,7 @@
                     let winChance = card.baseWin; if(gimmickMode.active && gimmickMode.type === 'hardcore') winChance += 0.15;
                     let win = Math.random() < winChance;
                     
+                    // Grab DOM element (safely if hidden by binder filter)
                     let el = document.querySelectorAll('.card-container')[i];
                     if(el && document.body.contains(el)) { let pop = document.createElement('div'); pop.className = 'auto-pop'; pop.innerHTML = win ? '<span style="color:var(--green);">+WIN</span>' : '<span style="color:var(--red);">-LOSS</span>'; el.appendChild(pop); setTimeout(()=>pop.remove(), 1000); }
                     
@@ -823,7 +625,7 @@
         function confirmTVWar() { tvWarMode = false; document.getElementById('tv-war-msg').style.display = 'none'; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; bCard.innerHTML = ''; bCard.style.backgroundImage = `url('wrapper.jpg')`; bCard.className = 'rumble'; bText.innerHTML = "CALCULATING RATINGS..."; bText.style.color = "var(--blue)"; setTimeout(() => { bCard.classList.remove('rumble'); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let myPower = 0; tvWarTeam.forEach(idx => { myPower += getCardValue(col[idx]); if(!col[idx].radioactive) col[idx].stamina--; }); let rivalPower = Math.floor(Math.random() * myPower * 1.5) + (50 * multi); if(myPower > rivalPower) { bText.innerHTML = `<span class="text-slam">RATINGS WAR WON!</span>`; bText.style.color = "var(--green)"; triggerConfetti(); let steal = Math.floor(userCash * 0.05); userCash += steal; setTimeout(()=>alert(`📺 You crushed the rival network! Stole $${steal} in ad revenue!`), 500); } else { bText.innerHTML = `<span class="text-slam">RATINGS TANKED!</span>`; bText.style.color = "var(--red)"; let lost = Math.floor(userCash * 0.05); userCash -= lost; setTimeout(()=>alert(`📺 The rival network beat your show! You lost $${lost} in sponsors!`), 500); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); tvWarTimer = 600; localStorage.setItem('EWF_TVWarTimer', tvWarTimer); saveGame(); setTimeout(() => { overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); displayCollection(); updateUI(); }, 2500); }, 2000); }
 
         function openCloning() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let html = ""; col.forEach((c, i) => { if((c.grade === 10 || c.radioactive) && !c.botched && !c.raw && !c.inShowcase) { html += `<div class="modal-item"><div>Card #${c.img.match(/\d+/)[0]} ${c.grade===10?'[GEM 10]':''} ${c.radioactive?'[RADIOACTIVE]':''}</div><div><button class="modal-btn" style="background:rgba(155,89,182,0.2); color:var(--purple); border-color:var(--purple);" onclick="attemptClone(${i})">CLONE ($2500)</button></div></div>`; } }); if(html === "") html = "<p style='color:#aaa; text-align:center;'>You need a GRADED GEM MINT 10 or RADIOACTIVE card.</p>"; document.getElementById('cloning-list').innerHTML = html; document.getElementById('cloning-modal').style.display = 'block'; }
-        function attemptClone(idx) { if(userCash < 2500) return alert("You need $2500 to clone!"); userCash -= 2500; document.getElementById('cloning-modal').style.display = 'none'; document.body.classList.add('screen-shake'); setTimeout(() => document.body.classList.remove('screen-shake'), 500); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let target = col[idx]; if(Math.random() < 0.6) { alert("🧬 CLONING SUCCESSFUL! A perfect duplicate was created!"); let clone = JSON.parse(JSON.stringify(target)); clone.dupes = 0; clone.champion = false; clone.streak = 0; clone.wins = 0; clone.customArt = null; col.push(clone); } else { alert("⚠️ CLONING BOTCHED! The experiment failed horribly."); let botch = JSON.parse(JSON.stringify(target)); botch.botched = true; botch.grade = 1; botch.baseWin = 0.1; botch.dupes = 0; botch.champion = false; botch.streak = 0; botch.wins = 0; botch.radioactive = false; botch.holo = false; botch.mythic = false; col.push(botch); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); }
+        function attemptClone(idx) { if(userCash < 2500) return alert("You need $2500 to clone!"); userCash -= 2500; document.getElementById('cloning-modal').style.display = 'none'; document.body.classList.add('screen-shake'); setTimeout(() => document.body.classList.remove('screen-shake'), 500); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let target = col[idx]; if(Math.random() < 0.6) { alert("🧬 CLONING SUCCESSFUL! A perfect duplicate was created!"); let clone = JSON.parse(JSON.stringify(target)); clone.dupes = 0; clone.champion = false; clone.streak = 0; clone.wins = 0; col.push(clone); } else { alert("⚠️ CLONING BOTCHED! The experiment failed horribly."); let botch = JSON.parse(JSON.stringify(target)); botch.botched = true; botch.grade = 1; botch.baseWin = 0.1; botch.dupes = 0; botch.champion = false; botch.streak = 0; botch.wins = 0; botch.radioactive = false; botch.holo = false; botch.mythic = false; col.push(botch); } localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); }
         function exileCard(idx) { if(userCash < 500) return alert("You need $500 to exile a botched card!"); if(confirm("Pay $500 to exile this abomination?")) { userCash -= 500; let col = JSON.parse(localStorage.getItem('EWF_Collection')); col.splice(idx, 1); localStorage.setItem('EWF_Collection', JSON.stringify(col)); saveGame(); displayCollection(); updateUI(); } }
 
         function openVault() { let html = ""; let now = Date.now(); if(vault.length === 0) { html = "<p style='color:#aaa; text-align:center; width:100%;'>Your vault is empty. Win matches to find briefcases!</p>"; } else { vault.forEach((b, i) => { let ready = now >= b.unlockAt; if(ready) { html += `<div class="modal-item"><div>💼 Diamond Briefcase</div><div><button class="modal-btn" style="background:rgba(46,204,113,0.2); color:var(--green); border-color:var(--green);" onclick="unlockBriefcase(${i})">OPEN</button></div></div>`; } else { let secs = Math.floor((b.unlockAt - now) / 1000); let m = Math.floor(secs / 60); let s = secs % 60; html += `<div class="modal-item"><div>🔒 Locked Briefcase<br><span style="font-size:10px; color:#aaa;">Ready in: ${m}:${s<10?'0':''}${s}</span></div><div><button class="modal-btn" style="background:rgba(212,175,55,0.2); color:var(--gold); border-color:var(--gold);" onclick="bribeBriefcase(${i})">BRIBE ($5)</button></div></div>`; } }); } document.getElementById('vault-list').innerHTML = html; document.getElementById('vault-modal').style.display = 'block'; }
@@ -831,20 +633,20 @@
         function bribeBriefcase(i) { if(userCash < 5) return alert("Not enough cash to bribe the guard!"); userCash -= 5; vault[i].unlockAt = 0; localStorage.setItem('EWF_Vault', JSON.stringify(vault)); saveGame(); updateUI(); openVault(); }
 
         function triggerInvasion() { document.body.classList.add('boss-alert'); let rival = aiRivals[Math.floor(Math.random() * aiRivals.length)]; invasion = { active: true, timeLeft: 300, rivalName: rival.name }; document.getElementById('invasion-name').innerText = rival.name; localStorage.setItem('EWF_Invasion', JSON.stringify(invasion)); displayCollection(); }
-        function openInvasionModal() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let html = ""; document.getElementById('invasion-rival-name').innerText = invasion.rivalName; col.forEach((c, i) => { if(!c.injured && !c.botched && c.trainingUntil < Date.now() && c.excursionUntil < Date.now() && !c.inShowcase) { let imgSource = c.customArt ? c.customArt : `${folderPath}/${c.img}`; html += `<div style="width:75px; height:105px; background:url('${imgSource}') center/cover; border:2px solid rgba(255,255,255,0.2); border-radius:6px; cursor:pointer; transition:0.2s;" onmouseover="this.style.borderColor='var(--gold)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)';" onclick="fightInvasion(${i})"></div>`; } }); if(html === "") html = "<p style='color:var(--red); width:100%; text-align:center;'>You have no healthy wrestlers to defend!</p>"; document.getElementById('invasion-roster').innerHTML = html; document.getElementById('invasion-modal').style.display = 'block'; }
-        function fightInvasion(idx) { document.getElementById('invasion-modal').style.display = 'none'; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; let imgSource = card.customArt ? card.customArt : `${folderPath}/${card.img}`; bCard.style.backgroundImage = `url('${imgSource}')`; bCard.className = 'rumble'; bText.innerHTML = `FIGHTING ${invasion.rivalName}...`; bText.style.color = "var(--red)"; setTimeout(() => { bCard.classList.remove('rumble'); renderBattleCard(bCard, card); let chance = card.baseWin - 0.2; let win = Math.random() < chance; if(win) { bText.innerHTML = `<span class="text-slam">INVASION REPELLED!</span>`; bText.style.color = "var(--green)"; triggerConfetti(); setTimeout(()=>resolveInvasion(true, false), 2000); } else { bText.innerHTML = `<span class="text-slam">YOUR CHAMPION FELL!</span>`; bText.style.color = "var(--red)"; setTimeout(()=>resolveInvasion(false, false), 2000); } setTimeout(()=>{ overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); }, 2000); }, 2000); }
+        function openInvasionModal() { let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let html = ""; document.getElementById('invasion-rival-name').innerText = invasion.rivalName; col.forEach((c, i) => { if(!c.injured && !c.botched && c.trainingUntil < Date.now() && c.excursionUntil < Date.now() && !c.inShowcase) { html += `<div style="width:75px; height:105px; background:url('${folderPath}/${c.img}') center/cover; border:2px solid rgba(255,255,255,0.2); border-radius:6px; cursor:pointer; transition:0.2s;" onmouseover="this.style.borderColor='var(--gold)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)';" onclick="fightInvasion(${i})"></div>`; } }); if(html === "") html = "<p style='color:var(--red); width:100%; text-align:center;'>You have no healthy wrestlers to defend!</p>"; document.getElementById('invasion-roster').innerHTML = html; document.getElementById('invasion-modal').style.display = 'block'; }
+        function fightInvasion(idx) { document.getElementById('invasion-modal').style.display = 'none'; const overlay = document.getElementById('battle-overlay'); const bCard = document.getElementById('battle-card'); const bText = document.getElementById('battle-text'); document.body.classList.add('battle-locked'); overlay.style.display = 'flex'; bCard.style.backgroundImage = `url('${folderPath}/${JSON.parse(localStorage.getItem('EWF_Collection'))[idx].img}')`; bCard.className = 'rumble'; bText.innerHTML = `FIGHTING ${invasion.rivalName}...`; bText.style.color = "var(--red)"; setTimeout(() => { bCard.classList.remove('rumble'); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; renderBattleCard(bCard, card); let chance = card.baseWin - 0.2; let win = Math.random() < chance; if(win) { bText.innerHTML = `<span class="text-slam">INVASION REPELLED!</span>`; bText.style.color = "var(--green)"; triggerConfetti(); setTimeout(()=>resolveInvasion(true, false), 2000); } else { bText.innerHTML = `<span class="text-slam">YOUR CHAMPION FELL!</span>`; bText.style.color = "var(--red)"; setTimeout(()=>resolveInvasion(false, false), 2000); } setTimeout(()=>{ overlay.style.display = 'none'; document.body.classList.remove('battle-locked'); }, 2000); }, 2000); }
         function resolveInvasion(won, timeout) { let rName = invasion.rivalName; invasion.active = false; document.body.classList.remove('boss-alert'); document.getElementById('invasion-banner').style.display = 'none'; document.getElementById('invasion-modal').style.display = 'none'; if(won) { alert(`🚨 You defeated ${rName}! Awarded $250 and a Diamond Briefcase!`); userCash += 250; vault.push({ id: Date.now(), unlockAt: 0 }); localStorage.setItem('EWF_Vault', JSON.stringify(vault)); } else { let loss = Math.floor(userCash * 0.15); userCash -= loss; alert(`🚨 ${rName} destroyed your arena! ${timeout ? 'You ran out of time! ' : ''}Lost $${loss}.`); } saveGame(); updateUI(); localStorage.removeItem('EWF_Invasion'); displayCollection(); }
 
-        function triggerAIAuction() { document.body.classList.add('auction-alert'); let num = getCardDropNum(); let val = 50 * multi; let card = { img: `card (${num}).jpg`, wins: 0, holo: true, grade: 10, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.6, trainingUntil: 0, buff: null, mythic: false, radioactive: Math.random()>0.8, botched: false, raw: false, alignment: 'heel', conditionCap: 10, inShowcase: false, blackLabel: false, relic: null, excursionUntil: 0, excursionBadge: null, customArt: null }; auction = { active: true, timeLeft: 60, card: card, currentBid: Math.floor(val/2), highestBidder: 'NONE', isPlayerSelling: false, trueValue: val }; localStorage.setItem('EWF_Auction', JSON.stringify(auction)); renderAuction(); }
+        function triggerAIAuction() { document.body.classList.add('auction-alert'); let num = getCardDropNum(); let val = 50 * multi; let card = { img: `card (${num}).jpg`, wins: 0, holo: true, grade: 10, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.6, trainingUntil: 0, buff: null, mythic: false, radioactive: Math.random()>0.8, botched: false, raw: false, alignment: 'heel', conditionCap: 10, inShowcase: false, blackLabel: false, relic: null, excursionUntil: 0, excursionBadge: null }; auction = { active: true, timeLeft: 60, card: card, currentBid: Math.floor(val/2), highestBidder: 'NONE', isPlayerSelling: false, trueValue: val }; localStorage.setItem('EWF_Auction', JSON.stringify(auction)); renderAuction(); }
         function playerSellAuction(idx) { if(auction.active) return alert("Auction already in progress!"); let col = JSON.parse(localStorage.getItem('EWF_Collection')); let card = col[idx]; if(card.raw) return alert("Cannot auction raw cards!"); let val = getCardValue(card); if(col[idx].dupes > 0) col[idx].dupes--; else col.splice(idx, 1); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); let auctionCard = JSON.parse(JSON.stringify(card)); auctionCard.dupes = 0; auction = { active: true, timeLeft: 60, card: auctionCard, currentBid: Math.floor(val*0.5), highestBidder: 'NONE', isPlayerSelling: true, trueValue: val }; localStorage.setItem('EWF_Auction', JSON.stringify(auction)); renderAuction(); document.body.classList.add('auction-alert'); }
-        function renderAuction() { document.getElementById('auction-block').style.display = 'block'; let innerVisuals = getCardInnerHtml(auction.card); let imgSource = auction.card.customArt ? auction.card.customArt : `${folderPath}/${auction.card.img}`; let html = `<div style="width:140px; height:190px; background:url('${imgSource}') center/cover; border:2px solid ${auction.card.radioactive ? '#39ff14' : 'rgba(255,255,255,0.2)'}; box-shadow:0 10px 20px rgba(0,0,0,0.5); border-radius:12px; position:relative; overflow:hidden;">${innerVisuals}</div>`; html += `<div style="display:flex; flex-direction:column; justify-content:center;"><div class="auction-text">${auction.isPlayerSelling ? 'YOUR CARD ON THE BLOCK' : 'RARE FIND ON THE BLOCK'}</div>`; html += `<div class="auction-bid">CURRENT BID: $${auction.currentBid}</div><div class="auction-text" style="text-transform:none; color:#aaa;">Highest Bidder: <span style="color:cyan; font-weight:900;">${auction.highestBidder}</span></div>`; html += `<div class="auction-time">Time Left: ${auction.timeLeft}s</div>`; if(!auction.isPlayerSelling) html += `<button class="modal-btn" style="margin-top:15px; width:100%; background:rgba(212,175,55,0.1); border-color:var(--gold); color:var(--gold);" onclick="playerBid()" onmouseover="this.style.background='var(--gold)'; this.style.color='black';" onmouseout="this.style.background='rgba(212,175,55,0.1)'; this.style.color='var(--gold)';">BID +$10</button>`; html += `</div>`; document.getElementById('auction-content').innerHTML = html; }
+        function renderAuction() { document.getElementById('auction-block').style.display = 'block'; let innerVisuals = getCardInnerHtml(auction.card); let html = `<div style="width:140px; height:190px; background:url('${folderPath}/${auction.card.img}') center/cover; border:2px solid ${auction.card.radioactive ? '#39ff14' : 'rgba(255,255,255,0.2)'}; box-shadow:0 10px 20px rgba(0,0,0,0.5); border-radius:12px; position:relative; overflow:hidden;">${innerVisuals}</div>`; html += `<div style="display:flex; flex-direction:column; justify-content:center;"><div class="auction-text">${auction.isPlayerSelling ? 'YOUR CARD ON THE BLOCK' : 'RARE FIND ON THE BLOCK'}</div>`; html += `<div class="auction-bid">CURRENT BID: $${auction.currentBid}</div><div class="auction-text" style="text-transform:none; color:#aaa;">Highest Bidder: <span style="color:cyan; font-weight:900;">${auction.highestBidder}</span></div>`; html += `<div class="auction-time">Time Left: ${auction.timeLeft}s</div>`; if(!auction.isPlayerSelling) html += `<button class="modal-btn" style="margin-top:15px; width:100%; background:rgba(212,175,55,0.1); border-color:var(--gold); color:var(--gold);" onclick="playerBid()" onmouseover="this.style.background='var(--gold)'; this.style.color='black';" onmouseout="this.style.background='rgba(212,175,55,0.1)'; this.style.color='var(--gold)';">BID +$10</button>`; html += `</div>`; document.getElementById('auction-content').innerHTML = html; }
         function playerBid() { if(!auction.active || auction.isPlayerSelling) return; if(userCash < auction.currentBid + 10) return alert("Not enough cash to bid!"); auction.currentBid += 10; auction.highestBidder = 'YOU'; localStorage.setItem('EWF_Auction', JSON.stringify(auction)); renderAuction(); }
         function processAIBids() { let rival = aiRivals[Math.floor(Math.random() * aiRivals.length)]; let willBid = false; let bidIncrease = 0; if(rival.style === 'whale' && Math.random() < 0.8) { willBid = true; bidIncrease = 20; } else if(rival.style === 'cheap' && auction.currentBid < auction.trueValue * 0.8 && Math.random() < 0.9) { willBid = true; bidIncrease = 5; } else if(rival.style === 'aggro' && Math.random() < 0.5) { willBid = true; bidIncrease = 15; } if(auction.isPlayerSelling) { if(willBid && auction.currentBid < auction.trueValue * 1.5) { auction.currentBid += bidIncrease; auction.highestBidder = rival.name; } } else { if(auction.highestBidder === 'YOU' && auction.currentBid < auction.trueValue * 1.5 && willBid) { auction.currentBid += bidIncrease; auction.highestBidder = rival.name; } } }
         function endAuction() { auction.active = false; document.body.classList.remove('auction-alert'); document.getElementById('auction-block').style.display = 'none'; if(auction.isPlayerSelling) { if(auction.highestBidder !== 'NONE') { alert(`🔨 Your card sold at auction to ${auction.highestBidder} for $${auction.currentBid}!`); userCash += auction.currentBid; } else { alert(`🔨 Nobody bid on your card. It was returned.`); let col = JSON.parse(localStorage.getItem('EWF_Collection')); col.push(auction.card); localStorage.setItem('EWF_Collection', JSON.stringify(col)); } } else { if(auction.highestBidder === 'YOU') { alert(`🔨 You won the auction for $${auction.currentBid}!`); userCash -= auction.currentBid; let col = JSON.parse(localStorage.getItem('EWF_Collection')); col.push(auction.card); localStorage.setItem('EWF_Collection', JSON.stringify(col)); } } saveGame(); updateUI(); displayCollection(); localStorage.removeItem('EWF_Auction'); }
 
         function updateMarketUI() { document.getElementById('ticker-text').innerHTML = `📈 EWF STOCK MARKET: Card #${market.boosted} is TRENDING! (+300% Value) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📉 CRASH: Card #${market.crashed} caught in a major scandal! (-50% Value) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ⏳ NEXT MARKET UPDATE IN <5 MINS`; }
         function updateBossUI() { document.getElementById('boss-hp-text').innerHTML = `${bossHP} / ${bossMaxHP} HP`; document.getElementById('boss-hp-bar').style.width = Math.max((bossHP / bossMaxHP) * 100, 0) + "%"; }
-        function hitBoss(dmg) { if(bossHP <= 0) return; bossHP -= dmg; if(bossHP <= 0) { alert("👹 WORLD BOSS DEFEATED! You obtained the 1-of-1 Mythic Diamond Card! ($50 Passive Income)"); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let num = getCardDropNum(); col.push({ img: `card (${num}).jpg`, wins: 0, holo: true, ewfVariant: 'card-nebula', serial: {current:1, max:1, color:'gold'}, holoType: 'ghost', grade: 10, raw: false, dupes: 0, champion: true, stamina: 5, injured: false, streak: 0, baseWin: 0.9, trainingUntil: 0, buff: null, mythic: true, radioactive: true, botched: false, alignment: 'heel', conditionCap: 10, inShowcase: false, blackLabel: false, relic: null, excursionUntil: 0, excursionBadge: null, customArt: null }); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); bossMaxHP += 500; bossHP = bossMaxHP; localStorage.setItem('EWF_BossMaxHP', bossMaxHP); } localStorage.setItem('EWF_BossHP', bossHP); updateBossUI(); }
+        function hitBoss(dmg) { if(bossHP <= 0) return; bossHP -= dmg; if(bossHP <= 0) { alert("👹 WORLD BOSS DEFEATED! You obtained the 1-of-1 Mythic Diamond Card! ($50 Passive Income)"); let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let num = getCardDropNum(); col.push({ img: `card (${num}).jpg`, wins: 0, holo: true, ewfVariant: 'card-nebula', serial: {current:1, max:1, color:'gold'}, holoType: 'ghost', grade: 10, raw: false, dupes: 0, champion: true, stamina: 5, injured: false, streak: 0, baseWin: 0.9, trainingUntil: 0, buff: null, mythic: true, radioactive: true, botched: false, alignment: 'heel', conditionCap: 10, inShowcase: false, blackLabel: false, relic: null, excursionUntil: 0, excursionBadge: null }); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); bossMaxHP += 500; bossHP = bossMaxHP; localStorage.setItem('EWF_BossMaxHP', bossMaxHP); } localStorage.setItem('EWF_BossHP', bossHP); updateBossUI(); }
 
         function spliceCard(idx) { let col = JSON.parse(localStorage.getItem('EWF_Collection')); if(col[idx].raw) return alert("Cannot splice a raw card!"); if(userCash < 100 || inventory.drink < 1 || inventory.chair < 1) return alert("Requires $100 + 1 Drink + 1 Chair!"); if(confirm("Splice this card? It will become Radioactive (80% Base Win, No Injuries, No Stamina Drain)!")) { userCash -= 100; inventory.drink--; inventory.chair--; col[idx].radioactive = true; col[idx].baseWin = 0.8; col[idx].injured = false; col[idx].stamina = 5; localStorage.setItem('EWF_Collection', JSON.stringify(col)); localStorage.setItem('EWF_Gear', JSON.stringify(inventory)); saveGame(); displayCollection(); updateUI(); } }
 
@@ -854,7 +656,7 @@
         function digBargainBin() {
             if(userCash < 2) return alert("You need $2 to dig through the Bargain Bin!"); userCash -= 2; saveGame(); updateUI();
             let col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; let num = getCardDropNum(); let isGhost = Math.random() < 0.001;
-            let card = { img: `card (${num}).jpg`, wins: 0, holo: isGhost, ewfVariant: isGhost?'card-nebula':'', holoType: isGhost ? 'ghost' : null, serial: null, raw: true, grade: null, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, scoutingUntil: 0, excursionUntil: 0, excursionBadge: null, buff: null, alignment: Math.random()>0.5?'face':'heel', radioactive: false, mythic: false, botched: false, conditionCap: isGhost ? 10 : 7, inShowcase: false, blackLabel: false, relic: null, customArt: null };
+            let card = { img: `card (${num}).jpg`, wins: 0, holo: isGhost, ewfVariant: isGhost?'card-nebula':'', holoType: isGhost ? 'ghost' : null, serial: null, raw: true, grade: null, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, scoutingUntil: 0, excursionUntil: 0, excursionBadge: null, buff: null, alignment: Math.random()>0.5?'face':'heel', radioactive: false, mythic: false, botched: false, conditionCap: isGhost ? 10 : 7, inShowcase: false, blackLabel: false, relic: null };
             col.push(card); localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection();
             if(isGhost) { document.body.classList.add('screen-shake'); setTimeout(()=>document.body.classList.remove('screen-shake'),500); alert("🚨 UNBELIEVABLE! You found a discarded GHOST RARE at the bottom of the bin!"); } 
             else { alert("🗑️ You paid $2 and dug through the trash. Found a beat-up raw common card."); }
@@ -934,7 +736,6 @@
 
         function saveGame() { localStorage.setItem('EWF_Cash', userCash); }
 
-        /* UPDATE 10: RELIC ODDS ADDED CRT */
         function generateCardForBox(type, isGuaranteedHolo, isGuaranteedSerial, isGuaranteedRelic) {
              const num = getCardDropNum();
              let isHolo = isGuaranteedHolo;
@@ -949,12 +750,12 @@
              }
              else if(type === 'elite') {
                  if(!isHolo) isHolo = Math.random() < 0.25;
-                 if(Math.random() < 0.05) { let rRoll = Math.random(); relic = rRoll > 0.95 ? 'crt' : rRoll > 0.8 ? 'leather' : rRoll > 0.5 ? 'rope' : rRoll > 0.25 ? 'table' : 'canvas'; }
+                 if(Math.random() < 0.05) { let rRoll = Math.random(); relic = rRoll > 0.9 ? 'leather' : rRoll > 0.6 ? 'rope' : rRoll > 0.3 ? 'table' : 'canvas'; }
                  if(Math.random() < 0.02) hasAuto = true;
              }
              else if(type === 'legendary') {
                  if(!isHolo) isHolo = Math.random() < 0.50;
-                 if(isGuaranteedRelic || Math.random() < 0.10) { let rRoll = Math.random(); relic = rRoll > 0.95 ? 'crt' : rRoll > 0.8 ? 'leather' : rRoll > 0.5 ? 'rope' : rRoll > 0.25 ? 'table' : 'canvas'; }
+                 if(isGuaranteedRelic || Math.random() < 0.10) { let rRoll = Math.random(); relic = rRoll > 0.9 ? 'leather' : rRoll > 0.6 ? 'rope' : rRoll > 0.3 ? 'table' : 'canvas'; }
                  if(Math.random() < 0.10) hasAuto = true;
                  if(Math.random() < 0.05) mythic = true;
              }
@@ -971,30 +772,33 @@
                  }
              }
              if(mythic) { isHolo = true; holoType = 'ghost'; ewfVariant = 'card-nebula'; }
-             return { img: `card (${num}).jpg`, holo: isHolo, holoType: holoType, serial: serial, relic: relic, mythic: mythic, grade: null, raw: true, alignment: Math.random()>0.5?'face':'heel', conditionCap: 10, inShowcase: false, blackLabel: false, excursionUntil: 0, excursionBadge: null, ewfVariant: ewfVariant, hasAuto: hasAuto, customArt: null, wins: 0, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, scoutingUntil: 0, buff: null, radioactive: false, botched: false };
+             return { img: `card (${num}).jpg`, holo: isHolo, holoType: holoType, serial: serial, relic: relic, mythic: mythic, grade: null, raw: true, alignment: Math.random()>0.5?'face':'heel', conditionCap: 10, inShowcase: false, blackLabel: false, excursionUntil: 0, excursionBadge: null, ewfVariant: ewfVariant, hasAuto: hasAuto, wins: 0, dupes: 0, champion: false, stamina: 5, injured: false, streak: 0, baseWin: 0.5, trainingUntil: 0, scoutingUntil: 0, buff: null, radioactive: false, botched: false };
         }
 
-        /* UPDATE 10: RIPPED FOIL OVERLAY INTEGRATION */
-        function ripStandardBox() { if(userCash < 10) return; userCash -= 10; saveGame(); updateUI(); pendingPack = []; for(let i=0; i<5; i++) pendingPack.push(generateCardForBox('standard', false, false, false)); document.getElementById('foil-tear-overlay').style.display = 'flex'; }
-        function ripHoloBox() { if(userCash < 50) return; userCash -= 50; saveGame(); updateUI(); pendingPack = []; for(let i=0; i<5; i++) pendingPack.push(generateCardForBox('holo', i===4, false, false)); document.getElementById('foil-tear-overlay').style.display = 'flex'; }
-        function ripEliteBox() { if(userCash < 150) return; userCash -= 150; saveGame(); updateUI(); pendingPack = []; for(let i=0; i<5; i++) pendingPack.push(generateCardForBox('elite', i===4, i===3, false)); document.getElementById('foil-tear-overlay').style.display = 'flex'; }
-        function ripLegendaryBox() { if(userCash < 500) return; userCash -= 500; saveGame(); updateUI(); pendingPack = []; for(let i=0; i<5; i++) pendingPack.push(generateCardForBox('legendary', i>=3, false, i===2)); document.getElementById('foil-tear-overlay').style.display = 'flex'; }
+        function showSealedBox(name) {
+             const area = document.getElementById('pack-area');
+             area.innerHTML = `<div id="sealed-box" onclick="openSealedPack()"><div class="box-lid"></div><h2 style="margin:0; text-shadow:0 0 10px black, 0 0 20px var(--gold);">${name}</h2><div style="font-size:12px; margin-top:5px; font-weight:bold; letter-spacing:1px; color:#fff;">5 CARDS</div><div class="box-flare"></div></div>`;
+        }
 
-        function triggerActualPackOpening() {
+        function ripStandardBox() { if(userCash < 10) return; userCash -= 10; saveGame(); updateUI(); pendingPack = []; for(let i=0; i<5; i++) pendingPack.push(generateCardForBox('standard', false, false, false)); showSealedBox("STANDARD BOX"); }
+        function ripHoloBox() { if(userCash < 50) return; userCash -= 50; saveGame(); updateUI(); pendingPack = []; for(let i=0; i<5; i++) pendingPack.push(generateCardForBox('holo', i===4, false, false)); showSealedBox("HOLO BOX"); }
+        function ripEliteBox() { if(userCash < 150) return; userCash -= 150; saveGame(); updateUI(); pendingPack = []; for(let i=0; i<5; i++) pendingPack.push(generateCardForBox('elite', i===4, i===3, false)); showSealedBox("ELITE BOX"); }
+        function ripLegendaryBox() { if(userCash < 500) return; userCash -= 500; saveGame(); updateUI(); pendingPack = []; for(let i=0; i<5; i++) pendingPack.push(generateCardForBox('legendary', i>=3, false, i===2)); showSealedBox("LEGENDARY BOX"); }
+
+        function openSealedPack() {
             const cheer = document.getElementById("cheerSound"); cheer.volume = 0.5; cheer.currentTime = 0; cheer.play().catch(e=>{}); const area = document.getElementById('pack-area'); area.innerHTML = '';
             pendingPack.forEach((cardData, i) => {
                 setTimeout(() => {
                     const cardDiv = document.createElement('div'); cardDiv.className = 'pack-card slide-in';
                     let innerVisuals = getCardInnerHtml(cardData);
-                    let imgSource = cardData.customArt ? cardData.customArt : `${folderPath}/${cardData.img}`;
-                    let inner = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${imgSource}'); ${cardData.holo ? 'border-color:cyan; box-shadow: 0 0 15px rgba(0,255,255,0.4);' : ''}">${innerVisuals}</div></div>`;
+                    let inner = `<div class="card-inner"><div class="back"></div><div class="front" style="background-image: url('${folderPath}/${cardData.img}'); ${cardData.holo ? 'border-color:cyan; box-shadow: 0 0 15px rgba(0,255,255,0.4);' : ''}">${innerVisuals}</div></div>`;
                     cardDiv.innerHTML = inner;
 
                     cardDiv.onclick = function() { 
                         if(!this.classList.contains('flipped')) { 
                             if(cardData.holoType === 'ghost' || cardData.mythic || (cardData.serial && cardData.serial.max === 1) || cardData.ewfVariant === 'card-nebula' || cardData.hasAuto) {
                                 document.getElementById('walkout-overlay').style.display = 'flex';
-                                document.getElementById('walkout-card-container').innerHTML = `<div class="walkout-card" style="width:300px; height:420px; background-image:url('${imgSource}'); background-size:cover; border:2px solid cyan; border-radius:10px; box-shadow: 0 0 50px rgba(0,255,255,0.8); position:relative; overflow:hidden;">${innerVisuals}</div>`;
+                                document.getElementById('walkout-card-container').innerHTML = `<div class="walkout-card" style="width:300px; height:420px; background-image:url('${folderPath}/${cardData.img}'); background-size:cover; border:2px solid cyan; border-radius:10px; box-shadow: 0 0 50px rgba(0,255,255,0.8); position:relative; overflow:hidden;">${innerVisuals}</div>`;
                                 setTimeout(() => { document.getElementById('walkout-overlay').style.display = 'none'; this.classList.add('flipped'); triggerConfetti(); updateBounty('holos', 1); saveCard(cardData); }, 3500);
                             } else if(cardData.holo || cardData.serial || cardData.relic || cardData.ewfVariant) {
                                 this.classList.add('super-shake'); document.body.classList.add('screen-shake');
@@ -1018,8 +822,7 @@
                 trainingUntil: 0, scoutingUntil: 0, buff: null, alignment: cardData.alignment, radioactive: false, mythic: cardData.mythic, 
                 botched: false, conditionCap: cardData.conditionCap || 10, inShowcase: cardData.inShowcase || false, 
                 blackLabel: cardData.blackLabel || false, relic: cardData.relic || null, excursionUntil: cardData.excursionUntil || 0, 
-                excursionBadge: cardData.excursionBadge || null, ewfVariant: cardData.ewfVariant || '', hasAuto: cardData.hasAuto || false,
-                customArt: cardData.customArt || null 
+                excursionBadge: cardData.excursionBadge || null, ewfVariant: cardData.ewfVariant || '', hasAuto: cardData.hasAuto || false 
             }); 
             localStorage.setItem('EWF_Collection', JSON.stringify(col)); displayCollection(); updateUI(); 
         }
@@ -1114,11 +917,12 @@
 
         function displayCollection() {
             const grid = document.getElementById('collection-grid'); const hofGrid = document.getElementById('hof-grid'); const col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            let showcaseElements = []; 
+            let showcaseElements = []; // Store elements designed for the book here
             
             grid.innerHTML = ''; hofGrid.innerHTML = ''; const now = Date.now();
             col.forEach((card, index) => {
                 
+                // BINDER FILTER LOGIC
                 if(card.wins < 200 && !card.inShowcase) {
                     let showCard = false;
                     if(currentBinderTab === 'all') showCard = true;
@@ -1127,7 +931,7 @@
                     else if(currentBinderTab === 'relic') showCard = (card.relic || card.hasAuto) && !card.grade;
                     else if(currentBinderTab === 'upgraded') showCard = card.grade || card.radioactive || card.mythic;
                     
-                    if(!showCard) return; 
+                    if(!showCard) return; // Skip rendering if it doesn't match the active filter
                 }
 
                 const container = document.createElement('div'); container.className = 'card-container'; 
@@ -1163,8 +967,7 @@
                         </div>
                     </div>`;
 
-                let imgSource = card.customArt ? card.customArt : `${folderPath}/${card.img}`;
-                cardDiv.innerHTML = `${gradeHtml}<div style="position:absolute; top:38px; left:0; right:0; bottom:0; background-image: url('${imgSource}'); background-size: cover; background-position: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; z-index: 10; overflow: hidden;">${innerVisuals}</div><div class="shine-layer"></div><div class="sparkle-layer"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive && !card.botched && !card.inShowcase ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${isScouting ? `<div class="scout-overlay">🚌 ON TOUR<br><span class="train-timer-text" data-time="${card.scoutingUntil}">--:--</span></div>` : ''}${isExcursion ? `<div class="scout-overlay" style="background:rgba(231,76,60,0.8);">✈️ EXCURSION<br><span class="train-timer-text" data-time="${card.excursionUntil}">--:--</span></div>` : ''}${isGrading ? `<div class="scout-overlay" style="background:rgba(212,175,55,0.8); color:black;">📦 GRADING<br><span class="train-timer-text" data-time="${card.gradingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}${alignBadge}${exBadgeHtml}`;
+                cardDiv.innerHTML = `${gradeHtml}<div style="position:absolute; top:38px; left:0; right:0; bottom:0; background-image: url('${folderPath}/${card.img}'); background-size: cover; background-position: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; z-index: 10; overflow: hidden;">${innerVisuals}</div><div class="shine-layer"></div><div class="sparkle-layer"></div><div class="win-count">${card.wins} W</div>${(card.dupes || 0) + 1 > 1 ? `<div class="dupe-count">x${(card.dupes || 0) + 1}</div>` : ''}${streakHtml} ${buffHtml}${!isHof && !card.radioactive && !card.botched && !card.inShowcase ? `<div class="stamina-bar"><div class="stamina-fill" style="width:${staminaPrc}%; background:${stamColor};"></div></div>` : ''}${card.injured ? `<div class="injured-overlay">🤕</div>` : ''}${isTraining ? `<div class="training-overlay">🏋️ TRAINING<br><span class="train-timer-text" data-time="${card.trainingUntil}">--:--</span></div>` : ''}${isScouting ? `<div class="scout-overlay">🚌 ON TOUR<br><span class="train-timer-text" data-time="${card.scoutingUntil}">--:--</span></div>` : ''}${isExcursion ? `<div class="scout-overlay" style="background:rgba(231,76,60,0.8);">✈️ EXCURSION<br><span class="train-timer-text" data-time="${card.excursionUntil}">--:--</span></div>` : ''}${isGrading ? `<div class="scout-overlay" style="background:rgba(212,175,55,0.8); color:black;">📦 GRADING<br><span class="train-timer-text" data-time="${card.gradingUntil}">--:--</span></div>` : ''}${radioBadge}${mythicBadge}${alignBadge}${exBadgeHtml}`;
                 
                 setupInspector(cardDiv); if(factionMode || tvWarMode) { cardDiv.onclick = () => handleCardClick(index); } else if(!isHof && !card.injured && !isTraining && !isScouting && !isExcursion && !isGrading && !card.botched && !card.inShowcase) { cardDiv.ondblclick = () => runBattle(index, false); } container.appendChild(cardDiv);
                 
@@ -1188,89 +991,69 @@
                         if(invasion.active && !card.inShowcase) controls.innerHTML += `<button class="gm-btn" style="background:var(--red); color:white; border-color:white; box-shadow:0 0 10px rgba(231,76,60,0.8); animation:pulse 1s infinite;" onclick="fightInvasion(${index})">⚔️ DEFEND INVASION</button>`; 
                     }
                     
+                    /* UPDATE 9: ADD INSPECT LOUPE BUTTON TO CONTROLS */
                     controls.innerHTML += `<div style="display:flex; gap:4px; margin-top:4px;"><button class="gm-btn" style="flex:1; background:rgba(255,255,255,0.1); border-color:#fff; color:#fff;" onclick="inspectCard(${index})">🔍 INSPECT LOUPE</button></div>`;
-                    
-                    /* UPDATE 10: PAINT BUTTON FOR CANVAS CARDS */
-                    if(card.ewfVariant === 'card-blank' && !card.inShowcase) {
-                        controls.innerHTML += `<button class="gm-btn" style="background:#fff; color:#000; border-color:#000; font-weight:900; margin-top:4px;" onclick="openPaintModal(${index})">🎨 PAINT CANVAS</button>`;
-                    }
 
+                    container.appendChild(controls); 
                     if(card.inShowcase) showcaseElements.push(container); else grid.appendChild(container);
-                } else if(isHof) {
-                    hofGrid.appendChild(container); // Add to Hall of Fame grid
-                }
+                } else if(isHof) { 
+                    hofGrid.appendChild(container); 
+                } else { 
+                    if(card.inShowcase) showcaseElements.push(container); else grid.appendChild(container); 
+                } 
             });
-
-            // Render the Showcase Binder Book
-            if (showcaseElements.length > 0) {
-                document.getElementById('showcase-book-container').style.display = 'block';
-                let totalPages = Math.ceil(showcaseElements.length / 8);
-                document.getElementById('showcase-page-info').innerText = `PAGE ${showcasePage + 1} / ${totalPages}`;
-                
-                let startIdx = showcasePage * 8;
-                let endIdx = startIdx + 8;
-                let pageElements = showcaseElements.slice(startIdx, endIdx);
-                
-                let leftPage = document.getElementById('showcase-left-page');
-                let rightPage = document.getElementById('showcase-right-page');
-                leftPage.innerHTML = '';
-                rightPage.innerHTML = '';
-                
-                pageElements.forEach((el, i) => {
-                    if (i < 4) leftPage.appendChild(el);
-                    else rightPage.appendChild(el);
-                });
-            } else {
-                document.getElementById('showcase-book-container').style.display = 'none';
-            }
+            document.getElementById('hof-section').style.display = hofGrid.innerHTML === '' ? 'none' : 'block';
+            
+            // Showcase Book Logic
+            let totalShowcasePages = Math.max(1, Math.ceil(showcaseElements.length / 8));
+            if (showcasePage >= totalShowcasePages) showcasePage = Math.max(0, totalShowcasePages - 1);
+            
+            document.getElementById('showcase-page-info').innerText = `PAGE ${showcasePage + 1} / ${totalShowcasePages}`;
+            
+            const leftPage = document.getElementById('showcase-left-page');
+            const rightPage = document.getElementById('showcase-right-page');
+            leftPage.innerHTML = ''; rightPage.innerHTML = '';
+            
+            let startIdx = showcasePage * 8;
+            let pageEls = showcaseElements.slice(startIdx, startIdx + 8);
+            
+            pageEls.forEach((el, i) => {
+                if (i < 4) leftPage.appendChild(el);
+                else rightPage.appendChild(el);
+            });
+            
+            document.getElementById('showcase-book-container').style.display = showcaseElements.length === 0 ? 'none' : 'block';
         }
 
-        // --- P2P TRADING FUNCTIONS --- 
+        /* P2P TRADE FUNCTIONS */
         function generateTradeCode(idx) {
-            let col = JSON.parse(localStorage.getItem('EWF_Collection'));
-            let cardData = JSON.stringify(col[idx]);
-            // Convert card data to a secure Base64 string so players can copy/paste it
-            let code = btoa(cardData); 
-            prompt("Copy this code to send to another player:", code);
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            let card = col[idx];
+            if(!confirm("GENERATE TRADE CODE?\n\nThis card will be REMOVED from your roster so you can send the code to a friend. Proceed?")) return;
+            let code = btoa(JSON.stringify(card));
+            col.splice(idx, 1);
+            localStorage.setItem('EWF_Collection', JSON.stringify(col));
+            displayCollection();
+            updateUI();
+            prompt("COPY AND SEND THIS CODE TO THE OTHER PLAYER:", code);
         }
 
         function redeemTradeCode() {
-            let code = document.getElementById('trade-input').value;
-            if(!code) return alert("Please enter a code!");
-            
+            let code = document.getElementById('trade-input').value.trim();
             try {
-                let cardData = JSON.parse(atob(code));
-                activeTrade = cardData;
-                
-                let imgSource = cardData.customArt ? cardData.customArt : `${folderPath}/${cardData.img}`;
-                document.getElementById('trade-text').innerText = `Incoming Trade Offer!`;
-                document.getElementById('trade-offer-card').style.backgroundImage = `url('${imgSource}')`;
-                
-                document.getElementById('p2p-modal').style.display = 'none';
-                document.getElementById('trade-modal').style.display = 'block';
-            } catch(e) {
-                alert("Invalid trade code!");
-            }
+                let card = JSON.parse(atob(code));
+                if(card.img) {
+                    let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+                    col.push(card);
+                    localStorage.setItem('EWF_Collection', JSON.stringify(col));
+                    document.getElementById('trade-input').value = "";
+                    document.getElementById('p2p-modal').style.display = 'none';
+                    displayCollection();
+                    updateUI();
+                    alert("🤝 TRADE SUCCESSFUL!");
+                }
+            } catch(e) { alert("❌ INVALID TRADE CODE"); }
         }
-
-        function acceptTrade() {
-            if(!activeTrade) return;
-            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
-            
-            // Add the traded card to the local collection
-            col.push(activeTrade);
-            localStorage.setItem('EWF_Collection', JSON.stringify(col));
-            
-            // Clean up UI
-            document.getElementById('trade-modal').style.display = 'none';
-            activeTrade = null;
-            document.getElementById('trade-input').value = "";
-            
-            displayCollection();
-            updateUI();
-            alert("🤝 Trade successful! The card has been added to your collection.");
-        }
-
     </script>
 </body>
 </html>
