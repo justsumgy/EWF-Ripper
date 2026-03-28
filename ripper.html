@@ -1195,7 +1195,82 @@
                         controls.innerHTML += `<button class="gm-btn" style="background:#fff; color:#000; border-color:#000; font-weight:900; margin-top:4px;" onclick="openPaintModal(${index})">🎨 PAINT CANVAS</button>`;
                     }
 
-                    container.appendChild(controls); 
                     if(card.inShowcase) showcaseElements.push(container); else grid.appendChild(container);
-                } else if(isHof) { 
-                    hof
+                } else if(isHof) {
+                    hofGrid.appendChild(container); // Add to Hall of Fame grid
+                }
+            });
+
+            // Render the Showcase Binder Book
+            if (showcaseElements.length > 0) {
+                document.getElementById('showcase-book-container').style.display = 'block';
+                let totalPages = Math.ceil(showcaseElements.length / 8);
+                document.getElementById('showcase-page-info').innerText = `PAGE ${showcasePage + 1} / ${totalPages}`;
+                
+                let startIdx = showcasePage * 8;
+                let endIdx = startIdx + 8;
+                let pageElements = showcaseElements.slice(startIdx, endIdx);
+                
+                let leftPage = document.getElementById('showcase-left-page');
+                let rightPage = document.getElementById('showcase-right-page');
+                leftPage.innerHTML = '';
+                rightPage.innerHTML = '';
+                
+                pageElements.forEach((el, i) => {
+                    if (i < 4) leftPage.appendChild(el);
+                    else rightPage.appendChild(el);
+                });
+            } else {
+                document.getElementById('showcase-book-container').style.display = 'none';
+            }
+        }
+
+        // --- P2P TRADING FUNCTIONS --- 
+        function generateTradeCode(idx) {
+            let col = JSON.parse(localStorage.getItem('EWF_Collection'));
+            let cardData = JSON.stringify(col[idx]);
+            // Convert card data to a secure Base64 string so players can copy/paste it
+            let code = btoa(cardData); 
+            prompt("Copy this code to send to another player:", code);
+        }
+
+        function redeemTradeCode() {
+            let code = document.getElementById('trade-input').value;
+            if(!code) return alert("Please enter a code!");
+            
+            try {
+                let cardData = JSON.parse(atob(code));
+                activeTrade = cardData;
+                
+                let imgSource = cardData.customArt ? cardData.customArt : `${folderPath}/${cardData.img}`;
+                document.getElementById('trade-text').innerText = `Incoming Trade Offer!`;
+                document.getElementById('trade-offer-card').style.backgroundImage = `url('${imgSource}')`;
+                
+                document.getElementById('p2p-modal').style.display = 'none';
+                document.getElementById('trade-modal').style.display = 'block';
+            } catch(e) {
+                alert("Invalid trade code!");
+            }
+        }
+
+        function acceptTrade() {
+            if(!activeTrade) return;
+            let col = JSON.parse(localStorage.getItem('EWF_Collection')) || [];
+            
+            // Add the traded card to the local collection
+            col.push(activeTrade);
+            localStorage.setItem('EWF_Collection', JSON.stringify(col));
+            
+            // Clean up UI
+            document.getElementById('trade-modal').style.display = 'none';
+            activeTrade = null;
+            document.getElementById('trade-input').value = "";
+            
+            displayCollection();
+            updateUI();
+            alert("🤝 Trade successful! The card has been added to your collection.");
+        }
+
+    </script>
+</body>
+</html>
