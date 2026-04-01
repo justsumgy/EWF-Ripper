@@ -9,6 +9,10 @@
             --silver: #C0C0C0; --ruby: #e0115f; --emerald: #50c878; --sapphire: #0f52ba; --mojo: #00ffcc; --atomic: #39ff14; --ice: #e0f7fa; --nebula: #ff00de; --auto-ink: #0a0a3a;
         }
         * { box-sizing: border-box; } img { max-width: 100%; height: auto; }
+        
+        /* UPDATE: Particle Canvas Layer */
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; opacity: 0.8; mix-blend-mode: screen; }
+        
         body { background: url('background.jpg') center/cover no-repeat fixed; background-color: #111; color: white; font-family: 'Montserrat', sans-serif; text-align: center; padding: 0; margin: 0; overflow-x: hidden; user-select: none; transition: background 1s ease-in-out, box-shadow 0.5s, filter 1s; }
         body.battle-locked { overflow: hidden !important; }
         body.gimmick-hardcore { filter: sepia(0.8) hue-rotate(-50deg) saturate(2) brightness(0.8); box-shadow: inset 0 0 150px rgba(255,0,0,0.5); }
@@ -91,7 +95,11 @@
         
         #dashboard { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 20px; max-width: 1000px; margin: 20px auto; }
         #stats-panel { flex: 1; min-width: 250px; text-align: left; display: flex; flex-direction: column; justify-content: center; position: relative; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px; }
-        #cash-display { color: var(--green); font-size: 32px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
+        
+        /* Cash display class updated for animations */
+        #cash-display { color: var(--green); font-size: 32px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); transition: transform 0.1s; }
+        .cash-pulse { transform: scale(1.05); color: #fff !important; text-shadow: 0 0 20px var(--green) !important; }
+
         #income-display { color: #aaa; font-size: 13px; margin-top: 5px; font-weight: 700; letter-spacing: 1px; }
         
         #rank-display, #season-display { color: var(--gold); margin-top: 10px; font-size: 14px; font-weight: 900; }
@@ -100,9 +108,26 @@
         #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), #fff, var(--gold)); background-size: 200% 100%; transition: width 0.5s ease-out; }
         
         #action-panel { flex: 2; min-width: 400px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; align-content: start; }
-        .main-btn { padding: 12px 10px; font-size: 11px; font-weight: 900; color: white; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
-        .main-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.5); } .main-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .btn-box { border-bottom: 3px solid #FF1493; } .rip-gear { border-bottom: 3px solid silver; } .btn-vault { border-bottom: 3px solid var(--green); } .btn-shredder { border-bottom: 3px solid #ff4500; } .btn-gauntlet { border-bottom: 3px solid var(--purple); } .btn-faction { border-bottom: 3px solid cyan; } .btn-bounty { border-bottom: 3px solid #f39c12; } .btn-checklist { border-bottom: 3px solid #39ff14; } .btn-bargain { border-bottom: 3px solid #8b4513; }
+        
+        /* UPDATE: HEAVY METAL UI TEXTURES */
+        .main-btn { 
+            padding: 12px 10px; font-size: 11px; font-weight: 900; color: #fff; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; 
+            border-radius: 6px;
+            /* Skeuomorphic Carbon Fiber / Brushed Steel */
+            background-color: #2b2b2b;
+            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03)),
+                              repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03));
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
+            border: 1px solid #111;
+            border-top: 1px solid #666; /* Brushed edge */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+            text-shadow: 1px 1px 3px black;
+        }
+        .main-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.9), inset 0 1px 5px rgba(255,255,255,0.2); filter: brightness(1.2); } 
+        .main-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        
+        .btn-box { border-bottom: 3px solid #FF1493 !important; } .rip-gear { border-bottom: 3px solid silver !important; } .btn-vault { border-bottom: 3px solid var(--green) !important; } .btn-shredder { border-bottom: 3px solid #ff4500 !important; } .btn-gauntlet { border-bottom: 3px solid var(--purple) !important; } .btn-faction { border-bottom: 3px solid cyan !important; } .btn-bounty { border-bottom: 3px solid #f39c12 !important; } .btn-checklist { border-bottom: 3px solid #39ff14 !important; } .btn-bargain { border-bottom: 3px solid #8b4513 !important; }
         
         .toggle-btn { margin-top: 15px; padding: 10px 15px; font-size: 12px; font-weight: 900; border-radius: 8px; cursor: pointer; color: white; transition: 0.3s; display: none; width: 100%; border: 1px solid; text-transform: uppercase; letter-spacing: 1px; } .toggle-off { background: rgba(0,0,0,0.6); color: #888; border-color: #444; } .toggle-on { background: rgba(0, 255, 255, 0.1); color: cyan; border-color: cyan; box-shadow: 0 0 15px rgba(0,255,255,0.3); }
         #boss-container { max-width: 600px; margin: 0 auto 20px auto; padding: 15px; border-color: rgba(231, 76, 60, 0.5); border-width: 1px; } #boss-container h3 { margin: 0 0 10px 0; color: var(--red); font-size: 16px; letter-spacing: 3px; } #boss-hp-bar-bg { background: #111; height: 20px; border-radius: 10px; border: 1px solid #333; } #boss-hp-bar { background: linear-gradient(90deg, #c0392b, #e74c3c); box-shadow: 0 0 15px rgba(231,76,60,0.5); } #boss-hp-text { line-height: 20px; font-size: 12px; letter-spacing: 1px; }
@@ -219,131 +244,144 @@
         
         .slide-in { animation: slideIn 0.4s ease-out forwards; } @keyframes slideIn { from { transform: translateY(-50px) scale(0.8); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } } .super-shake { animation: superShake 1.2s cubic-bezier(.36,.07,.19,.97) both !important; } @keyframes superShake { 0% { transform: translate(2px, 1px) rotate(0deg); filter: brightness(1); box-shadow: 0 0 0px white; } 20% { transform: translate(-3px, 0px) rotate(2deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); filter: brightness(2); box-shadow: 0 0 40px white; } 80% { transform: translate(-1px, -1px) rotate(2deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); filter: brightness(1); box-shadow: 0 0 0px white; } } .screen-shake { animation: screenShake 0.15s linear; } @keyframes screenShake { 0% { transform: translate(10px,10px) rotate(1deg); } 25% { transform: translate(-10px,-5px) rotate(-1deg); } 50% { transform: translate(5px,-10px) rotate(1deg); } 75% { transform: translate(-5px,10px) rotate(-1deg); } 100% { transform: translate(0,0); } } .confetti { position: fixed; width: 8px; height: 16px; z-index: 20000; pointer-events: none; border-radius: 2px; } .rumble { animation: rumble 0.1s linear infinite; } @keyframes rumble { 0% { transform: translate(3px,3px); } 50% { transform: translate(-3px,-3px); } 100% { transform: translate(0,0); } }
         .tv-selected { border-color: cyan !important; box-shadow: 0 0 20px rgba(0,255,255,0.8) !important; transform: scale(1.05); } .is-botched { filter: grayscale(1) sepia(1) hue-rotate(-50deg) contrast(1.5); border-color: #555 !important; }
+        
+        /* UPDATE: SCENE TRANSITIONS */
+        #main-menu-overlay { position: fixed; inset: 0; background: radial-gradient(circle, #222 0%, #000 100%); z-index: 50000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease-out; }
+        #main-game-wrapper { opacity: 0; pointer-events: none; transition: opacity 1.5s ease-in; }
     </style>
 </head>
-<body onload="initGame()">
-    
-    <div id="ticker-wrap"><div id="ticker-text">LOADING REALISTIC EWF STOCK MARKET DATA...</div></div>
-    <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
-    <div id="tv-war-banner" onclick="startTVWar()">📺 FRIDAY NIGHT RATINGS WAR! CLICK TO MAIN EVENT!</div>
-    <div id="gimmick-banner"></div><div id="sponsor-tracker"></div><div id="prestige-border"></div>
-    <div id="early-access">V9.0 THE TRIPLE-A EDITION (67 CARD DECK)</div>
-    <button id="music-toggle" onclick="toggleMusic()">Mute</button>
-    <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio><audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
-    
-    <div id="walkout-overlay"><div class="spotlight left"></div><div class="spotlight right"></div><div id="walkout-card-container"></div></div>
-    
-    <div id="battle-overlay" onclick="if(!factionSimulating && !gauntlet.active && !tvWarMode) { this.style.display='none'; document.body.classList.remove('battle-locked'); }">
-        <div class="battle-arena-container">
-            <div id="battle-card"></div>
-            <div id="d20-display">🎲 20</div>
-            <div id="ai-battle-card"></div>
-        </div>
-        <div id="battle-text">FIGHTING...</div>
+<body onload="setupIntro()">
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="main-menu-overlay">
+        <h1 style="font-size: 5em; margin-bottom: 20px;">EWF RIPPED TCG</h1>
+        <p style="color: var(--gold); letter-spacing: 5px; font-weight: bold; margin-bottom: 50px;">THE TRIPLE-A EDITION</p>
+        <button class="main-btn" style="font-size: 24px; padding: 20px 40px; border-bottom: 4px solid var(--gold) !important; box-shadow: 0 10px 30px rgba(212,175,55,0.3) !important;" onclick="enterArena()">CLICK TO ENTER ARENA</button>
     </div>
 
-    <div id="inspect-overlay" onclick="this.style.display='none'">
-        <div id="inspect-container" onclick="event.stopPropagation()">
-            <div id="inspect-content"></div>
-        </div>
-        <div style="position:absolute; bottom:20px; color:white; font-weight:900; letter-spacing:2px;">CLICK ANYWHERE TO CLOSE | HOVER TO USE LOUPE</div>
-    </div>
-
-   <div id="p2p-modal" class="modal">
-        <h2 style="color:var(--blue); border-bottom: 1px solid var(--blue);">🤝 HUMAN TRADE CENTER</h2>
-        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Paste a trade code from another player to receive their wrestler.</p>
-        <input type="text" id="trade-input" placeholder="PASTE CODE HERE" style="width:100%; padding:15px; background:#111; color:white; border:1px solid #444; border-radius:8px; margin-bottom:15px; font-family:monospace;">
-        <button class="gm-btn" style="width:100%; background:var(--blue); color:white; padding:12px;" onclick="redeemTradeCode()">REDEEM WRESTLER</button>
-        <button class="gm-btn" style="width:100%; margin-top:10px;" onclick="document.getElementById('p2p-modal').style.display='none'">CANCEL</button>
-    </div>
-    <div id="trade-modal" class="modal" style="width: 500px; text-align:center;"><h2 style="color:cyan; border-bottom-color:cyan;">🤝 LOCAL TRADE OFFER</h2><p id="trade-text" style="color:#ddd; font-size:14px;"></p><div style="display:flex; justify-content:space-around; align-items:center; margin: 20px 0;"><div id="trade-offer-card" style="width:120px; height:160px; border:2px solid cyan; border-radius:10px; background-size:cover; position:relative; overflow:hidden;"></div><div style="font-size:30px;">🔁</div><div id="trade-my-card" style="width:120px; height:160px; border:2px solid var(--red); border-radius:10px; background-size:cover; position:relative; overflow:hidden;"></div></div><div style="display:flex; gap:10px;"><button class="modal-btn" style="flex:1; background:rgba(46,204,113,0.2); color:var(--green); border-color:var(--green); font-size:16px;" onclick="acceptTrade()">ACCEPT</button><button class="modal-btn" style="flex:1; background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red); font-size:16px;" onclick="document.getElementById('trade-modal').style.display='none'">DECLINE</button></div></div>
-    <div id="season-modal" class="modal" style="width: 600px; text-align:center;"><h1 style="color:var(--gold); text-shadow:0 0 15px var(--gold); margin-top:0;">🏆 EWF MYGM AWARDS 🏆</h1><p style="color:#aaa; font-size:13px; margin-bottom:20px;">Another 30-tick season comes to a close! Here are the winners:</p><div id="season-content" style="display:flex; flex-direction:column; gap:15px; text-align:left;"></div><button class="close-btn" onclick="document.getElementById('season-modal').style.display='none'">START NEXT SEASON</button></div>
-    <div id="checklist-modal" class="modal" style="width: 550px;"><h2>📋 CHECKLIST</h2><div id="checklist-list"></div><button class="close-btn" onclick="document.getElementById('checklist-modal').style.display='none'">CLOSE</button></div>
-    <div id="bounty-modal" class="modal"><h2>📋 PROMOTER BOUNTY BOARD</h2><div id="bounty-list"></div><button class="close-btn" onclick="document.getElementById('bounty-modal').style.display='none'">CLOSE</button></div>
-    <div id="gear-modal" class="modal"><h2>🎒 EQUIP GEAR</h2><div id="gear-list"></div><button class="close-btn" onclick="document.getElementById('gear-modal').style.display='none'">CANCEL</button></div>
-    <div id="shredder-modal" class="modal"><h2>☢️ THE SHREDDER</h2><p style="color:#aaa; font-size:12px; text-align:center;">Burn 5 Common Dupes for a permanent +0.5% Global Holo Pull Rate!</p><div id="shredder-stats" style="margin: 20px 0; font-size: 16px; font-weight: bold; color: white; text-align:center;"></div><button class="modal-btn" style="background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red); width:100%; margin-top:10px; font-size: 14px;" onclick="shredCards()">SHRED 5 COMMONS</button><button class="close-btn" onclick="document.getElementById('shredder-modal').style.display='none'">CLOSE</button></div>
-    <div id="vault-modal" class="modal"><h2>💼 MONEY IN THE BANK</h2><div id="vault-list"></div><button class="close-btn" onclick="document.getElementById('vault-modal').style.display='none'">CLOSE</button></div>
-    
-    <div id="gauntlet-modal" class="modal" style="width: 600px;"><div id="gauntlet-content"></div><button class="close-btn" id="gauntlet-close-btn" onclick="document.getElementById('gauntlet-modal').style.display='none'">SURRENDER RUN</button></div>
-
-    <div id="invasion-modal" class="modal"><h2 style="color:var(--red); border-bottom-color:rgba(231,76,60,0.3);">🚨 DEFEND YOUR TURF 🚨</h2><p style="color:#ddd; text-align:center; font-size:13px;">Select your best available wrestler to fight <span id="invasion-rival-name" style="color:var(--gold); font-weight:bold;">the Rival Boss</span>.</p><div id="invasion-roster" style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:20px; max-height:300px; overflow-y:auto; padding-right:5px;"></div><button class="close-btn" onclick="document.getElementById('invasion-modal').style.display='none'">FLEE (LOSE 15% CASH)</button></div>
-    <div id="cloning-modal" class="modal"><h2>🧬 THE BLACK MARKET LAB</h2><div id="cloning-list" style="margin-top:15px;"></div><button class="close-btn" onclick="document.getElementById('cloning-modal').style.display='none'">LEAVE LAB</button></div>
-    <div id="gimmick-modal" class="modal"><h2>🎟️ BOOK A SPECIAL EVENT</h2><div class="modal-item"><div>🩸 <b>Hardcore Night</b><br><span style="font-size:10px; color:#aaa;">+15% Win Rate, Triple Stamina Drain</span></div><div><button class="modal-btn" style="background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red);" onclick="bookGimmick('hardcore')">BOOK ($50)</button></div></div><div class="modal-item"><div>🏆 <b>Legends Night</b><br><span style="font-size:10px; color:#aaa;">Retired HOF Cards can fight again!</span></div><div><button class="modal-btn" style="background:rgba(212,175,55,0.2); color:var(--gold); border-color:var(--gold);" onclick="bookGimmick('legends')">BOOK ($50)</button></div></div><button class="close-btn" onclick="document.getElementById('gimmick-modal').style.display='none'">CANCEL</button></div>
-
-    <h1>EWF RIPPED</h1>
-    <div id="boss-container" class="glass-panel"><h3>👹 WORLD HEAVYWEIGHT BOSS</h3><div id="boss-hp-bar-bg"><div id="boss-hp-bar"></div><div id="boss-hp-text">1000 / 1000 HP</div></div></div>
-    
-    <div id="dashboard" class="glass-panel">
-        <div id="stats-panel">
-            <div style="font-size:11px; color:#888; text-transform:uppercase; font-weight:900; letter-spacing:1px;">Treasury</div>
-            <div id="cash-display">CONTRACT FUNDS: $0</div>
-            <div id="income-display">PASSIVE INCOME: $0 / tick</div>
-            <div id="rank-display">RANK: ROOKIE PROMOTER</div>
-            <div id="season-display">SEASON: TICK 0/30</div>
-            <div id="progress-text">COLLECTION: 0 / 67</div>
-            <div id="progress-container"><div id="progress-fill"></div></div>
-            <button id="auto-btn" class="toggle-btn toggle-off" onclick="toggleAuto()">AUTO-BOOK: OFF</button>
-            <button id="rebirth-btn" onclick="doRebirth()">🔥 INITIATE REBIRTH 🔥</button>
-        </div>
-        <div id="action-panel">
-            <button class="main-btn btn-box" style="border-bottom:3px solid #ccc;" onclick="ripStandardBox()">STANDARD BOX ($10)</button>
-            <button class="main-btn btn-box" style="border-bottom:3px solid #3498db;" onclick="ripHoloBox()">HOLO BOX ($50)</button>
-            <button class="main-btn btn-box" style="border-bottom:3px solid #9b59b6;" onclick="ripEliteBox()">ELITE BOX ($150)</button>
-            <button class="main-btn btn-box" style="border-bottom:3px solid #f1c40f;" onclick="ripLegendaryBox()">LEGENDARY BOX ($500)</button>
-            <button class="main-btn rip-gear" id="rip-gear-btn" onclick="ripGearPack()">GEAR PACK ($10)</button>
-            <button class="main-btn" style="border-bottom:3px solid var(--blue);" onclick="document.getElementById('p2p-modal').style.display='block'">🤝 PLAYER TRADE</button>
-            <button class="main-btn btn-checklist" onclick="openChecklist()">📋 CHECKLIST</button>
-            <button class="main-btn btn-vault" onclick="openVault()">💼 VAULT</button>
-            <button class="main-btn btn-shredder" onclick="openShredder()">☢️ SHREDDER</button>
-            <button class="main-btn btn-bargain" onclick="digBargainBin()">🗑️ BARGAIN BIN ($2)</button>
-            <button class="main-btn btn-gauntlet" onclick="startGauntlet()">☠️ GAUNTLET ($25)</button>
-            <button class="main-btn btn-faction" id="faction-btn" onclick="toggleFactionWar()">3v3 WAR ($50)</button>
-            <button class="main-btn btn-bounty" onclick="openBounties()">📋 BOUNTIES</button>
-            <button class="main-btn" style="border-bottom: 3px solid #b8860b;" onclick="document.getElementById('gimmick-modal').style.display='block'">🎟️ GIMMICKS</button>
-            <button class="main-btn" id="buy-auto-btn" style="border-bottom: 3px solid var(--green);" onclick="buyAutoBooker()">🤖 BUY AUTO GM ($10000)</button>
-        </div>
-    </div>
-    
-    <h2 id="faction-msg" style="color: var(--green); display: none; text-shadow: 0 0 15px rgba(46,204,113,0.5); font-weight:900;">SELECT 3 WRESTLERS FOR COMBAT!</h2><h2 id="tv-war-msg" style="color: var(--blue); display: none; text-shadow: 0 0 15px rgba(52,152,219,0.5); font-weight:900;">SELECT 3 WRESTLERS FOR THE TV MAIN EVENT!</h2>
-    <div id="pack-area"></div>
-    <div id="auction-block"><h2 style="color:var(--gold); margin-top:0; font-weight:900; letter-spacing:1px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:15px; text-align:center;">🔨 DARK WEB AUCTION HOUSE 🔨</h2><div id="auction-content"></div></div>
-    
-    <div id="showcase-book-container">
-        <h2 style="color:var(--gold); margin-top:0; font-weight:900; letter-spacing:2px; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:10px;">📖 THE SHOWCASE BINDER</h2>
-        <div class="book-controls">
-            <button onclick="changeShowcasePage(-1)">&#9664; PREV PAGE</button>
-            <span id="showcase-page-info">PAGE 1 / 1</span>
-            <button onclick="changeShowcasePage(1)">NEXT PAGE &#9654;</button>
-        </div>
-        <div id="showcase-book">
-            <div id="showcase-left-page" class="book-page"></div>
-            <div class="book-spine">
-                <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
-            </div>
-            <div id="showcase-right-page" class="book-page"></div>
-        </div>
-    </div>
-
-    <div class="showcase-area">
-        <h2 style="color: white; margin-top: 0; font-weight: 900; letter-spacing: 2px;">ESA PRO PLAYER BINDER</h2>
+    <div id="main-game-wrapper">
+        <div id="ticker-wrap"><div id="ticker-text">LOADING REALISTIC EWF STOCK MARKET DATA...</div></div>
+        <div id="invasion-banner" onclick="openInvasionModal()">🚨 <span id="invasion-name">A RIVAL</span> IS INVADING! CLICK TO DEFEND TERRITORY! (<span id="invasion-time">5:00</span>) 🚨</div>
+        <div id="tv-war-banner" onclick="startTVWar()">📺 FRIDAY NIGHT RATINGS WAR! CLICK TO MAIN EVENT!</div>
+        <div id="gimmick-banner"></div><div id="sponsor-tracker"></div><div id="prestige-border"></div>
+        <div id="early-access">V9.0 THE TRIPLE-A EDITION (67 CARD DECK)</div>
+        <button id="music-toggle" onclick="toggleMusic()">Mute</button>
+        <audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio><audio id="cheerSound"><source src="cheer.mp3" type="audio/mpeg"></audio>
         
-        <div id="binder-tabs">
-            <button class="binder-tab active" onclick="setBinderTab('all')">ALL CARDS</button>
-            <button class="binder-tab" onclick="setBinderTab('base')">BASE SET</button>
-            <button class="binder-tab" onclick="setBinderTab('holo')">HOLOS & RARES</button>
-            <button class="binder-tab" onclick="setBinderTab('relic')">RELICS & AUTOS</button>
-            <button class="binder-tab" onclick="setBinderTab('upgraded')">UPGRADED (SLABS)</button>
+        <div id="walkout-overlay"><div class="spotlight left"></div><div class="spotlight right"></div><div id="walkout-card-container"></div></div>
+        
+        <div id="battle-overlay" onclick="if(!factionSimulating && !gauntlet.active && !tvWarMode) { this.style.display='none'; document.body.classList.remove('battle-locked'); }">
+            <div class="battle-arena-container">
+                <div id="battle-card"></div>
+                <div id="d20-display">🎲 20</div>
+                <div id="ai-battle-card"></div>
+            </div>
+            <div id="battle-text">FIGHTING...</div>
         </div>
 
-        <div id="collection-grid"></div>
-    </div>
-    <div id="record-box" class="glass-panel"><h3>PROMOTER RECORD</h3><div id="record-display"><span class="win-text" id="win-count">0 W</span> <span style="color:#555;">-</span> <span class="loss-text" id="loss-count">0 L</span></div><div id="win-rate" style="font-size: 13px; color: #aaa; letter-spacing: 1px; font-weight:700;">WIN RATE: 0%</div><button style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#666; font-size:9px; padding:6px 12px; margin-top:20px; cursor:pointer; border-radius:4px; font-family:inherit; transition:0.2s;" onclick="hardReset()" onmouseover="this.style.color='white'; this.style.borderColor='white';" onmouseout="this.style.color='#666'; this.style.borderColor='rgba(255,255,255,0.1)';">FULL DATA RESET</button></div>
-    <div id="hof-section"><h1 style="color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); font-size: 2.5em; margin-bottom: 5px; font-weight:900;">🏛️ EWF HALL OF FAME 🏛️</h1><p style="color: #aaa; font-size: 13px; margin-top: 0; font-weight:700; letter-spacing:1px;">LEGENDS WITH 200+ WINS</p><div id="hof-grid"></div></div>
+        <div id="inspect-overlay" onclick="this.style.display='none'">
+            <div id="inspect-container" onclick="event.stopPropagation()">
+                <div id="inspect-content"></div>
+            </div>
+            <div style="position:absolute; bottom:20px; color:white; font-weight:900; letter-spacing:2px;">CLICK ANYWHERE TO CLOSE | HOVER TO USE LOUPE</div>
+        </div>
 
-    <script>
+       <div id="p2p-modal" class="modal">
+            <h2 style="color:var(--blue); border-bottom: 1px solid var(--blue);">🤝 HUMAN TRADE CENTER</h2>
+            <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Paste a trade code from another player to receive their wrestler.</p>
+            <input type="text" id="trade-input" placeholder="PASTE CODE HERE" style="width:100%; padding:15px; background:#111; color:white; border:1px solid #444; border-radius:8px; margin-bottom:15px; font-family:monospace;">
+            <button class="gm-btn" style="width:100%; background:var(--blue); color:white; padding:12px;" onclick="redeemTradeCode()">REDEEM WRESTLER</button>
+            <button class="gm-btn" style="width:100%; margin-top:10px;" onclick="document.getElementById('p2p-modal').style.display='none'">CANCEL</button>
+        </div>
+        <div id="trade-modal" class="modal" style="width: 500px; text-align:center;"><h2 style="color:cyan; border-bottom-color:cyan;">🤝 LOCAL TRADE OFFER</h2><p id="trade-text" style="color:#ddd; font-size:14px;"></p><div style="display:flex; justify-content:space-around; align-items:center; margin: 20px 0;"><div id="trade-offer-card" style="width:120px; height:160px; border:2px solid cyan; border-radius:10px; background-size:cover; position:relative; overflow:hidden;"></div><div style="font-size:30px;">🔁</div><div id="trade-my-card" style="width:120px; height:160px; border:2px solid var(--red); border-radius:10px; background-size:cover; position:relative; overflow:hidden;"></div></div><div style="display:flex; gap:10px;"><button class="modal-btn" style="flex:1; background:rgba(46,204,113,0.2); color:var(--green); border-color:var(--green); font-size:16px;" onclick="acceptTrade()">ACCEPT</button><button class="modal-btn" style="flex:1; background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red); font-size:16px;" onclick="document.getElementById('trade-modal').style.display='none'">DECLINE</button></div></div>
+        <div id="season-modal" class="modal" style="width: 600px; text-align:center;"><h1 style="color:var(--gold); text-shadow:0 0 15px var(--gold); margin-top:0;">🏆 EWF MYGM AWARDS 🏆</h1><p style="color:#aaa; font-size:13px; margin-bottom:20px;">Another 30-tick season comes to a close! Here are the winners:</p><div id="season-content" style="display:flex; flex-direction:column; gap:15px; text-align:left;"></div><button class="close-btn" onclick="document.getElementById('season-modal').style.display='none'">START NEXT SEASON</button></div>
+        <div id="checklist-modal" class="modal" style="width: 550px;"><h2>📋 CHECKLIST</h2><div id="checklist-list"></div><button class="close-btn" onclick="document.getElementById('checklist-modal').style.display='none'">CLOSE</button></div>
+        <div id="bounty-modal" class="modal"><h2>📋 PROMOTER BOUNTY BOARD</h2><div id="bounty-list"></div><button class="close-btn" onclick="document.getElementById('bounty-modal').style.display='none'">CLOSE</button></div>
+        <div id="gear-modal" class="modal"><h2>🎒 EQUIP GEAR</h2><div id="gear-list"></div><button class="close-btn" onclick="document.getElementById('gear-modal').style.display='none'">CANCEL</button></div>
+        <div id="shredder-modal" class="modal"><h2>☢️ THE SHREDDER</h2><p style="color:#aaa; font-size:12px; text-align:center;">Burn 5 Common Dupes for a permanent +0.5% Global Holo Pull Rate!</p><div id="shredder-stats" style="margin: 20px 0; font-size: 16px; font-weight: bold; color: white; text-align:center;"></div><button class="modal-btn" style="background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red); width:100%; margin-top:10px; font-size: 14px;" onclick="shredCards()">SHRED 5 COMMONS</button><button class="close-btn" onclick="document.getElementById('shredder-modal').style.display='none'">CLOSE</button></div>
+        <div id="vault-modal" class="modal"><h2>💼 MONEY IN THE BANK</h2><div id="vault-list"></div><button class="close-btn" onclick="document.getElementById('vault-modal').style.display='none'">CLOSE</button></div>
+        
+        <div id="gauntlet-modal" class="modal" style="width: 600px;"><div id="gauntlet-content"></div><button class="close-btn" id="gauntlet-close-btn" onclick="document.getElementById('gauntlet-modal').style.display='none'">SURRENDER RUN</button></div>
+
+        <div id="invasion-modal" class="modal"><h2 style="color:var(--red); border-bottom-color:rgba(231,76,60,0.3);">🚨 DEFEND YOUR TURF 🚨</h2><p style="color:#ddd; text-align:center; font-size:13px;">Select your best available wrestler to fight <span id="invasion-rival-name" style="color:var(--gold); font-weight:bold;">the Rival Boss</span>.</p><div id="invasion-roster" style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:20px; max-height:300px; overflow-y:auto; padding-right:5px;"></div><button class="close-btn" onclick="document.getElementById('invasion-modal').style.display='none'">FLEE (LOSE 15% CASH)</button></div>
+        <div id="cloning-modal" class="modal"><h2>🧬 THE BLACK MARKET LAB</h2><div id="cloning-list" style="margin-top:15px;"></div><button class="close-btn" onclick="document.getElementById('cloning-modal').style.display='none'">LEAVE LAB</button></div>
+        <div id="gimmick-modal" class="modal"><h2>🎟️ BOOK A SPECIAL EVENT</h2><div class="modal-item"><div>🩸 <b>Hardcore Night</b><br><span style="font-size:10px; color:#aaa;">+15% Win Rate, Triple Stamina Drain</span></div><div><button class="modal-btn" style="background:rgba(231,76,60,0.2); color:var(--red); border-color:var(--red);" onclick="bookGimmick('hardcore')">BOOK ($50)</button></div></div><div class="modal-item"><div>🏆 <b>Legends Night</b><br><span style="font-size:10px; color:#aaa;">Retired HOF Cards can fight again!</span></div><div><button class="modal-btn" style="background:rgba(212,175,55,0.2); color:var(--gold); border-color:var(--gold);" onclick="bookGimmick('legends')">BOOK ($50)</button></div></div><button class="close-btn" onclick="document.getElementById('gimmick-modal').style.display='none'">CANCEL</button></div>
+
+        <h1>EWF RIPPED</h1>
+        <div id="boss-container" class="glass-panel"><h3>👹 WORLD HEAVYWEIGHT BOSS</h3><div id="boss-hp-bar-bg"><div id="boss-hp-bar"></div><div id="boss-hp-text">1000 / 1000 HP</div></div></div>
+        
+        <div id="dashboard" class="glass-panel">
+            <div id="stats-panel">
+                <div style="font-size:11px; color:#888; text-transform:uppercase; font-weight:900; letter-spacing:1px;">Treasury</div>
+                <div id="cash-display">CONTRACT FUNDS: $0</div>
+                <div id="income-display">PASSIVE INCOME: $0 / tick</div>
+                <div id="rank-display">RANK: ROOKIE PROMOTER</div>
+                <div id="season-display">SEASON: TICK 0/30</div>
+                <div id="progress-text">COLLECTION: 0 / 67</div>
+                <div id="progress-container"><div id="progress-fill"></div></div>
+                <button id="auto-btn" class="toggle-btn toggle-off" onclick="toggleAuto()">AUTO-BOOK: OFF</button>
+                <button id="rebirth-btn" onclick="doRebirth()">🔥 INITIATE REBIRTH 🔥</button>
+            </div>
+            <div id="action-panel">
+                <button class="main-btn btn-box" onclick="ripStandardBox()">STANDARD BOX ($10)</button>
+                <button class="main-btn btn-box" onclick="ripHoloBox()">HOLO BOX ($50)</button>
+                <button class="main-btn btn-box" onclick="ripEliteBox()">ELITE BOX ($150)</button>
+                <button class="main-btn btn-box" onclick="ripLegendaryBox()">LEGENDARY BOX ($500)</button>
+                <button class="main-btn rip-gear" id="rip-gear-btn" onclick="ripGearPack()">GEAR PACK ($10)</button>
+                <button class="main-btn" onclick="document.getElementById('p2p-modal').style.display='block'">🤝 PLAYER TRADE</button>
+                <button class="main-btn btn-checklist" onclick="openChecklist()">📋 CHECKLIST</button>
+                <button class="main-btn btn-vault" onclick="openVault()">💼 VAULT</button>
+                <button class="main-btn btn-shredder" onclick="openShredder()">☢️ SHREDDER</button>
+                <button class="main-btn btn-bargain" onclick="digBargainBin()">🗑️ BARGAIN BIN ($2)</button>
+                <button class="main-btn btn-gauntlet" onclick="startGauntlet()">☠️ GAUNTLET ($25)</button>
+                <button class="main-btn btn-faction" id="faction-btn" onclick="toggleFactionWar()">3v3 WAR ($50)</button>
+                <button class="main-btn btn-bounty" onclick="openBounties()">📋 BOUNTIES</button>
+                <button class="main-btn" onclick="document.getElementById('gimmick-modal').style.display='block'">🎟️ GIMMICKS</button>
+                <button class="main-btn" id="buy-auto-btn" onclick="buyAutoBooker()">🤖 BUY AUTO GM ($10000)</button>
+            </div>
+        </div>
+        
+        <h2 id="faction-msg" style="color: var(--green); display: none; text-shadow: 0 0 15px rgba(46,204,113,0.5); font-weight:900;">SELECT 3 WRESTLERS FOR COMBAT!</h2><h2 id="tv-war-msg" style="color: var(--blue); display: none; text-shadow: 0 0 15px rgba(52,152,219,0.5); font-weight:900;">SELECT 3 WRESTLERS FOR THE TV MAIN EVENT!</h2>
+        <div id="pack-area"></div>
+        <div id="auction-block"><h2 style="color:var(--gold); margin-top:0; font-weight:900; letter-spacing:1px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:15px; text-align:center;">🔨 DARK WEB AUCTION HOUSE 🔨</h2><div id="auction-content"></div></div>
+        
+        <div id="showcase-book-container">
+            <h2 style="color:var(--gold); margin-top:0; font-weight:900; letter-spacing:2px; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:10px;">📖 THE SHOWCASE BINDER</h2>
+            <div class="book-controls">
+                <button onclick="changeShowcasePage(-1)">&#9664; PREV PAGE</button>
+                <span id="showcase-page-info">PAGE 1 / 1</span>
+                <button onclick="changeShowcasePage(1)">NEXT PAGE &#9654;</button>
+            </div>
+            <div id="showcase-book">
+                <div id="showcase-left-page" class="book-page"></div>
+                <div class="book-spine">
+                    <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                </div>
+                <div id="showcase-right-page" class="book-page"></div>
+            </div>
+        </div>
+
+        <div class="showcase-area">
+            <h2 style="color: white; margin-top: 0; font-weight: 900; letter-spacing: 2px;">ESA PRO PLAYER BINDER</h2>
+            
+            <div id="binder-tabs">
+                <button class="binder-tab active" onclick="setBinderTab('all')">ALL CARDS</button>
+                <button class="binder-tab" onclick="setBinderTab('base')">BASE SET</button>
+                <button class="binder-tab" onclick="setBinderTab('holo')">HOLOS & RARES</button>
+                <button class="binder-tab" onclick="setBinderTab('relic')">RELICS & AUTOS</button>
+                <button class="binder-tab" onclick="setBinderTab('upgraded')">UPGRADED (SLABS)</button>
+            </div>
+
+            <div id="collection-grid"></div>
+        </div>
+        <div id="record-box" class="glass-panel"><h3>PROMOTER RECORD</h3><div id="record-display"><span class="win-text" id="win-count">0 W</span> <span style="color:#555;">-</span> <span class="loss-text" id="loss-count">0 L</span></div><div id="win-rate" style="font-size: 13px; color: #aaa; letter-spacing: 1px; font-weight:700;">WIN RATE: 0%</div><button style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#666; font-size:9px; padding:6px 12px; margin-top:20px; cursor:pointer; border-radius:4px; font-family:inherit; transition:0.2s;" onclick="hardReset()" onmouseover="this.style.color='white'; this.style.borderColor='white';" onmouseout="this.style.color='#666'; this.style.borderColor='rgba(255,255,255,0.1)';">FULL DATA RESET</button></div>
+        <div id="hof-section"><h1 style="color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); font-size: 2.5em; margin-bottom: 5px; font-weight:900;">🏛️ EWF HALL OF FAME 🏛️</h1><p style="color: #aaa; font-size: 13px; margin-top: 0; font-weight:700; letter-spacing:1px;">LEGENDS WITH 200+ WINS</p><div id="hof-grid"></div></div>
+    </div> <script>
         const totalCards = 67; const folderPath = "rare ewf cards";
         let currentBinderTab = 'all'; // Tracks the active binder tab
         let showcasePage = 0; // Tracks the active page in The Showcase book
+        let displayedCash = 0; // UPDATE: Track cash for rapid tick animation
+        let cashAnimationId = null; 
 
         function getCardDropNum() { let num; let valid = false; while(!valid) { num = Math.floor(Math.random() * totalCards) + 1; if (num === 32) { if (Math.random() < 0.01) valid = true; } else if (num === 30 || num === 36) { if (Math.random() < 0.05) valid = true; } else { valid = true; } } return num; }
         
@@ -367,6 +405,101 @@
 
         const aiRivals = [ { name: "Billionaire Ted", style: "whale", handle: "@TedMoney" }, { name: "The Trashman", style: "cheap", handle: "@TrashyPromoter" }, { name: "The Scrapper", style: "aggro", handle: "@ScrapKing" } ];
         let bounties = JSON.parse(localStorage.getItem('EWF_Bounties')) || { wins: { target: 10, current: 0, reward: 200, desc: "Win 10 Matches", claimed: false }, holos: { target: 3, current: 0, reward: 300, desc: "Pull 3 Holo Cards", claimed: false } };
+
+        /* UPDATE: SETUP INTRO & PARTICLES */
+        function setupIntro() {
+            initParticles();
+            displayedCash = userCash;
+            document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${displayedCash}`;
+        }
+        
+        /* UPDATE: PARTICLE ENGINE */
+        function initParticles() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            let particles = [];
+            const pCount = 80;
+            
+            for(let i=0; i<pCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speedY: Math.random() * 2 + 0.5,
+                    opacity: Math.random(),
+                    fadeRate: Math.random() * 0.02 + 0.005
+                });
+            }
+            
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for(let i=0; i<particles.length; i++) {
+                    let p = particles[i];
+                    ctx.beginPath();
+                    // Draw embers (orange to red)
+                    ctx.fillStyle = `rgba(255, ${Math.floor(Math.random()*100)+50}, 0, ${p.opacity})`;
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    p.y -= p.speedY;
+                    p.opacity -= p.fadeRate;
+                    
+                    if(p.opacity <= 0 || p.y < 0) {
+                        p.y = canvas.height;
+                        p.x = Math.random() * canvas.width;
+                        p.opacity = Math.random();
+                        p.size = Math.random() * 3 + 1;
+                    }
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        /* UPDATE: ENTER ARENA LOGIC */
+        function enterArena() {
+            document.getElementById('main-menu-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('main-menu-overlay').style.display = 'none';
+                document.getElementById('main-game-wrapper').style.opacity = '1';
+                document.getElementById('main-game-wrapper').style.pointerEvents = 'auto';
+                initGame();
+                toggleMusic(); // Optionally Auto-start music on user gesture
+            }, 800);
+        }
+
+        /* UPDATE: ANIMATED TICKING CASH COUNTER */
+        function animateCashUI() {
+            const cashUI = document.getElementById('cash-display');
+            if(displayedCash === userCash) {
+                cancelAnimationFrame(cashAnimationId);
+                cashUI.classList.remove('cash-pulse');
+                return;
+            }
+            
+            cashUI.classList.add('cash-pulse');
+            let difference = userCash - displayedCash;
+            let step = Math.max(1, Math.ceil(Math.abs(difference) * 0.1));
+            
+            if(difference > 0) {
+                displayedCash += step;
+                if(displayedCash > userCash) displayedCash = userCash;
+            } else {
+                displayedCash -= step;
+                if(displayedCash < userCash) displayedCash = userCash;
+            }
+            
+            cashUI.innerHTML = `CONTRACT FUNDS: $${displayedCash}`;
+            cashAnimationId = requestAnimationFrame(animateCashUI);
+        }
 
         /* RARITY ENGINE FUNCTIONS */
         function getEWFVariant() {
@@ -722,7 +855,8 @@
         function triggerConfetti() { const colors = ['#e74c3c', '#2ecc71', '#f1c40f', '#3498db']; for(let i=0; i<60; i++) { const c = document.createElement('div'); c.className = 'confetti'; c.style.cssText = `left:${Math.random()*100}vw; top:${Math.random()*50}vh; background:${colors[Math.floor(Math.random()*colors.length)]};`; document.body.appendChild(c); let cy = 0, op = 1; const drift = setInterval(() => { cy += Math.random() * 5 + 2; op -= 0.01; c.style.transform = `translateY(${cy}px) rotate(${cy}deg)`; c.style.opacity = op; if (op <= 0) { clearInterval(drift); c.remove(); } }, 20); } }
 
         function updateUI() {
-            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; document.getElementById('cash-display').innerHTML = `CONTRACT FUNDS: $${userCash.toFixed(2)}`;
+            const col = JSON.parse(localStorage.getItem('EWF_Collection')) || []; 
+            animateCashUI(); // UPDATE: Calling the animated counter logic instead of directly setting HTML
             const mythicCount = col.filter(c => c.mythic).length; let showcaseBonus = col.filter(c => c.inShowcase).length * 5;
             const baseIncome = (50 + (col.filter(c => c.wins >= 200).length * 2) + (mythicCount * 20) + showcaseBonus) * multi;
             document.getElementById('income-display').innerHTML = `PASSIVE INCOME: $${Math.floor(baseIncome)} / 30s`;
